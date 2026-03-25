@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hardware.dao.NotificationDao">
+    <!-- 通知结果映射 -->
+    <resultMap id="NotificationResultMap" type="com.hardware.entity.Notification">
+        <id property="id" column="id"/>
+        <result property="recipientId" column="recipient_id"/>
+        <result property="type" column="type"/>
+        <result property="relatedId" column="related_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="readStatus" column="read_status"/>
+    </resultMap>
+
+    <!-- 插入新通知 -->
+    <insert id="insert" parameterType="com.hardware.entity.Notification" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO notifications (recipient_id, type, related_id, create_time, read_status)
+        VALUES (#{recipientId}, #{type}, #{relatedId}, NOW(), #{readStatus})
+    </insert>
+
+    <!-- 根据ID查询通知 -->
+    <select id="findById" parameterType="java.lang.Integer" resultType="com.hardware.entity.Notification">
+        SELECT id, recipient_id AS recipientId, type, related_id AS relatedId,
+               create_time AS createTime, read_status AS readStatus
+        FROM notifications
+        WHERE id = #{id}
+    </select>
+
+    <!-- 根据接收者ID查询所有通知 -->
+    <select id="findByRecipientId" parameterType="java.lang.Integer" resultType="com.hardware.entity.Notification">
+        SELECT id, recipient_id AS recipientId, type, related_id AS relatedId,
+               create_time AS createTime, read_status AS readStatus
+        FROM notifications
+        WHERE recipient_id = #{recipientId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据接收者ID查询未读通知 -->
+    <select id="selectUnreadByRecipientId" parameterType="java.lang.Integer" resultMap="NotificationResultMap">
+        SELECT id, recipient_id, type, related_id, create_time, read_status
+        FROM notifications
+        WHERE recipient_id = #{recipientId}
+          AND read_status = 0
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 标记通知为已读 -->
+    <update id="markAsRead" parameterType="java.lang.Integer">
+        UPDATE notifications
+        SET read_status = 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 标记所有通知为已读 -->
+    <update id="markAllAsRead" parameterType="java.lang.Integer">
+        UPDATE notifications
+        SET read_status = 1
+        WHERE recipient_id = #{recipientId}
+          AND read_status = 0
+    </update>
+
+    <!-- 标记特定帖子的通知为已读 -->
+    <update id="markPostNotificationsAsRead">
+        UPDATE notifications
+        SET read_status = 1
+        WHERE recipient_id = #{userId}
+          AND related_id = #{postId}
+          AND type = 'REPLY_TO_POST'
+          AND read_status = 0
+    </update>
+
+    <!-- 删除通知 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM notifications
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 统计用户未读通知数量 -->
+    <select id="countUnreadNotifications" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM notifications
+        WHERE recipient_id = #{recipientId}
+          AND read_status = 0
+    </select>
+
+    <delete id="deleteAllByUserId" parameterType="java.lang.Integer">
+        DELETE FROM notifications
+        WHERE recipient_id = #{userId}
+    </delete>
+
+</mapper>

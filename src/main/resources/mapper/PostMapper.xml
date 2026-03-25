@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hardware.dao.PostDao">
+
+    <!-- 为帖子查询创建通用的 ResultMap，包含用户名和版块名称 -->
+    <resultMap id="PostWithUserResultMap" type="com.hardware.entity.Post">
+        <id property="id" column="post_id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="userId" column="user_id"/>
+        <result property="sectionId" column="section_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="isLocked" column="is_locked"/>
+        <result property="viewCount" column="view_count"/>
+        <result property="pinLevel" column="pin_level"/>
+        <result property="authorUsername" column="username"/>
+        <result property="sectionName" column="section_name"/>
+        <result property="authorRole" column="user_role"/>
+    </resultMap>
+
+    <!-- 查询所有帖子，包含用户名和版块名称 -->
+    <select id="selectAll" resultMap="PostWithUserResultMap">
+        SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+        FROM post p
+                 JOIN user u ON p.user_id = u.id
+                 JOIN forum_section s ON p.section_id = s.id
+        ORDER BY p.pin_level DESC, p.create_time DESC
+    </select>
+
+    <!-- 查询单个帖子，包含用户名和版块名称 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="PostWithUserResultMap">
+        SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+        FROM post p
+                 JOIN user u ON p.user_id = u.id
+                 JOIN forum_section s ON p.section_id = s.id
+        WHERE p.id = #{id}
+    </select>
+
+    <!-- 根据板块ID查询帖子列表，包含用户名和版块名称 -->
+    <select id="selectBySectionId" parameterType="java.lang.Integer" resultMap="PostWithUserResultMap">
+        SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+        FROM post p
+                 JOIN user u ON p.user_id = u.id
+                 JOIN forum_section s ON p.section_id = s.id
+        WHERE p.section_id = #{sectionId}
+        ORDER BY p.pin_level DESC, p.create_time DESC
+    </select>
+
+    <!-- 查询最新的帖子，包含用户名和版块名称 -->
+    <select id="selectLatestPosts" parameterType="map" resultMap="PostWithUserResultMap">
+        SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
+               p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+        FROM post p
+                 JOIN user u ON p.user_id = u.id
+                 JOIN forum_section s ON p.section_id = s.id
+        ORDER BY p.pin_level DESC, p.create_time DESC
+            LIMIT #{limit}
+    </select>
+
+    <!-- 根据用户ID查询帖子，包含用户名和版块名称 -->
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="PostWithUserResultMap">
+        SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+        FROM post p
+                 JOIN user u ON p.user_id = u.id
+                 JOIN forum_section s ON p.section_id = s.id
+        WHERE p.user_id = #{userId}
+        ORDER BY p.pin_level DESC, p.create_time DESC
+    </select>
+
+    <!-- 插入新帖子，包含 pin_level 字段 -->
+    <insert id="insert" parameterType="com.hardware.entity.Post" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO post (title, content, user_id, section_id, create_time, update_time, is_locked, view_count, pin_level)
+        VALUES (#{title}, #{content}, #{userId}, #{sectionId}, NOW(), NOW(), #{isLocked}, #{viewCount}, #{pinLevel})
+    </insert>
+
+    <!-- 更新帖子信息 (如标题、内容、锁定状态、置顶级别) -->
+    <update id="update" parameterType="com.hardware.entity.Post">
+        UPDATE post
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="isLocked != null">
+                is_locked = #{isLocked},
+            </if>
+            <if test="pinLevel != null">
+                pin_level = #{pinLevel},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除帖子 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM post WHERE id = #{id}
+    </delete>
+
+    <!-- 增加帖子浏览次数 -->
+    <update id="incrementViewCount" parameterType="java.lang.Integer">
+        UPDATE post SET view_count = view_count + 1 WHERE id = #{id}
+    </update>
+
+    <!-- 锁定帖子 -->
+    <update id="lockPost" parameterType="java.lang.Integer">
+        UPDATE post SET is_locked = true WHERE id = #{id}
+    </update>
+
+    <!-- 解锁帖子 -->
+    <update id="unlockPost" parameterType="java.lang.Integer">
+        UPDATE post SET is_locked = false WHERE id = #{id}
+    </update>
+
+    <!-- 置顶帖子 -->
+    <update id="pinPost" parameterType="map">
+        UPDATE post SET pin_level = #{level, jdbcType=INTEGER} WHERE id = #{id, jdbcType=INTEGER}
+    </update>
+
+    <!-- 取消置顶 -->
+    <update id="unpinPost" parameterType="java.lang.Integer">
+        UPDATE post SET pin_level = 0 WHERE id = #{id}
+    </update>
+
+    <select id="selectByUserIdWithPagination" parameterType="map" resultMap="PostWithUserResultMap">
+        SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name
+        FROM post p
+                 JOIN user u ON p.user_id = u.id
+                 JOIN forum_section s ON p.section_id = s.id
+        WHERE p.user_id = #{userId}
+        ORDER BY p.create_time DESC
+            LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="countByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM post WHERE user_id = #{userId}
+    </select>
+
+</mapper>
