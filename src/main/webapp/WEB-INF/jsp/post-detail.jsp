@@ -1088,7 +1088,8 @@
                     </div>
                     <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == reply.userId}">
                         <div class="reply-actions">
-                            <button class="btn btn-primary" data-reply-id="${reply.id}">🗑️ 删除</button>
+                            <!-- 增加了 delete-reply-btn 类名，方便 JS 定位 -->
+                            <button class="btn btn-primary delete-reply-btn" data-reply-id="${reply.id}">🗑️ 删除</button>
                         </div>
                     </c:if>
                 </li>
