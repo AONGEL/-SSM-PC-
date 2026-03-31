@@ -42,9 +42,6 @@ public class ReplyController {
     private PostService postService; // 用于验证帖子是否存在
 
     @Autowired
-    private UserService userService; // 用于验证用户是否存在 (可选)
-
-    @Autowired
     private ParamReferenceService paramReferenceService; // 注入
 
     // 如果我们将 PostController 中的 createReply 方法迁移到这里，可以这样做：
