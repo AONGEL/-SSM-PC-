@@ -4,578 +4,209 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
-    <title>PC硬件交流论坛</title>
+    <title>PC 硬件交流论坛 - 首页</title>
     <style>
-        /* 整体布局 - 白色背景 */
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* ========== 顶部信息栏 ========== */
-        .top-bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            padding: 12px 20px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .top-bar .time-info {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .top-bar .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .top-bar .user-info span {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .top-bar .user-info a {
-            color: #fff;
-            text-decoration: none;
-            padding: 6px 15px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .top-bar .user-info a:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* ========== 主标题 ========== */
-        .main-title {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 42px;
-            margin: 40px 0 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-            letter-spacing: 2px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
-
-        .main-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
-
-        /* ========== Tab导航栏 ========== */
-        .tab-nav-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 15px 0;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
-            margin: 0 auto 30px;  /* 居中 + 底部间距 */
-            max-width: 800px;     /* 横条最大宽度 */
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .tab-nav {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            list-style: none;
-            padding: 0;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .tab-nav li {
-            position: relative;
-        }
-
-        .tab-nav a {
-            display: inline-block;
-            padding: 12px 30px;
-            color: #6c757d;
-            text-decoration: none;
-            font-size: 17px;
-            font-weight: 600;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tab-nav a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .tab-nav a:hover::before {
-            left: 100%;
-        }
-
-        .tab-nav a:hover {
-            color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .tab-nav a.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            transform: translateY(-2px);
-        }
-
-        /* ========== 内容卡片 ========== */
-        .content-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .content-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
-            z-index: 0;
-        }
-
-        .content-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-        }
-
-        .content-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        /* 卡片标题 */
-        .card-title {
-            color: #2c3e50;
-            font-size: 26px;
-            margin-bottom: 25px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .card-title::before {
-            content: '•';
-            font-size: 36px;
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        /* ========== 最新帖子列表 ========== */
-        .latest-posts-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .latest-post-item {
-            padding: 20px;
-            border-bottom: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .latest-post-item:last-child {
-            border-bottom: none;
-        }
-
-        .latest-post-item:hover {
-            background: rgba(102, 126, 234, 0.03);
-            padding-left: 25px;
-            border-left: 4px solid #667eea;
-        }
-
-        /* 帖子标题 */
-        .latest-post-title {
-            font-weight: 700;
-            color: #2c3e50;
-            text-decoration: none;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            max-width: 200px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .latest-post-title:hover {
-            color: #667eea;
-            text-decoration: underline;
-        }
-
-        /* 帖子元信息 */
-        .latest-post-meta {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            font-size: 14px;
-            color: #6c757d;
-        }
-
-        .latest-post-author,
-        .latest-post-section,
-        .latest-post-date {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .latest-post-author::before {
-            content: '👤';
-        }
-
-        .latest-post-section::before {
-            content: '📁';
-        }
-
-        .latest-post-date::before {
-            content: '📅';
-        }
-
-        /* ========== 未登录状态 ========== */
-        .not-logged-in {
-            text-align: center;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .not-logged-in h3 {
-            color: #6c757d;
-            font-size: 20px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .not-logged-in .login-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .not-logged-in .login-links a {
-            display: inline-block;
-            padding: 10px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .not-logged-in .login-links a.login-btn {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-        }
-
-        .not-logged-in .login-links a.register-btn {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-            color: white;
-        }
-
-        .not-logged-in .login-links a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* ========== 空状态提示 ========== */
-        .empty-state {
-            text-align: center;
-            padding: 60px 30px;
-            color: #6c757d;
-            position: relative;
-            z-index: 1;
-        }
-
-        .empty-state .empty-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-            color: #adb5bd;
-        }
-
-        .empty-state p {
-            font-size: 18px;
-            margin: 10px 0;
-            font-weight: 500;
-        }
-
-        /* ========== 底部版权信息 ========== */
-        .footer {
-            text-align: center;
-            color: #6c757d;
-            font-size: 14px;
-            margin-top: 50px;
-            padding: 20px;
-            border-top: 1px solid #e9ecef;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ========== 响应式调整 ========== */
-        @media (max-width: 768px) {
-            .top-bar {
-                flex-direction: column;
-                gap: 10px;
-                padding: 15px;
-            }
-
-            .top-bar .time-info,
-            .top-bar .user-info {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .main-title {
-                font-size: 32px;
-                margin: 30px 0 20px;
-            }
-
-            .main-title::after {
-                width: 80px;
-                height: 3px;
-            }
-
-            .tab-nav {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .tab-nav a {
-                padding: 10px 20px;
-                font-size: 15px;
-            }
-
-            .content-card {
-                padding: 20px;
-            }
-
-            .card-title {
-                font-size: 22px;
-            }
-
-            .latest-post-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .latest-post-meta {
-                flex-wrap: wrap;
-                width: 100%;
-            }
-
-            .not-logged-in .login-links {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .not-logged-in .login-links a {
-                width: 100%;
-            }
-        }
-
-        /* ========== 动画效果 ========== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .content-card {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .content-card:nth-child(1) { animation-delay: 0.1s; }
-        .content-card:nth-child(2) { animation-delay: 0.2s; }
-        .content-card:nth-child(3) { animation-delay: 0.3s; }
-
-        /* ========== 链接样式 ========== */
-        a {
-            color: #667eea;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f6f6f6; color: #121212; line-height: 1.6; min-height: 100vh; }
+        .header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; padding: 0 20px; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 56px; }
+        .logo { font-size: 22px; font-weight: 700; color: #0066ff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo:hover { color: #0055dd; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { color: #121212; text-decoration: none; font-size: 15px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; }
+        .nav-links a:hover { background: #f0f0f0; color: #0066ff; }
+        .nav-links .highlight { background: #0066ff; color: #fff; }
+        .nav-links .highlight:hover { background: #0055dd; }
+        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+        .left-column { display: flex; flex-direction: column; gap: 20px; }
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 18px; font-weight: 600; color: #121212; display: flex; align-items: center; gap: 8px; }
+        .card-body { padding: 16px 20px; }
+        .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .section-item { display: block; padding: 16px; background: #fafafa; border-radius: 8px; text-decoration: none; color: #121212; transition: all 0.3s ease; border: 1px solid #f0f0f0; }
+        .section-item:hover { background: #f0f0f0; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .section-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #0066ff; }
+        .section-desc { font-size: 13px; color: #8a8a8a; line-height: 1.4; }
+        .post-list { list-style: none; }
+        .post-item { padding: 16px 0; border-bottom: 1px solid #f0f0f0; transition: all 0.3s ease; }
+        .post-item:last-child { border-bottom: none; }
+        .post-item:hover { background: #fafafa; margin: 0 -20px; padding-left: 20px; padding-right: 20px; }
+        .post-title-link { display: block; font-size: 16px; font-weight: 500; color: #121212; text-decoration: none; margin-bottom: 8px; line-height: 1.5; word-break: break-word; }
+        .post-title-link:hover { color: #0066ff; text-decoration: underline; }
+        .post-meta { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; color: #8a8a8a; }
+        .post-meta-item { display: flex; align-items: center; gap: 4px; }
+        .post-badge { display: inline-block; padding: 2px 8px; background: #e6f0ff; color: #0066ff; border-radius: 4px; font-size: 12px; font-weight: 500; margin-right: 8px; }
+        .user-card { text-align: center; }
+        .user-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
+        .user-avatar-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; border: 3px solid #f0f0f0; }
+        .user-name { font-size: 18px; font-weight: 600; color: #121212; margin-bottom: 4px; }
+        .user-role { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
+        .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+        .stat-item { text-align: center; padding: 12px 8px; background: #fafafa; border-radius: 8px; }
+        .stat-value { font-size: 20px; font-weight: 700; color: #0066ff; display: block; }
+        .stat-label { font-size: 12px; color: #8a8a8a; margin-top: 4px; }
+        .user-actions { display: flex; flex-direction: column; gap: 8px; }
+        .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
+        .user-btn-primary { background: #0066ff; color: #fff; }
+        .user-btn-primary:hover { background: #0055dd; }
+        .user-btn-secondary { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
+        .user-btn-secondary:hover { background: #f0f0f0; }
+        .quick-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .quick-link { display: flex; flex-direction: column; align-items: center; padding: 16px; background: #fafafa; border-radius: 8px; text-decoration: none; color: #121212; transition: all 0.3s ease; text-align: center; }
+        .quick-link:hover { background: #f0f0f0; transform: translateY(-2px); }
+        .quick-link-icon { font-size: 28px; margin-bottom: 8px; }
+        .quick-link-text { font-size: 14px; font-weight: 500; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #8a8a8a; }
+        .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+        .empty-text { font-size: 15px; }
+        @media (max-width: 900px) { .main-container { grid-template-columns: 1fr; } .right-column { order: -1; } .sections-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .header-content { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 10px; } .nav-links { width: 100%; justify-content: center; } .sections-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="header-content">
+            <a href="${pageContext.request.contextPath}/" class="logo">💻 PC 硬件交流论坛</a>
+            <nav class="nav-links">
+                <a href="${pageContext.request.contextPath}/forum/section">📁 论坛分区</a>
+                <a href="${pageContext.request.contextPath}/hardware-library">🔧 硬件参数库</a>
+                <c:choose>
+                    <c:when test="${sessionScope.currentUser != null}">
+                        <a href="${pageContext.request.contextPath}/user/notifications">🔔 消息</a>
+                        <a href="${pageContext.request.contextPath}/user/profile" class="highlight">👤 个人中心</a>
+                        <a href="${pageContext.request.contextPath}/user/logout">🚪 退出</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="${pageContext.request.contextPath}/user/login">🔑 登录</a>
+                        <a href="${pageContext.request.contextPath}/user/register" class="highlight">📝 注册</a>
+                    </c:otherwise>
+                </c:choose>
+            </nav>
+        </div>
+    </header>
 
-    <!-- 顶部信息栏 -->
-    <div class="top-bar">
-    <div class="time-info">
-        <span>⏰ 当前日期时间: </span>
-        <span id="currentTime">-- ::</span>
-        <script>
-            // 立即执行时间更新
-            (function() {
-                function updateCurrentTime() {
-                    var now = new Date();
-                    var year = now.getFullYear();
-                    var month = String(now.getMonth() + 1).padStart(2, '0');
-                    var day = String(now.getDate()).padStart(2, '0');
-                    var hours = String(now.getHours()).padStart(2, '0');
-                    var minutes = String(now.getMinutes()).padStart(2, '0');
-                    var seconds = String(now.getSeconds()).padStart(2, '0');
+    <div class="main-container">
+        <div class="left-column">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📁 论坛分区</h2>
+                    <a href="${pageContext.request.contextPath}/forum/section" style="font-size: 14px; color: #0066ff; text-decoration: none;">查看全部 →</a>
+                </div>
+                <div class="card-body">
+                    <div class="sections-grid">
+                        <c:choose>
+                            <c:when test="${not empty sections}">
+                                <c:forEach items="${sections}" var="section" begin="0" end="5">
+                                    <a href="${pageContext.request.contextPath}/forum/section/${section.id}/posts" class="section-item">
+                                        <div class="section-name">${section.name}</div>
+                                        <div class="section-desc">${section.description}</div>
+                                    </a>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">暂无论坛分区</div></div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+            </div>
 
-                    var formattedTime = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
-                    document.getElementById('currentTime').textContent = formattedTime;
-                }
+            <div class="card">
+                <div class="card-header"><h2 class="card-title">🔥 热门帖子</h2></div>
+                <div class="card-body">
+                    <ul class="post-list">
+                        <c:choose>
+                            <c:when test="${not empty latestPosts}">
+                                <c:forEach items="${latestPosts}" var="post">
+                                    <li class="post-item">
+                                        <a href="${pageContext.request.contextPath}/post/${post.id}" class="post-title-link">
+                                            <c:if test="${post.pinLevel > 0}"><span class="post-badge">📌 置顶</span></c:if>
+                                            ${post.title}
+                                        </a>
+                                        <div class="post-meta">
+                                            <span class="post-meta-item">👤 ${post.authorUsername}</span>
+                                            <span class="post-meta-item">📁 ${post.sectionName}</span>
+                                            <span class="post-meta-item">💬 ${post.replyCount} 回复</span>
+                                            <span class="post-meta-item">👁️ ${post.viewCount} 浏览</span>
+                                            <span class="post-meta-item">📅 <fmt:formatDate value="${post.createTime}" pattern="MM-dd HH:mm"/></span>
+                                        </div>
+                                    </li>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">暂无帖子</div></div>
+                            </c:otherwise>
+                        </c:choose>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-                // 立即更新一次
-                updateCurrentTime();
-                // 每秒更新一次
-                setInterval(updateCurrentTime, 1000);
-            })();
-        </script>
-    </div>
-    <div class="user-info">
-        <c:choose>
-            <c:when test="${sessionScope.currentUser != null}">
-                <span>👤 欢迎, ${sessionScope.currentUser.username}</span>
-                <a href="${pageContext.request.contextPath}/user/profile">👤 个人中心</a>
-                <a href="${pageContext.request.contextPath}/user/logout">🚪 登出</a>
-            </c:when>
-            <c:otherwise>
-                <a href="${pageContext.request.contextPath}/user/login">🔑 登录</a>
-                <a href="${pageContext.request.contextPath}/user/register">📝 注册</a>
-            </c:otherwise>
-        </c:choose>
-    </div>
-</div>
-
-    <!-- 主标题 -->
-    <h1 class="main-title">欢迎来到PC硬件交流论坛！</h1>
-
-    <!-- Tab导航栏 -->
-    <div class="tab-nav-container">
-        <ul class="tab-nav">
-        <li><a href="${pageContext.request.contextPath}/forum/section" class="active">📁 论坛分区</a></li>
-        <li><a href="${pageContext.request.contextPath}/hardware-library" class="active">📊 硬件参数库</a></li>
-    </ul>
-    </div>
-
-    <div class="container">
-        <!-- 最新帖子卡片 -->
-        <div class="content-card">
-        <h2 class="card-title">最新帖子</h2>
-        <ul class="latest-posts-list">
+        <div class="right-column">
             <c:choose>
-                <c:when test="${not empty latestPosts}">
-                    <c:forEach items="${latestPosts}" var="post">
-                        <li class="latest-post-item">
-                            <a href="${pageContext.request.contextPath}/post/${post.id}" class="latest-post-title">
-                                <c:choose>
-                                    <c:when test="${fn:length(post.title) > 7}">
-                                        ${fn:substring(post.title, 0, 7)}...
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${post.title}
-                                    </c:otherwise>
-                                </c:choose>
-                            </a>
-                            <div class="latest-post-meta">
-                                <span class="latest-post-author">${post.authorUsername}</span>
-                                <span class="latest-post-section">${post.sectionName}</span>
-                                <span class="latest-post-date">
-                                        <fmt:formatDate value="${post.createTime}" pattern="yyyy-MM-dd HH:mm"/>
-                                    </span>
+                <c:when test="${currentUser != null}">
+                    <div class="card user-card">
+                        <div class="card-body">
+                            <c:choose>
+                                <c:when test="${not empty currentUser.avatar && currentUser.avatar != ''}">
+                                    <img src="${currentUser.avatar}" alt="头像" class="user-avatar-img" />
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="user-avatar">${fn:substring(currentUser.username, 0, 1)}</div>
+                                </c:otherwise>
+                            </c:choose>
+                            <div class="user-name">${currentUser.username}</div>
+                            <c:choose>
+                                <c:when test="${currentUser.role == 'ADMIN'}"><span class="user-role">👑 管理员</span></c:when>
+                                <c:when test="${currentUser.role == 'CERTIFIED'}"><span class="user-role">✅ 认证用户</span></c:when>
+                                <c:otherwise><span class="user-role">👤 普通用户</span></c:otherwise>
+                            </c:choose>
+                            <div class="user-stats">
+                                <div class="stat-item"><span class="stat-value">${postCount != null ? postCount : 0}</span><div class="stat-label">发帖数</div></div>
+                                <div class="stat-item"><span class="stat-value">${replyCount != null ? replyCount : 0}</span><div class="stat-label">回复数</div></div>
+                                <div class="stat-item"><span class="stat-value">${favoriteCount != null ? favoriteCount : 0}</span><div class="stat-label">收藏数</div></div>
                             </div>
-                        </li>
-                    </c:forEach>
+                            <div class="user-actions">
+                                <a href="${pageContext.request.contextPath}/user/profile" class="user-btn user-btn-primary">👤 个人中心</a>
+                                <a href="${pageContext.request.contextPath}/user/notifications" class="user-btn user-btn-secondary">🔔 我的消息</a>
+                                <a href="${pageContext.request.contextPath}/user/favorites" class="user-btn user-btn-secondary">⭐ 我的收藏</a>
+                            </div>
+                        </div>
+                    </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <p>暂无最新帖子</p>
+                    <div class="card">
+                        <div class="card-body" style="text-align: center; padding: 30px 20px;">
+                            <div style="font-size: 48px; margin-bottom: 12px;">👋</div>
+                            <h3 style="font-size: 18px; margin-bottom: 8px; color: #121212;">欢迎游客</h3>
+                            <p style="color: #8a8a8a; font-size: 14px; margin-bottom: 20px;">登录后享受更多功能</p>
+                            <div style="display: flex; flex-direction: column; gap: 10px;">
+                                <a href="${pageContext.request.contextPath}/user/login" class="user-btn user-btn-primary">🔑 立即登录</a>
+                                <a href="${pageContext.request.contextPath}/user/register" class="user-btn user-btn-secondary">📝 免费注册</a>
+                            </div>
+                        </div>
                     </div>
                 </c:otherwise>
             </c:choose>
-        </ul>
+            <div class="card">
+                <div class="card-header"><h2 class="card-title">⚡ 快捷入口</h2></div>
+                <div class="card-body">
+                    <div class="quick-links">
+                        <a href="${pageContext.request.contextPath}/hardware-library" class="quick-link">
+                            <span class="quick-link-icon">🔧</span><span class="quick-link-text">硬件参数库</span>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/post/create?sectionId=1" class="quick-link">
+                            <span class="quick-link-icon">✏️</span><span class="quick-link-text">发布帖子</span>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/forum/section" class="quick-link">
+                            <span class="quick-link-icon">📁</span><span class="quick-link-text">所有分区</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-
-    <!-- 底部版权信息 -->
-    <div class="footer">
-    <p>© 2026 PC硬件交流论坛 </p>
-</div>
-
 </body>
 </html>

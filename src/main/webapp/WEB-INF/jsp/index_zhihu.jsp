@@ -40,6 +40,7 @@
         .post-badge { display: inline-block; padding: 2px 8px; background: #e6f0ff; color: #0066ff; border-radius: 4px; font-size: 12px; font-weight: 500; margin-right: 8px; }
         .user-card { text-align: center; }
         .user-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
+        .user-avatar-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; border: 3px solid #f0f0f0; }
         .user-name { font-size: 18px; font-weight: 600; color: #121212; margin-bottom: 4px; }
         .user-role { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
         .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
@@ -145,14 +146,21 @@
 
         <div class="right-column">
             <c:choose>
-                <c:when test="${sessionScope.currentUser != null}">
+                <c:when test="${currentUser != null}">
                     <div class="card user-card">
                         <div class="card-body">
-                            <div class="user-avatar">${fn:substring(sessionScope.currentUser.username, 0, 1)}</div>
-                            <div class="user-name">${sessionScope.currentUser.username}</div>
                             <c:choose>
-                                <c:when test="${sessionScope.currentUser.role == 'ADMIN'}"><span class="user-role">👑 管理员</span></c:when>
-                                <c:when test="${sessionScope.currentUser.role == 'CERTIFIED'}"><span class="user-role">✅ 认证用户</span></c:when>
+                                <c:when test="${not empty currentUser.avatar && currentUser.avatar != ''}">
+                                    <img src="${currentUser.avatar}" alt="头像" class="user-avatar-img" />
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="user-avatar">${fn:substring(currentUser.username, 0, 1)}</div>
+                                </c:otherwise>
+                            </c:choose>
+                            <div class="user-name">${currentUser.username}</div>
+                            <c:choose>
+                                <c:when test="${currentUser.role == 'ADMIN'}"><span class="user-role">👑 管理员</span></c:when>
+                                <c:when test="${currentUser.role == 'CERTIFIED'}"><span class="user-role">✅ 认证用户</span></c:when>
                                 <c:otherwise><span class="user-role">👤 普通用户</span></c:otherwise>
                             </c:choose>
                             <div class="user-stats">
@@ -195,11 +203,6 @@
                         <a href="${pageContext.request.contextPath}/forum/section" class="quick-link">
                             <span class="quick-link-icon">📁</span><span class="quick-link-text">所有分区</span>
                         </a>
-                        <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
-                            <a href="${pageContext.request.contextPath}/admin/user-list" class="quick-link">
-                                <span class="quick-link-icon">⚙️</span><span class="quick-link-text">管理后台</span>
-                            </a>
-                        </c:if>
                     </div>
                 </div>
             </div>

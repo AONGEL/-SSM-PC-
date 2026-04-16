@@ -9,6 +9,7 @@ target/
 
 # Dependencies
 lib/
+libs/
 vendor/
 
 # Logs and temp files
@@ -27,9 +28,57 @@ vendor/
 *.swp
 *.swo
 
-# OS generated files
+# OS files
 .DS_Store
 Thumbs.db
 
-# Original rules preserved
+# Archives
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+.eggs/
+
+# Java specific
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
+# Web artifacts
+dist/
+public/dist/
+out/
 ```
