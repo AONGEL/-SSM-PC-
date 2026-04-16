@@ -1,1 +1,58 @@
-Nothing needs to be added to .gitignore since only JSP source files were modified and no build artifacts, dependencies, or temporary files are present in the changes.
+```
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.class
+*.exe
+*.dll
+*.so
+*.a
+*.out
+
+# Dependencies
+node_modules/
+venv/
+.venv/
+.env
+.env.local
+.env.*
+
+# Build directories
+dist/
+build/
+target/
+.gradle/
+
+# Python specific
+.mypy_cache/
+.pytest_cache/
+.coverage
+coverage/
+htmlcov/
+
+# Java specific
+*.class
+*.jar
+*.war
+
+# Web artifacts
+*.min.js
+*.min.css
+*.map
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+```
