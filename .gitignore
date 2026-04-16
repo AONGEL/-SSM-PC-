@@ -1,1 +1,1 @@
-Nothing should be ignored based on the provided file changes. The only modified file is a JSP source file (`src/main/webapp/WEB-INF/jsp/hardware/hardware-library.jsp`), which is a legitimate source code file that should be tracked in version control. No build artifacts, dependencies, temporary files, or other ignorable items are present in the change list.
+Nothing needs to be added to .gitignore since only JSP source files were modified and no build artifacts, dependencies, or temporary files are present in the changes.
