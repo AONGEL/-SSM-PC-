@@ -89,4 +89,39 @@ public interface PostService {
      * @return 帖子总数
      */
     int countPostsByUserId(Integer userId);
+
+    /**
+     * 根据 ID 获取 CPU 信息
+     * @param id CPU ID
+     * @return CPU 对象
+     */
+    com.hardware.entity.CpuInfo getCpuById(Integer id);
+
+    /**
+     * 根据 ID 获取显卡信息
+     * @param id 显卡 ID
+     * @return 显卡对象
+     */
+    com.hardware.entity.GpuInfo getGpuById(Integer id);
+
+    /**
+     * 根据 ID 获取主板信息
+     * @param id 主板 ID
+     * @return 主板对象
+     */
+    com.hardware.entity.MotherboardInfo getMotherboardById(Integer id);
+
+    /**
+     * 根据 ID 获取内存信息
+     * @param id 内存 ID
+     * @return 内存对象
+     */
+    com.hardware.entity.MemoryInfo getMemoryById(Integer id);
+
+    /**
+     * 根据 ID 获取存储设备信息
+     * @param id 存储设备 ID
+     * @return 存储设备对象
+     */
+    com.hardware.entity.StorageInfo getStorageById(Integer id);
 }

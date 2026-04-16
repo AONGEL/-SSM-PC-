@@ -156,6 +156,33 @@
     color: #333;
     }
 
+    /* 知乎风格硬件标签 */
+    .hardware-tag {
+        display: inline-block;
+        padding: 4px 12px;
+        margin: 2px 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        text-decoration: none;
+    }
+
+    .hardware-tag:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        color: white;
+    }
+
+    .post-content p {
+        margin: 1em 0;
+        line-height: 1.8;
+    }
+
     .post-content img,
     .reply-content-rendered img {
     max-width: 100%;
@@ -318,24 +345,26 @@
     color: #764ba2 !important;
     }
 
-    /* 硬件引用链接样式 */
+    /* 硬件引用链接样式 - 知乎风格 */
     .hardware-ref {
-    color: #667eea;
-    text-decoration: none;
-    border-bottom: 2px solid #667eea;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: inline-block;
-    background: rgba(102, 126, 234, 0.05);
+        display: inline-block;
+        padding: 4px 12px;
+        margin: 2px 4px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        text-decoration: none !important;
     }
 
     .hardware-ref:hover {
-    color: #764ba2;
-    border-bottom-color: #764ba2;
-    background: rgba(102, 126, 234, 0.1);
-    transform: translateY(-2px);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+        color: white !important;
     }
 
     /* 硬件模态框美化 */
@@ -1459,48 +1488,45 @@
                 closePostNotification(${post.id});
             }
 
-            // 正则表达式匹配 ![](url) 和 [table:id] 格式
-            var referenceRegex = /!\[([^\]]*)\]\(([^)]+)\)|\[([a-zA-Z_]+):(\d+)\]/g;
-            var match;
-            var lastIndex = 0;
-            var result = '';
+            // 后端已经处理了硬件引用替换和段落格式化
+            // 直接返回处理后的 HTML 内容
+            return text;
+        }
 
-            while ((match = referenceRegex.exec(text)) !== null) {
-                result += text.substring(lastIndex, match.index);
+        // 获取硬件类型的中文名称
+        function getHardwareTypeName(tableName) {
+            var typeNames = {
+                "cpu_info": "CPU",
+                "gpu_info": "显卡",
+                "motherboard_info": "主板",
+                "memory_info": "内存",
+                "storage_info": "存储"
+            };
+            return typeNames[tableName] || "硬件";
+        }
 
-                // 检查是哪种匹配
-                if (match[1] !== undefined && match[2] !== undefined) {
-                    // 匹配 ![](url) 格式
-                    var alt = match[1];
-                    var url = match[2];
-                    // 验证 URL 是否安全 (基本检查)
-                    if (url.startsWith('${pageContext.request.contextPath}/uploads/') || url.startsWith('http')) {
-                        result += '<img src="' + url + '" alt="' + (alt || 'Image') + '" style="max-width: 100%; height: auto;">';
-                    } else {
-                        console.warn("Invalid image URL detected during render: " + url); // 即使在生产环境，保留这条警告日志也有助于排查问题
-                        result += match[0]; // 如果 URL 不符合预期，返回原始文本
+        // 根据表名和 ID 查找硬件名称（从后端传递的数据中）
+        function findHardwareName(table, id) {
+            // 从 pageContext 中获取 postReferences 数据
+            <c:if test="${not empty postReferences}">
+                <c:forEach var="ref" items="${postReferences}">
+                    if ('${ref.paramTable}' == table && ${ref.paramId} == id) {
+                        return '${ref.referenceText}';
                     }
-                } else if (match[3] !== undefined && match[4] !== undefined) {
-                    // 匹配 [table:id] 格式
-                    var table = match[3];
-                    var id = match[4];
-                    if (isValidTableName(table)) {
-                        result += '<a href="#" class="hardware-ref" data-table="' + table + '" data-id="' + id + '">' + match[0] + '</a>';
-                    } else {
-                        console.warn("Invalid table name in reference during render: " + table); // 同上，保留警告日志
-                        result += match[0]; // 如果表名不合法，返回原始文本
-                    }
-                } else {
-                    // 理论上不应该到达这里
-                    console.error("Unexpected match structure:", match); // 同上，保留错误日志
-                    result += match[0];
-                }
+                </c:forEach>
+            </c:if>
+            return null;
+        }
 
-                lastIndex = match.index + match[0].length;
-            }
-
-            result += text.substring(lastIndex);
-            return result;
+        // HTML 转义函数，防止 XSS 攻击
+        function escapeHtml(text) {
+            if (!text) return text;
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
 
         function isValidTableName(tableName) {

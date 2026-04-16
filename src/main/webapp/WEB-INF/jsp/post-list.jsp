@@ -4,621 +4,758 @@
 <html>
 <head>
     <title>${section.name} - 帖子列表</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        /* 整体布局 - 白色背景 */
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
+        /* 知乎风格全局变量 */
+        :root {
+            --zhihu-blue: #0066ff;
+            --zhihu-bg: #f6f6f6;
+            --zhihu-white: #ffffff;
+            --zhihu-text-primary: #121212;
+            --zhihu-text-secondary: #646464;
+            --zhihu-text-tertiary: #969696;
+            --zhihu-border: #ebebeb;
+            --zhihu-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --zhihu-radius: 8px;
         }
 
-        .container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--zhihu-bg);
+            color: var(--zhihu-text-primary);
+            line-height: 1.6;
+        }
+
+        /* 顶部导航栏 */
+        .navbar {
+            background: var(--zhihu-white);
+            height: 52px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .navbar-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            padding: 0 20px;
         }
 
-        /* 标题美化 */
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 36px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-            letter-spacing: 1px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--zhihu-blue);
+            text-decoration: none;
         }
 
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
+        .navbar-links {
+            display: flex;
+            gap: 20px;
         }
 
-        /* 板块描述美化 */
+        .navbar-links a {
+            color: var(--zhihu-text-primary);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .navbar-links a:hover {
+            color: var(--zhihu-blue);
+        }
+
+        /* 主容器 */
+        .main-container {
+            max-width: 1200px;
+            margin: 72px auto 20px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 24px;
+        }
+
+        /* 左侧内容区 */
+        .content-left {
+            min-width: 0;
+        }
+
+        /* 版块头部 */
+        .section-header {
+            background: var(--zhihu-white);
+            border-radius: var(--zhihu-radius);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--zhihu-shadow);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--zhihu-text-primary);
+            margin-bottom: 8px;
+        }
+
         .section-description {
-            text-align: center;
-            color: #6c757d;
-            font-size: 18px;
-            margin-bottom: 30px;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--zhihu-text-secondary);
+            font-size: 15px;
         }
 
-        /* 帖子卡片美化 */
+        /* 帖子卡片 - 知乎风格 */
         .post-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: default;
-        }
-
-        .post-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
-            z-index: 0;
+            background: var(--zhihu-white);
+            border-radius: var(--zhihu-radius);
+            padding: 20px 24px;
+            margin-bottom: 12px;
+            box-shadow: var(--zhihu-shadow);
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
         }
 
         .post-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-color: var(--zhihu-border);
         }
 
-        /* 帖子标题美化 */
-        .post-title {
+        .post-card-header {
             display: flex;
-            align-items: center;
-            margin: 0 0 15px 0;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .post-title h3 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 修复链接点击问题 */
-        .post-title a {
-            color: #2c3e50;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-            display: inline-block;
-            cursor: pointer !important;
-        }
-
-        .post-title a:hover {
-            color: #667eea;
-            text-decoration: underline;
-        }
-
-        /* 置顶标签美化 */
-        .pinned-tag {
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #1976d2;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 13px;
-            font-weight: 600;
-            display: inline-block;
-            box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
-            position: relative;
-            z-index: 2;
-        }
-
-        /* 锁定标签美化 */
-        .locked-tag {
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-            color: #d32f2f;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 13px;
-            font-weight: 600;
-            display: inline-block;
-            box-shadow: 0 2px 8px rgba(211, 47, 47, 0.2);
-            position: relative;
-            z-index: 2;
-        }
-
-        /* 帖子信息美化 */
-        .post-info {
-            color: #6c757d;
-            font-size: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .post-info-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .post-info-item strong {
-            color: #2c3e50;
-            font-weight: 600;
-        }
-
-        /* 用户角色标识美化 */
-        .user-role {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
-        .role-regular {
-            background-color: #e9ecef;
-            color: #495057;
-        }
-
-        .role-certified {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-            color: white;
-        }
-
-        .role-admin {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
-        }
-
-        /* ========== 帖子操作按钮区域 ========== */
-        .post-actions {
-            display: flex;
+            align-items: flex-start;
             gap: 12px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            align-items: center;
-            line-height: 1;
+            margin-bottom: 12px;
         }
 
-        /* 表单容器对齐问题 */
-        .post-actions form {
-            display: inline-block !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            vertical-align: middle !important;
-            line-height: normal !important;
-            height: auto !important;
-        }
-
-        /* ========== 统一所有按钮样式 ========== */
-        .post-actions a,
-        .post-actions input[type="submit"] {
-            padding: 0 24px !important; /* 让padding只控制左右 */
-            border: none !important;
-            border-radius: 25px !important;
-            cursor: pointer !important;
-            font-size: 15px !important;
-            font-weight: 600 !important;
-            transition: all 0.3s ease !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-decoration: none !important;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
-            position: relative !important;
-            overflow: hidden !important;
-            gap: 8px !important;
-            min-width: 110px !important;
-            height: 48px !important;
-            line-height: 48px !important; /* 行高等于高度 */
-            box-sizing: border-box !important;
-            text-align: center !important;
-            vertical-align: middle !important; /* 强制垂直居中 */
-            margin: 0 !important;
-        }
-
-        /* input按钮的内部对齐 */
-        .post-actions input[type="submit"] {
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            -moz-appearance: none !important;
-            text-align: center !important;
-            line-height: 48px !important;
-        }
-
-        /* 悬停效果 */
-        .post-actions a:hover,
-        .post-actions input[type="submit"]:hover {
-            transform: translateY(-3px) !important;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15) !important;
-        }
-
-        /* 点击效果 */
-        .post-actions a:active,
-        .post-actions input[type="submit"]:active {
-            transform: translateY(1px) !important;
-        }
-
-        /* 光流动画 */
-        .post-actions a::before,
-        .post-actions input[type="submit"]::before {
-            content: '' !important;
-            position: absolute !important;
-            top: 0 !important;
-            left: -100% !important;
-            width: 100% !important;
-            height: 100% !important;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent) !important;
-            transition: left 0.5s !important;
-        }
-
-        .post-actions a:hover::before,
-        .post-actions input[type="submit"]:hover::before {
-            left: 100% !important;
-        }
-
-        /* ========== 编辑按钮 - 蓝色渐变 ========== */
-        .post-actions a[href*="/edit"] {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
-            color: white !important;
-        }
-
-        .post-actions a[href*="/edit"]:hover {
-            background: linear-gradient(135deg, #0069d9 0%, #004494 100%) !important;
-        }
-
-        /* ========== 删除按钮 - 红色渐变 ========== */
-        .post-actions input[type="submit"][value*="删除"] {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
-            color: white !important;
-        }
-
-        .post-actions input[type="submit"][value*="删除"]:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%) !important;
-        }
-
-        /* ========== 置顶按钮 - 紫色渐变 ========== */
-        .post-actions input[type="submit"][value*="置顶"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-            color: white !important;
-        }
-
-        .post-actions input[type="submit"][value*="置顶"]:hover {
-            background: linear-gradient(135deg, #5568d3 0%, #653a8f 100%) !important;
-        }
-
-        /* ========== 取消置顶按钮 - 灰色渐变 ========== */
-        .post-actions input[type="submit"][value*="取消置顶"] {
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%) !important;
-            color: white !important;
-        }
-
-        .post-actions input[type="submit"][value*="取消置顶"]:hover {
-            background: linear-gradient(135deg, #5a6268 0%, #4e555b 100%) !important;
-        }
-
-        /* ========== 锁定按钮 - 橙色渐变 ========== */
-        .post-actions input[type="submit"][value*="锁定"] {
-            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
-            color: #212529 !important;
-        }
-
-        .post-actions input[type="submit"][value*="锁定"]:hover {
-            background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%) !important;
-        }
-
-        /* ========== 解锁按钮 - 绿色渐变 ========== */
-        .post-actions input[type="submit"][value*="解锁"] {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%) !important;
-            color: white !important;
-        }
-
-        .post-actions input[type="submit"][value*="解锁"]:hover {
-            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%) !important;
-        }
-
-        /* 空状态提示美化 */
-        .empty-state {
-            text-align: center;
-            padding: 60px 30px;
-            color: #6c757d;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            margin: 30px 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .empty-state p {
-            color: #6c757d;
+        .post-title-link {
+            flex: 1;
+            text-decoration: none;
+            color: var(--zhihu-text-primary);
             font-size: 18px;
-            margin: 10px 0;
+            font-weight: 500;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .post-title-link:hover {
+            color: var(--zhihu-blue);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .tag-pinned {
+            background: #e8f3ff;
+            color: var(--zhihu-blue);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
             font-weight: 500;
         }
 
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-            color: rgba(102, 126, 234, 0.5);
+        .tag-locked {
+            background: #fff3e8;
+            color: #ff6b00;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
         }
 
-        /* 底部导航美化 */
-        .page-footer {
-            margin-top: 40px;
+        .post-meta {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            color: var(--zhihu-text-tertiary);
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .author-name {
+            color: var(--zhihu-text-secondary);
+            font-weight: 500;
+        }
+
+        .user-badge {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-left: 6px;
+        }
+
+        .badge-certified {
+            background: #e6f7ed;
+            color: #00a854;
+        }
+
+        .badge-admin {
+            background: #ffe8e8;
+            color: #ff4d4f;
+        }
+
+        .badge-regular {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        /* 帖子统计信息 */
+        .post-stats {
+            display: flex;
             gap: 20px;
-            padding: 20px;
+            padding-top: 12px;
+            border-top: 1px solid var(--zhihu-border);
         }
 
-        .footer-link {
-            display: inline-block;
-            padding: 12px 25px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #667eea !important;
-            text-decoration: none;
-            border-radius: 25px;
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--zhihu-text-tertiary);
+            font-size: 13px;
+        }
+
+        .stat-item strong {
+            color: var(--zhihu-text-secondary);
             font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
-        .footer-link:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-            background: rgba(255, 255, 255, 0.3);
-            color: #764ba2 !important;
-            border-color: rgba(255, 255, 255, 0.5);
+        .stat-replies {
+            color: var(--zhihu-blue);
         }
 
-        /* 创建帖子按钮美化 */
-        .create-post-btn {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+        /* 操作按钮区域 */
+        .post-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .post-actions form {
+            display: inline;
+        }
+
+        .btn-action {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-edit {
+            background: #e8f3ff;
+            color: var(--zhihu-blue);
+        }
+
+        .btn-edit:hover {
+            background: #d0e7ff;
+        }
+
+        .btn-delete {
+            background: #ffe8e8;
+            color: #ff4d4f;
+        }
+
+        .btn-delete:hover {
+            background: #ffd0d0;
+        }
+
+        .btn-pin {
+            background: #f3e8ff;
+            color: #722ed1;
+        }
+
+        .btn-pin:hover {
+            background: #e6d0ff;
+        }
+
+        .btn-unpin {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-unpin:hover {
+            background: #e8e8e8;
+        }
+
+        .btn-lock {
+            background: #fff3e8;
+            color: #ff6b00;
+        }
+
+        .btn-lock:hover {
+            background: #ffe8d0;
+        }
+
+        .btn-unlock {
+            background: #e6f7ed;
+            color: #00a854;
+        }
+
+        .btn-unlock:hover {
+            background: #ccfadd;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            background: var(--zhihu-white);
+            border-radius: var(--zhihu-radius);
+            padding: 60px 24px;
+            text-align: center;
+            box-shadow: var(--zhihu-shadow);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            color: var(--zhihu-text-secondary);
+            font-size: 15px;
+        }
+
+        /* 底部操作栏 */
+        .page-footer {
+            background: var(--zhihu-white);
+            border-radius: var(--zhihu-radius);
+            padding: 20px 24px;
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            box-shadow: var(--zhihu-shadow);
+        }
+
+        .btn-primary {
+            background: var(--zhihu-blue);
             color: white;
-            padding: 12px 25px;
+            padding: 10px 24px;
+            border-radius: 4px;
             text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary:hover {
+            background: #0052cc;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: var(--zhihu-text-primary);
+            padding: 10px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            background: #e8e8e8;
+        }
+
+        /* 右侧边栏 */
+        .sidebar-right {
+            position: sticky;
+            top: 72px;
+            height: fit-content;
+        }
+
+        .sidebar-card {
+            background: var(--zhihu-white);
+            border-radius: var(--zhihu-radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--zhihu-shadow);
+        }
+
+        .sidebar-title {
             font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            font-weight: 600;
+            color: var(--zhihu-text-primary);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--zhihu-border);
+        }
+
+        .user-info-card {
+            text-align: center;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #f0f0f0;
+            margin: 0 auto 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--zhihu-text-tertiary);
+        }
+
+        .user-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--zhihu-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .user-role-badge {
             display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 16px;
         }
 
-        .create-post-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-            background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+        .role-badge-certified {
+            background: #e6f7ed;
+            color: #00a854;
         }
 
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 28px;
-                margin-bottom: 15px;
+        .role-badge-admin {
+            background: #ffe8e8;
+            color: #ff4d4f;
+        }
+
+        .role-badge-regular {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .user-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 12px;
+            background: #fafafa;
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--zhihu-text-primary);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--zhihu-text-tertiary);
+            margin-top: 4px;
+        }
+
+        .user-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
             }
 
-            h1::after {
-                width: 100px;
-                height: 3px;
+            .sidebar-right {
+                position: static;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar-content {
+                padding: 0 12px;
             }
 
-            .section-description {
-                font-size: 16px;
-                padding: 12px 20px;
+            .main-container {
+                padding: 0 12px;
+            }
+
+            .section-header {
+                padding: 16px;
             }
 
             .post-card {
-                padding: 20px 15px;
+                padding: 16px;
             }
 
-            .post-title h3 {
-                font-size: 20px;
+            .post-title-link {
+                font-size: 16px;
             }
 
-            .post-info {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .post-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .admin-btn,
-            .btn-edit,
-            .btn-delete,
-            .btn-pin,
-            .btn-unpin,
-            .btn-lock,
-            .btn-unlock,
-            input[type="submit"] {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .page-footer {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .footer-link,
-            .create-post-btn {
-                width: 100%;
-                max-width: 300px;
-                text-align: center;
+            .post-stats {
+                flex-wrap: wrap;
+                gap: 12px;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>${section.name}</h1>
-    <p class="section-description">${section.description}</p>
+    <!-- 顶部导航栏 -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="${pageContext.request.contextPath}/" class="navbar-logo">硬件论坛</a>
+            <div class="navbar-links">
+                <a href="${pageContext.request.contextPath}/">首页</a>
+                <a href="${pageContext.request.contextPath}/forum/section">分区</a>
+                <a href="${pageContext.request.contextPath}/hardware/library">硬件库</a>
+                <c:if test="${not empty sessionScope.currentUser}">
+                    <a href="${pageContext.request.contextPath}/user/profile">个人中心</a>
+                </c:if>
+                <c:if test="${empty sessionScope.currentUser}">
+                    <a href="${pageContext.request.contextPath}/user/login">登录</a>
+                </c:if>
+            </div>
+        </div>
+    </nav>
 
-    <c:choose>
-        <c:when test="${not empty posts}">
-            <c:forEach items="${posts}" var="post">
-                <div class="post-card">
-                    <div class="post-title">
-                        <!-- 添加置顶标记 -->
-                        <c:if test="${post.pinLevel > 0}">
-                            <span class="pinned-tag">📌 置顶</span>
-                        </c:if>
+    <div class="main-container">
+        <!-- 左侧主内容区 -->
+        <div class="content-left">
+            <!-- 版块头部 -->
+            <div class="section-header">
+                <h1 class="section-title">${section.name}</h1>
+                <p class="section-description">${section.description}</p>
+            </div>
 
-                        <!-- 修复：确保链接可以点击 -->
-                        <h3>
-                            <a href="${pageContext.request.contextPath}/post/${post.id}">
+            <c:choose>
+                <c:when test="${not empty posts}">
+                    <c:forEach items="${posts}" var="post">
+                        <div class="post-card">
+                            <div class="post-card-header">
+                                <a href="${pageContext.request.contextPath}/post/${post.id}" class="post-title-link">
                                     ${post.title}
-                            </a>
-                        </h3>
-
-                        <!-- 添加锁定标记 -->
-                        <c:if test="${post.isLocked}">
-                            <span class="locked-tag">🔒 已锁定</span>
-                        </c:if>
-                    </div>
-
-                    <div class="post-info">
-                            <span class="post-info-item">
-                                <strong>👤</strong> 作者: ${post.authorUsername}
-                                <c:if test="${post.authorRole == 'CERTIFIED'}">
-                                    <span class="user-role role-certified">[认证用户]</span>
-                                </c:if>
-                                <c:if test="${post.authorRole == 'ADMIN'}">
-                                    <span class="user-role role-admin">[管理员]</span>
-                                </c:if>
-                                <c:if test="${post.authorRole == 'USER' || post.authorRole == null}">
-                                    <span class="user-role role-regular">[普通用户]</span>
-                                </c:if>
-                            </span>
-
-                        <span class="post-info-item">
-                                <strong>📅</strong> <fmt:formatDate value="${post.createTime}" pattern="yyyy-MM-dd HH:mm"/>
-                            </span>
-
-                        <span class="post-info-item">
-                                <strong>👁️</strong> 浏览: ${post.viewCount}
-                            </span>
-                    </div>
-
-                    <!-- 管理员操作按钮 -->
-                    <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
-                        <!-- ========== 帖子操作按钮区域 ========== -->
-                        <div class="post-actions">
-                            <!-- ========== 编辑按钮 - 仅原作者可见 ========== -->
-                            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == post.userId}">
-                                <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn-edit">
-                                    ✏️ 编辑
                                 </a>
-                            </c:if>
+                                <div class="post-tags">
+                                    <c:if test="${post.pinLevel > 0}">
+                                        <span class="tag-pinned">📌 置顶</span>
+                                    </c:if>
+                                    <c:if test="${post.isLocked}">
+                                        <span class="tag-locked">🔒 锁定</span>
+                                    </c:if>
+                                </div>
+                            </div>
 
-                            <!-- ========== 删除按钮 - 原作者或管理员可见 ========== -->
-                            <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN')}">
-                                <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
-                                    <input type="submit" value="🗑️ 删除" onclick="return confirm('确定要删除此帖子吗？');">
-                                </form>
-                            </c:if>
+                            <div class="post-meta">
+                                <span class="meta-item">
+                                    <span class="author-name">${post.authorUsername}</span>
+                                    <c:choose>
+                                        <c:when test="${post.authorRole == 'CERTIFIED'}">
+                                            <span class="user-badge badge-certified">✓ 认证用户</span>
+                                        </c:when>
+                                        <c:when test="${post.authorRole == 'ADMIN'}">
+                                            <span class="user-badge badge-admin">★ 管理员</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="user-badge badge-regular">普通用户</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </span>
+                                <span class="meta-item">
+                                    📅 <fmt:formatDate value="${post.createTime}" pattern="yyyy-MM-dd HH:mm"/>
+                                </span>
+                            </div>
 
-                            <!-- ========== 管理员专属操作按钮 ========== -->
-                            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
-                                <!-- 置顶/取消置顶 -->
-                                <c:if test="${post.pinLevel > 0}">
-                                    <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
-                                        <input type="submit" value="📌 取消置顶">
-                                    </form>
-                                </c:if>
-                                <c:if test="${post.pinLevel == 0}">
-                                    <form action="${pageContext.request.contextPath}/post/${post.id}/pin" method="post" style="display:inline;">
-                                        <input type="hidden" name="level" value="1">
-                                        <input type="submit" value="📌 置顶">
-                                    </form>
-                                </c:if>
+                            <div class="post-stats">
+                                <span class="stat-item stat-replies">
+                                    💬 <strong>${post.replyCount != null ? post.replyCount : 0}</strong> 回复
+                                </span>
+                                <span class="stat-item">
+                                    👁️ <strong>${post.viewCount}</strong> 浏览
+                                </span>
+                            </div>
 
-                                <!-- 锁定/解锁 -->
-                                <c:if test="${post.isLocked}">
-                                    <form action="${pageContext.request.contextPath}/post/${post.id}/unlock" method="post" style="display:inline;">
-                                        <input type="submit" value="🔓 解锁">
-                                    </form>
-                                </c:if>
-                                <c:if test="${!post.isLocked}">
-                                    <form action="${pageContext.request.contextPath}/post/${post.id}/lock" method="post" style="display:inline;">
-                                        <input type="submit" value="🔒 锁定">
-                                    </form>
-                                </c:if>
+                            <!-- 管理员和作者操作按钮 -->
+                            <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.role == 'ADMIN' || sessionScope.currentUser.id == post.userId)}">
+                                <div class="post-actions">
+                                    <c:if test="${sessionScope.currentUser.id == post.userId}">
+                                        <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn-action btn-edit">
+                                            ✏️ 编辑
+                                        </a>
+                                        <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
+                                            <button type="submit" class="btn-action btn-delete" onclick="return confirm('确定要删除此帖子吗？');">
+                                                🗑️ 删除
+                                            </button>
+                                        </form>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.currentUser.role == 'ADMIN'}">
+                                        <c:if test="${post.pinLevel > 0}">
+                                            <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
+                                                <button type="submit" class="btn-action btn-unpin">📌 取消置顶</button>
+                                            </form>
+                                        </c:if>
+                                        <c:if test="${post.pinLevel == 0}">
+                                            <form action="${pageContext.request.contextPath}/post/${post.id}/pin" method="post" style="display:inline;">
+                                                <input type="hidden" name="level" value="1">
+                                                <button type="submit" class="btn-action btn-pin">📌 置顶</button>
+                                            </form>
+                                        </c:if>
+
+                                        <c:if test="${post.isLocked}">
+                                            <form action="${pageContext.request.contextPath}/post/${post.id}/unlock" method="post" style="display:inline;">
+                                                <button type="submit" class="btn-action btn-unlock">🔓 解锁</button>
+                                            </form>
+                                        </c:if>
+                                        <c:if test="${!post.isLocked}">
+                                            <form action="${pageContext.request.contextPath}/post/${post.id}/lock" method="post" style="display:inline;">
+                                                <button type="submit" class="btn-action btn-lock">🔒 锁定</button>
+                                            </form>
+                                        </c:if>
+                                    </c:if>
+                                </div>
                             </c:if>
                         </div>
-                    </c:if>
-                </div>
-            </c:forEach>
-        </c:when>
-        <c:otherwise>
-            <div class="empty-state">
-                <div class="empty-icon">📭</div>
-                <p>该分区下暂无帖子</p>
-            </div>
-        </c:otherwise>
-    </c:choose>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <div class="empty-state">
+                        <div class="empty-icon">📭</div>
+                        <p class="empty-text">该分区下暂无帖子</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
 
-    <div class="page-footer">
-        <a href="${pageContext.request.contextPath}/post/create?sectionId=${section.id}" class="create-post-btn">
-            ✏️ 创建帖子
-        </a>
-        <a href="${pageContext.request.contextPath}/forum/section" class="footer-link">
-            📁 返回分区列表
-        </a>
-        <a href="${pageContext.request.contextPath}/" class="footer-link">
-            🏠 返回首页
-        </a>
+            <!-- 底部操作栏 -->
+            <div class="page-footer">
+                <a href="${pageContext.request.contextPath}/post/create?sectionId=${section.id}" class="btn-primary">
+                    ✏️ 创建帖子
+                </a>
+                <a href="${pageContext.request.contextPath}/forum/section" class="btn-secondary">
+                    📁 返回分区列表
+                </a>
+                <a href="${pageContext.request.contextPath}/" class="btn-secondary">
+                    🏠 返回首页
+                </a>
+            </div>
+        </div>
+
+        <!-- 右侧边栏 - 个人中心 -->
+        <div class="sidebar-right">
+            <c:choose>
+                <c:when test="${not empty sessionScope.currentUser}">
+                    <div class="sidebar-card user-info-card">
+                        <h3 class="sidebar-title">个人中心</h3>
+                        <div class="user-avatar">
+                            ${sessionScope.currentUser.username.substring(0, 1)}
+                        </div>
+                        <div class="user-name">${sessionScope.currentUser.username}</div>
+                        <c:choose>
+                            <c:when test="${sessionScope.currentUser.role == 'CERTIFIED'}">
+                                <span class="user-role-badge role-badge-certified">✓ 认证用户</span>
+                            </c:when>
+                            <c:when test="${sessionScope.currentUser.role == 'ADMIN'}">
+                                <span class="user-role-badge role-badge-admin">★ 管理员</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="user-role-badge role-badge-regular">普通用户</span>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <div class="user-stats">
+                            <div class="stat-box">
+                                <div class="stat-value">${postCount != null ? postCount : 0}</div>
+                                <div class="stat-label">发帖数</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">${replyCount != null ? replyCount : 0}</div>
+                                <div class="stat-label">回复数</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-value">${favoriteCount != null ? favoriteCount : 0}</div>
+                                <div class="stat-label">收藏数</div>
+                            </div>
+                        </div>
+
+                        <div class="user-actions">
+                            <a href="${pageContext.request.contextPath}/user/profile" class="btn-action btn-primary btn-full">
+                                查看个人主页
+                            </a>
+                            <a href="${pageContext.request.contextPath}/user/logout" class="btn-action btn-secondary btn-full">
+                                退出登录
+                            </a>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">欢迎来到硬件论坛</h3>
+                        <p style="color: var(--zhihu-text-secondary); font-size: 14px; margin-bottom: 16px; text-align: center;">
+                            登录后享受更多功能
+                        </p>
+                        <div class="user-actions">
+                            <a href="${pageContext.request.contextPath}/user/login" class="btn-action btn-primary btn-full">
+                                登录
+                            </a>
+                            <a href="${pageContext.request.contextPath}/user/register" class="btn-action btn-secondary btn-full">
+                                注册账号
+                            </a>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+
+            <!-- 快捷入口 -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">快捷入口</h3>
+                <div class="user-actions">
+                    <a href="${pageContext.request.contextPath}/hardware/library" class="btn-action btn-secondary btn-full">
+                        🔧 硬件参数库
+                    </a>
+                    <a href="${pageContext.request.contextPath}/forum/section" class="btn-action btn-secondary btn-full">
+                        📁 所有分区
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>
