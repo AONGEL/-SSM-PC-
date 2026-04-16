@@ -45,6 +45,91 @@ public class PostController {
     private PostFavoriteService postFavoriteService;
 
     /**
+     * 根据表名和ID获取硬件名称
+     */
+    private String getHardwareName(String tableName, Integer id) {
+        if (id == null || tableName == null) {
+            return "未知硬件";
+        }
+        
+        try {
+            String name = null;
+            switch (tableName) {
+                case "cpu_info":
+                    CpuInfo cpu = postService.getCpuById(id);
+                    name = cpu != null ? cpu.getCpuName() : null;
+                    break;
+                case "gpu_info":
+                    GpuInfo gpu = postService.getGpuById(id);
+                    name = gpu != null ? gpu.getGpuName() : null;
+                    break;
+                case "motherboard_info":
+                    MotherboardInfo mb = postService.getMotherboardById(id);
+                    name = mb != null ? mb.getModel() : null;
+                    break;
+                case "memory_info":
+                    MemoryInfo mem = postService.getMemoryById(id);
+                    name = mem != null ? mem.getBrand() : null;
+                    break;
+                case "storage_info":
+                    StorageInfo storage = postService.getStorageById(id);
+                    name = storage != null ? storage.getModel() : null;
+                    break;
+            }
+            return name != null ? name : "已删除的硬件";
+        } catch (Exception e) {
+            return "未知硬件";
+        }
+    }
+
+    /**
+     * 处理帖子内容：替换硬件引用格式并处理换行
+     */
+    private String processContent(String content) {
+        if (content == null) {
+            return "";
+        }
+        
+        // 1. 处理换行：双换行符分割段落，单换行转换为<br>
+        String[] paragraphs = content.split("\\n\\n+");
+        StringBuilder processedContent = new StringBuilder();
+        
+        for (int i = 0; i < paragraphs.length; i++) {
+            String paragraph = paragraphs[i].trim();
+            if (!paragraph.isEmpty()) {
+                // 将段落内的单换行转换为<br>
+                paragraph = paragraph.replace("\n", "<br>");
+                processedContent.append("<p>").append(paragraph).append("</p>");
+            }
+        }
+        
+        String result = processedContent.toString();
+        
+        // 2. 替换硬件引用格式 [table:id] 为硬件名称
+        String regex = "\\[([a-zA-Z_]+):(\\d+)\\]";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(result);
+        
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String tableName = matcher.group(1);
+            Integer id = Integer.parseInt(matcher.group(2));
+            String hardwareName = getHardwareName(tableName, id);
+            
+            // 生成知乎风格的硬件引用标签
+            String replacement = "<span class=\"hardware-tag\" data-table=\"" + tableName + 
+                               "\" data-id=\"" + id + "\">" + hardwareName + "</span>";
+            matcher.appendReplacement(sb, replacement);
+        }
+        matcher.appendTail(sb);
+        
+        return sb.toString();
+    }
+
+    @Autowired
+    private HardwareInfoService hardwareInfoService; // 注入硬件信息服务
+
+    /**
      * 显示帖子详情页
      * @param id 帖子ID
      * @param model Model对象，用于向视图传递数据
@@ -79,7 +164,11 @@ public class PostController {
         int totalPages = (int) Math.ceil((double) totalReplies / pageSize);
         List<Reply> replies = replyService.getRepliesByPostIdWithPagination(id, pageNum, pageSize);
 
-        // 5. 将数据传递给视图
+        // 5. 处理帖子内容：替换硬件引用格式并处理换行
+        String processedContent = processContent(post.getContent());
+        post.setContent(processedContent);
+
+        // 6. 将数据传递给视图
         model.addAttribute("post", post);
         model.addAttribute("replies", replies);
         model.addAttribute("pageNum", pageNum);
@@ -109,6 +198,10 @@ public class PostController {
             int favoriteCount = postFavoriteService.countFavoritesByPostId(id);
             model.addAttribute("favoriteCount", favoriteCount);
         }
+
+        // 9. 获取帖子的硬件参数引用信息
+        List<ParamReference> postReferences = paramReferenceService.getReferencesByPostId(id);
+        model.addAttribute("postReferences", postReferences);
 
         return "post-detail";
     }
@@ -493,8 +586,11 @@ public class PostController {
                 ref.setReplyId(replyId);
                 ref.setParamTable(tableName);
                 ref.setParamId(id);
-                // 可以在这里查询数据库获取硬件名称作为 referenceText (可选)
-                // ref.setReferenceText(...);
+                
+                // 查询硬件名称作为 referenceText
+                String hardwareName = getHardwareName(tableName, id);
+                ref.setReferenceText(hardwareName);
+                
                 references.add(ref);
             } else {
                 System.out.println("Invalid table name in reference: " + tableName);
@@ -508,6 +604,36 @@ public class PostController {
                 new HashSet<>(Arrays.asList("cpu_info", "gpu_info", "motherboard_info", "memory_info", "storage_info"))
         );
         return validTables.contains(tableName);
+    }
+
+    /**
+     * 根据表名和ID获取硬件名称
+     */
+    private String getHardwareName(String tableName, Integer id) {
+        try {
+            switch (tableName) {
+                case "cpu_info":
+                    CpuInfo cpu = hardwareInfoService.getCpuById(id);
+                    return cpu != null ? cpu.getModel() : "未知 CPU";
+                case "gpu_info":
+                    GpuInfo gpu = hardwareInfoService.getGpuById(id);
+                    return gpu != null ? gpu.getModel() : "未知 GPU";
+                case "motherboard_info":
+                    MotherboardInfo mobo = hardwareInfoService.getMotherboardById(id);
+                    return mobo != null ? mobo.getModel() : "未知主板";
+                case "memory_info":
+                    // 如果有 MemoryInfoService，可以类似处理
+                    return "内存 #" + id;
+                case "storage_info":
+                    // 如果有 StorageInfoService，可以类似处理
+                    return "存储 #" + id;
+                default:
+                    return "未知硬件";
+            }
+        } catch (Exception e) {
+            System.out.println("Error getting hardware name for " + tableName + ":" + id + " - " + e.getMessage());
+            return "未知硬件";
+        }
     }
 
     /**

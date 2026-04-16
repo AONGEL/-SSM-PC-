@@ -32,6 +32,9 @@ public class Post {
 
     private Integer pinLevel = 0; // 置顶级别，0表示不置顶，数值越大置顶级别越高
 
+    // --- 回复数量 ---
+    private Integer replyCount = 0; // 回复数量
+
     // Constructors
     public Post() {}
 
@@ -159,6 +162,15 @@ public class Post {
         this.pinLevel = pinLevel;
     }
 
+    // --- 回复数量的 getter/setter ---
+    public Integer getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(Integer replyCount) {
+        this.replyCount = replyCount;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -176,6 +188,7 @@ public class Post {
                 ", authorUsername='" + authorUsername + '\'' +
                 ", authorRole='" + authorRole + '\'' +
                 ", pinLevel=" + pinLevel +
+                ", replyCount=" + replyCount +
                 '}';
     }
 }

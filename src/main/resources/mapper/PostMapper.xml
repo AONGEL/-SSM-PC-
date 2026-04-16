@@ -19,59 +19,90 @@
         <result property="authorUsername" column="username"/>
         <result property="sectionName" column="section_name"/>
         <result property="authorRole" column="user_role"/>
+        <result property="replyCount" column="reply_count"/>
     </resultMap>
 
     <!-- 查询所有帖子，包含用户名和版块名称 -->
     <select id="selectAll" resultMap="PostWithUserResultMap">
         SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
-               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role,
+               COALESCE(reply_counts.reply_count, 0) AS reply_count
         FROM post p
                  JOIN user u ON p.user_id = u.id
                  JOIN forum_section s ON p.section_id = s.id
-        ORDER BY p.pin_level DESC, p.create_time DESC
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS reply_count
+                    FROM reply
+                    GROUP BY post_id
+                 ) reply_counts ON p.id = reply_counts.post_id
+        ORDER BY p.pin_level DESC, reply_counts.reply_count DESC, p.create_time DESC
     </select>
 
     <!-- 查询单个帖子，包含用户名和版块名称 -->
     <select id="selectById" parameterType="java.lang.Integer" resultMap="PostWithUserResultMap">
         SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
-               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role,
+               COALESCE(reply_counts.reply_count, 0) AS reply_count
         FROM post p
                  JOIN user u ON p.user_id = u.id
                  JOIN forum_section s ON p.section_id = s.id
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS reply_count
+                    FROM reply
+                    GROUP BY post_id
+                 ) reply_counts ON p.id = reply_counts.post_id
         WHERE p.id = #{id}
     </select>
 
-    <!-- 根据板块ID查询帖子列表，包含用户名和版块名称 -->
+    <!-- 根据板块ID查询帖子列表，包含用户名和版块名称，并按回复数排序 -->
     <select id="selectBySectionId" parameterType="java.lang.Integer" resultMap="PostWithUserResultMap">
         SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
-               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role,
+               COALESCE(reply_counts.reply_count, 0) AS reply_count
         FROM post p
                  JOIN user u ON p.user_id = u.id
                  JOIN forum_section s ON p.section_id = s.id
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS reply_count
+                    FROM reply
+                    GROUP BY post_id
+                 ) reply_counts ON p.id = reply_counts.post_id
         WHERE p.section_id = #{sectionId}
-        ORDER BY p.pin_level DESC, p.create_time DESC
+        ORDER BY p.pin_level DESC, reply_counts.reply_count DESC, p.create_time DESC
     </select>
 
-    <!-- 查询最新的帖子，包含用户名和版块名称 -->
+    <!-- 查询最新的帖子，包含用户名和版块名称，并按回复数排序 -->
     <select id="selectLatestPosts" parameterType="map" resultMap="PostWithUserResultMap">
         SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
-               p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+               p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role,
+               COALESCE(reply_counts.reply_count, 0) AS reply_count
         FROM post p
                  JOIN user u ON p.user_id = u.id
                  JOIN forum_section s ON p.section_id = s.id
-        ORDER BY p.pin_level DESC, p.create_time DESC
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS reply_count
+                    FROM reply
+                    GROUP BY post_id
+                 ) reply_counts ON p.id = reply_counts.post_id
+        ORDER BY p.pin_level DESC, reply_counts.reply_count DESC, p.create_time DESC
             LIMIT #{limit}
     </select>
 
     <!-- 根据用户ID查询帖子，包含用户名和版块名称 -->
     <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="PostWithUserResultMap">
         SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
-               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name, u.role AS user_role,
+               COALESCE(reply_counts.reply_count, 0) AS reply_count
         FROM post p
                  JOIN user u ON p.user_id = u.id
                  JOIN forum_section s ON p.section_id = s.id
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS reply_count
+                    FROM reply
+                    GROUP BY post_id
+                 ) reply_counts ON p.id = reply_counts.post_id
         WHERE p.user_id = #{userId}
-        ORDER BY p.pin_level DESC, p.create_time DESC
+        ORDER BY p.pin_level DESC, reply_counts.reply_count DESC, p.create_time DESC
     </select>
 
     <!-- 插入新帖子，包含 pin_level 字段 -->
@@ -133,12 +164,18 @@
 
     <select id="selectByUserIdWithPagination" parameterType="map" resultMap="PostWithUserResultMap">
         SELECT p.id AS post_id, p.title, p.content, p.user_id, p.section_id, p.create_time, p.update_time,
-               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name
+               p.is_locked, p.pin_level, p.view_count, u.username, s.name AS section_name,
+               COALESCE(reply_counts.reply_count, 0) AS reply_count
         FROM post p
                  JOIN user u ON p.user_id = u.id
+                 LEFT JOIN (
+                    SELECT post_id, COUNT(*) AS reply_count
+                    FROM reply
+                    GROUP BY post_id
+                 ) reply_counts ON p.id = reply_counts.post_id
                  JOIN forum_section s ON p.section_id = s.id
         WHERE p.user_id = #{userId}
-        ORDER BY p.create_time DESC
+        ORDER BY reply_counts.reply_count DESC, p.create_time DESC
             LIMIT #{offset}, #{limit}
     </select>
 

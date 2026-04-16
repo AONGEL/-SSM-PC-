@@ -3,6 +3,11 @@ package com.hardware.service.impl;
 import com.hardware.dao.PostDao;
 import com.hardware.entity.Post;
 import com.hardware.service.PostService;
+import com.hardware.entity.CpuInfo;
+import com.hardware.entity.GpuInfo;
+import com.hardware.entity.MotherboardInfo;
+import com.hardware.entity.MemoryInfo;
+import com.hardware.entity.StorageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +22,21 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostDao postDao;
+
+    @Autowired
+    private CpuInfoDao cpuInfoDao;
+
+    @Autowired
+    private GpuInfoDao gpuInfoDao;
+
+    @Autowired
+    private MotherboardInfoDao motherboardInfoDao;
+
+    @Autowired
+    private com.hardware.dao.MemoryInfoDao memoryInfoDao;
+
+    @Autowired
+    private com.hardware.dao.StorageInfoDao storageInfoDao;
 
     @Override
     public List<Post> getAllPosts() {
@@ -118,7 +138,28 @@ public class PostServiceImpl implements PostService {
         return postDao.selectByUserIdWithPagination(userId, offset, pageSize);
     }
 
+    @Override
+    public CpuInfo getCpuById(Integer id) {
+        return cpuInfoDao.selectById(id);
+    }
 
+    @Override
+    public GpuInfo getGpuById(Integer id) {
+        return gpuInfoDao.selectById(id);
+    }
 
+    @Override
+    public MotherboardInfo getMotherboardById(Integer id) {
+        return motherboardInfoDao.selectById(id);
+    }
 
+    @Override
+    public MemoryInfo getMemoryById(Integer id) {
+        return memoryInfoDao.selectById(id);
+    }
+
+    @Override
+    public StorageInfo getStorageById(Integer id) {
+        return storageInfoDao.selectById(id);
+    }
 }
