@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hardware.dao.UserDao">
+    <resultMap id="UserResultMap" type="com.hardware.entity.User">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="createTime" column="create_time"/>
+        <result property="role" column="role"/>
+        <result property="avatar" column="avatar"/>
+        <result property="certificationReason" column="certification_reason"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="UserResultMap">
+        SELECT id, username, password, create_time, role, avatar, certification_reason
+        FROM user
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="UserResultMap">
+        SELECT id, username, password, create_time, role, avatar, certification_reason
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="UserResultMap">
+        SELECT id, username, password, create_time, role, avatar, certification_reason
+        FROM user
+        WHERE username = #{username}
+    </select>
+
+    <insert id="insert" parameterType="com.hardware.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (username, password, create_time, role, avatar)
+        VALUES (#{username}, #{password}, NOW(), #{role}, #{avatar})
+    </insert>
+
+    <update id="update" parameterType="com.hardware.entity.User">
+        UPDATE user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="role != null and role != ''">
+                role = #{role},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+            <if test="certificationReason != null">
+                certification_reason = #{certificationReason},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updatePassword" parameterType="map">
+        UPDATE user
+        SET password = #{newPassword}
+        WHERE id = #{userId} AND password = #{oldPassword}
+    </update>
+
+    <update id="updateRole" parameterType="map">
+        UPDATE user
+        SET role = #{role}
+        WHERE id = #{userId}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM user
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectByUsernameAndPassword" parameterType="map" resultMap="UserResultMap">
+        SELECT id, username, password, create_time, role, avatar, certification_reason
+        FROM user
+        WHERE username = #{username} AND password = #{password}
+    </select>
+</mapper>

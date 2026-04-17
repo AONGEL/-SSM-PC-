@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hardware.dao.CpuInfoDao">
+
+    <resultMap id="CpuInfoResultMap" type="com.hardware.entity.CpuInfo">
+        <id property="id" column="id"/>
+        <result property="brand" column="brand"/>
+        <result property="model" column="model"/>
+        <result property="interfaceType" column="interface_type"/>
+        <result property="cores" column="cores"/>
+        <result property="threads" column="threads"/>
+        <result property="baseFrequency" column="base_frequency"/>
+        <result property="maxFrequency" column="max_frequency"/>
+        <result property="tdp" column="tdp"/>
+        <result property="integratedGraphics" column="integrated_graphics"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time FROM cpu_info
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time FROM cpu_info WHERE id = #{id}
+    </select>
+
+    <select id="selectByModel" parameterType="java.lang.String" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time FROM cpu_info WHERE model = #{model}
+    </select>
+
+    <insert id="insert" parameterType="com.hardware.entity.CpuInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cpu_info (brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time)
+        VALUES (#{brand}, #{model}, #{interfaceType}, #{cores}, #{threads}, #{baseFrequency}, #{maxFrequency}, #{tdp}, #{integratedGraphics}, #{releaseDate}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="com.hardware.entity.CpuInfo">
+        UPDATE cpu_info SET
+                            brand = #{brand},
+                            model = #{model},
+                            interface_type = #{interfaceType},
+                            cores = #{cores},
+                            threads = #{threads},
+                            base_frequency = #{baseFrequency},
+                            max_frequency = #{maxFrequency},
+                            tdp = #{tdp},
+                            integrated_graphics = #{integratedGraphics},
+                            release_date = #{releaseDate},
+                            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM cpu_info WHERE id = #{id}
+    </delete>
+
+    <!-- 新增：搜索CPU -->
+    <select id="searchCpus" parameterType="map" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time
+        FROM cpu_info
+        WHERE LOWER(brand) LIKE CONCAT('%', LOWER(#{term}), '%')
+           OR LOWER(model) LIKE CONCAT('%', LOWER(#{term}), '%')
+    </select>
+
+</mapper>

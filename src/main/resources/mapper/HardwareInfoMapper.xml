@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hardware.dao.HardwareInfoDao">
+
+    <!-- CPU ResultMap: 显式映射数据库字段名 (snake_case) 到 Java 实体类属性名 (camelCase) -->
+    <resultMap id="CpuInfoResultMap" type="com.hardware.entity.CpuInfo">
+        <id property="id" column="id"/>
+        <result property="brand" column="brand"/>
+        <result property="model" column="model"/>
+        <result property="interfaceType" column="interface_type"/>
+        <result property="cores" column="cores"/>             <!-- 修正 -->
+        <result property="threads" column="threads"/>         <!-- 修正 -->
+        <result property="baseFrequency" column="base_frequency"/>
+        <result property="maxFrequency" column="max_frequency"/>
+        <result property="tdp" column="tdp"/>
+        <result property="integratedGraphics" column="integrated_graphics"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- GPU ResultMap: 显式映射 (移除 architecture, tbp, direct_x_version, image_url) -->
+    <resultMap id="GpuInfoResultMap" type="com.hardware.entity.GpuInfo">
+        <id property="id" column="id"/>
+        <result property="brand" column="brand"/>
+        <result property="model" column="model"/>
+        <!-- <result property="architecture" column="architecture"/> --> <!-- 移除 -->
+        <result property="memorySize" column="memory_size"/>
+        <result property="memoryType" column="memory_type"/>
+        <result property="memoryBusWidth" column="memory_bus_width"/>
+        <result property="baseClock" column="base_clock"/>
+        <result property="boostClock" column="boost_clock"/>
+        <result property="tdp" column="tdp"/> <!-- tdp 列存在，保留 -->
+        <!-- <result property="tbp" column="tbp"/> --> <!-- 移除 -->
+        <!-- <result property="directXVersion" column="direct_x_version"/> --> <!-- 移除 -->
+        <result property="interfaceType" column="interface_type"/>
+        <result property="releaseDate" column="release_date"/>
+        <!-- <result property="imageUrl" column="image_url"/> --> <!-- 移除 -->
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 主板 ResultMap: 显式映射 (移除 image_url) -->
+    <resultMap id="MotherboardInfoResultMap" type="com.hardware.entity.MotherboardInfo">
+        <id property="id" column="id"/>
+        <result property="brand" column="brand"/>
+        <result property="model" column="model"/>
+        <result property="chipset" column="chipset"/>
+        <result property="cpuInterface" column="cpu_interface"/>
+        <result property="memorySlots" column="memory_slots"/>
+        <result property="maxMemory" column="max_memory"/>
+        <result property="memoryType" column="memory_type"/>
+        <result property="powerPhase" column="power_phase"/>
+        <result property="sataPorts" column="sata_ports"/>
+        <result property="m2Slots" column="m2_slots"/>
+        <result property="releaseDate" column="release_date"/>
+        <!-- <result property="imageUrl" column="image_url"/> --> <!-- 移除这一行 -->
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!-- 查询所有 CPU -->
+    <select id="selectAllCpus" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time
+        FROM cpu_info
+    </select>
+
+    <!-- 根据 ID 查询 CPU -->
+    <select id="selectCpuById" parameterType="java.lang.Integer" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time
+        FROM cpu_info
+        WHERE id = #{id}
+    </select>
+
+    <!-- 搜索 CPU -->
+    <select id="searchCpus" parameterType="map" resultMap="CpuInfoResultMap">
+        SELECT id, brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time
+        FROM cpu_info
+        WHERE LOWER(brand) LIKE CONCAT('%', LOWER(#{term}), '%')
+           OR LOWER(model) LIKE CONCAT('%', LOWER(#{term}), '%')
+    </select>
+
+    <!-- 新增 CPU -->
+    <insert id="insertCpuInfo" parameterType="com.hardware.entity.CpuInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cpu_info (
+            brand, model, interface_type, cores, threads, base_frequency, max_frequency, tdp, integrated_graphics, release_date, create_time, update_time
+        )
+        VALUES (
+                   #{brand}, #{model}, #{interfaceType}, #{cores}, #{threads}, #{baseFrequency}, #{maxFrequency}, #{tdp}, #{integratedGraphics}, #{releaseDate}, NOW(), NOW()
+               )
+    </insert>
+
+    <!-- 删除 CPU -->
+    <delete id="deleteCpuInfo" parameterType="java.lang.Integer">
+        DELETE FROM cpu_info WHERE id = #{id}
+    </delete>
+
+    <!-- 查询所有 GPU (移除 architecture, tbp, direct_x_version, image_url) -->
+    <select id="selectAllGpus" resultMap="GpuInfoResultMap">
+        SELECT id, brand, model, memory_size, memory_type, memory_bus_width, base_clock, boost_clock, tdp, interface_type, release_date, create_time, update_time
+        FROM gpu_info
+    </select>
+
+    <!-- 根据 ID 查询 GPU (移除 architecture, tbp, direct_x_version, image_url) -->
+    <select id="selectGpuById" parameterType="java.lang.Integer" resultMap="GpuInfoResultMap">
+        SELECT id, brand, model, memory_size, memory_type, memory_bus_width, base_clock, boost_clock, tdp, interface_type, release_date, create_time, update_time
+        FROM gpu_info
+        WHERE id = #{id}
+    </select>
+
+    <!-- 搜索 GPU (移除 architecture, tbp, direct_x_version, image_url) -->
+    <select id="searchGpus" parameterType="map" resultMap="GpuInfoResultMap">
+        SELECT id, brand, model, memory_size, memory_type, memory_bus_width, base_clock, boost_clock, tdp, interface_type, release_date, create_time, update_time
+        FROM gpu_info
+        WHERE LOWER(brand) LIKE CONCAT('%', LOWER(#{term}), '%')
+           OR LOWER(model) LIKE CONCAT('%', LOWER(#{term}), '%')
+    </select>
+
+    <!-- 新增 GPU -->
+    <insert id="insertGpuInfo" parameterType="com.hardware.entity.GpuInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO gpu_info (
+        brand, model, memory_size, memory_type, memory_bus_width, base_clock, boost_clock, tdp, interface_type, release_date, create_time, update_time
+        <!-- 如果数据库表有 architecture, tbp, direct_x_version, image_url 字段，也需要加上 -->
+        <!-- , architecture, tbp, direct_x_version, image_url -->
+        )
+        VALUES (
+        #{brand}, #{model}, #{memorySize}, #{memoryType}, #{memoryBusWidth}, #{baseClock}, #{boostClock}, #{tdp}, #{interfaceType}, #{releaseDate}, NOW(), NOW()
+        <!-- , #{architecture}, #{tbp}, #{directXVersion}, #{imageUrl} -->
+        )
+    </insert>
+
+
+    <!-- 删除 GPU -->
+    <delete id="deleteGpuInfo" parameterType="java.lang.Integer">
+        DELETE FROM gpu_info WHERE id = #{id}
+    </delete>
+
+    <!-- 查询所有主板 (移除 image_url) -->
+    <select id="selectAllMotherboards" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time
+        FROM motherboard_info
+    </select>
+
+    <!-- 根据 ID 查询主板 (移除 image_url) -->
+    <select id="selectMotherboardById" parameterType="java.lang.Integer" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time
+        FROM motherboard_info
+        WHERE id = #{id}
+    </select>
+
+    <!-- 搜索主板 (移除 image_url) -->
+    <select id="searchMotherboards" parameterType="map" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time
+        FROM motherboard_info
+        WHERE LOWER(brand) LIKE CONCAT('%', LOWER(#{term}), '%')
+           OR LOWER(model) LIKE CONCAT('%', LOWER(#{term}), '%')
+    </select>
+
+    <!-- 新增 主板  -->
+    <insert id="insertMotherboardInfo" parameterType="com.hardware.entity.MotherboardInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO motherboard_info (
+        brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time
+        <!-- 如果数据库表有 image_url 字段，也需要加上 -->
+        <!-- , image_url -->
+        )
+        VALUES (
+        #{brand}, #{model}, #{chipset}, #{cpuInterface}, #{memorySlots}, #{maxMemory}, #{memoryType}, #{powerPhase}, #{sataPorts}, #{m2Slots}, #{releaseDate}, NOW(), NOW()
+        <!-- , #{imageUrl} -->
+        )
+    </insert>
+
+    <!-- 删除 主板 -->
+    <delete id="deleteMotherboardInfo" parameterType="java.lang.Integer">
+        DELETE FROM motherboard_info WHERE id = #{id}
+    </delete>
+
+    <!-- 用于 API 获取单个硬件详情的查询 (需要根据表名动态选择) -->
+    <!-- 这个查询需要在 Service/Controller 层根据 table 参数动态调用下面三个具体的方法 -->
+    <!-- selectCpuById, selectGpuById, selectMotherboardById -->
+
+    <!-- 更新 CPU -->
+    <update id="updateCpuInfo" parameterType="com.hardware.entity.CpuInfo">
+        UPDATE cpu_info
+        <set>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="interfaceType != null">interface_type = #{interfaceType},</if>
+            <if test="cores != null">cores = #{cores},</if>             <!-- 修正 -->
+            <if test="threads != null">threads = #{threads},</if>         <!-- 修正 -->
+            <if test="baseFrequency != null">base_frequency = #{baseFrequency},</if>
+            <if test="maxFrequency != null">max_frequency = #{maxFrequency},</if>
+            <if test="tdp != null">tdp = #{tdp},</if>
+            <if test="integratedGraphics != null">integrated_graphics = #{integratedGraphics},</if>
+            <if test="releaseDate != null">release_date = #{releaseDate},</if>
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新 GPU (移除 architecture, tbp, direct_x_version, image_url) -->
+    <update id="updateGpuInfo" parameterType="com.hardware.entity.GpuInfo">
+        UPDATE gpu_info
+        <set>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="model != null">model = #{model},</if>
+            <!-- <if test="architecture != null">architecture = #{architecture},</if> --> <!-- 移除 -->
+            <if test="memorySize != null">memory_size = #{memorySize},</if>
+            <if test="memoryType != null">memory_type = #{memoryType},</if>
+            <if test="memoryBusWidth != null">memory_bus_width = #{memoryBusWidth},</if>
+            <if test="baseClock != null">base_clock = #{baseClock},</if>
+            <if test="boostClock != null">boost_clock = #{boostClock},</if>
+            <if test="tdp != null">tdp = #{tdp},</if>
+            <!-- <if test="tbp != null">tbp = #{tbp},</if> --> <!-- 移除 -->
+            <!-- <if test="directXVersion != null">direct_x_version = #{directXVersion},</if> --> <!-- 移除 -->
+            <if test="interfaceType != null">interface_type = #{interfaceType},</if>
+            <if test="releaseDate != null">release_date = #{releaseDate},</if>
+            <!-- <if test="imageUrl != null">image_url = #{imageUrl},</if> --> <!-- 移除 -->
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 更新 主板 (移除 image_url) -->
+    <update id="updateMotherboardInfo" parameterType="com.hardware.entity.MotherboardInfo">
+        UPDATE motherboard_info
+        <set>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="chipset != null">chipset = #{chipset},</if>
+            <if test="cpuInterface != null">cpu_interface = #{cpuInterface},</if>
+            <if test="memorySlots != null">memory_slots = #{memorySlots},</if>
+            <if test="maxMemory != null">max_memory = #{maxMemory},</if>
+            <if test="memoryType != null">memory_type = #{memoryType},</if>
+            <if test="powerPhase != null">power_phase = #{powerPhase},</if>
+            <if test="sataPorts != null">sata_ports = #{sataPorts},</if>
+            <if test="m2Slots != null">m2_slots = #{m2Slots},</if>
+            <if test="releaseDate != null">release_date = #{releaseDate},</if>
+            <!-- <if test="imageUrl != null">image_url = #{imageUrl},</if> --> <!-- 移除这一行 -->
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

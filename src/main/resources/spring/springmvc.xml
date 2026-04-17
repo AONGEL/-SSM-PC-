@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:validation="http://www.springframework.org/schema/validation"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/validation
+           http://www.springframework.org/schema/validation/spring-validation.xsd">
+
+    <!-- 1. 扫描Controller层的注解 -->
+    <context:component-scan base-package="com.hardware.controller"/>
+
+    <!-- 2. 启用注解驱动 (包含验证支持) -->
+    <mvc:annotation-driven validator="validator"/>
+
+    <!-- 3. 配置验证器 -->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
+
+    <!-- 4. 配置静态资源处理器 (处理CSS, JS, 图片等) -->
+    <mvc:default-servlet-handler/>
+
+    <!-- 5. 配置视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- 6. 配置文件上传解析器 (新增) -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设置上传文件的最大尺寸 (例如 10MB) -->
+        <property name="maxUploadSize" value="10485760"/> <!-- 10 * 1024 * 1024 -->
+        <!-- 设置上传时内存的大小 (例如 4096 bytes = 4KB) -->
+        <property name="maxInMemorySize" value="4096"/>
+    </bean>
+
+</beans>
