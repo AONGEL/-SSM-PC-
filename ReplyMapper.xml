@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hardware.dao.ReplyDao">
+    <!-- 为回复查询创建通用的 ResultMap，包含用户名 -->
+    <resultMap id="ReplyWithUserResultMap" type="com.hardware.entity.Reply">
+        <id property="id" column="reply_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="parentReplyId" column="parent_reply_id"/>
+        <result property="authorUsername" column="username"/>
+        <result property="authorRole" column="user_role"/>
+    </resultMap>
+
+    <!-- 旧的 ReplyResultMap (其他地方还在用) -->
+    <resultMap id="ReplyResultMap" type="com.hardware.entity.Reply">
+        <id property="id" column="id"/>
+        <result property="postId" column="post_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="parentReplyId" column="parent_reply_id"/>
+    </resultMap>
+
+    <!-- 根据帖子ID查询回复列表，包含用户名 -->
+    <select id="selectByPostId" parameterType="java.lang.Integer" resultMap="ReplyWithUserResultMap">
+        SELECT r.id AS reply_id, r.content, r.post_id, r.user_id, r.create_time, u.username, u.role AS user_role
+        FROM reply r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.post_id = #{postId}
+        ORDER BY r.create_time ASC
+    </select>
+
+    <!-- 查询单个回复，包含用户名 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="ReplyWithUserResultMap">
+        SELECT r.id AS reply_id, r.content, r.post_id, r.user_id, r.create_time, u.username, u.role AS user_role
+        FROM reply r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.id = #{id}
+    </select>
+
+    <!-- 根据用户ID查询回复，包含用户名 -->
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="ReplyWithUserResultMap">
+        SELECT r.id AS reply_id, r.post_id, r.user_id, r.content, r.create_time, u.username, u.role AS user_role
+        FROM reply r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.user_id = #{userId}
+        ORDER BY r.create_time DESC
+    </select>
+
+    <!-- 插入、更新、删除回复的 SQL 不受影响 -->
+    <insert id="insert" parameterType="com.hardware.entity.Reply" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO reply (post_id, user_id, content, create_time, parent_reply_id)
+        VALUES (#{postId}, #{userId}, #{content}, NOW(), #{parentReplyId})
+    </insert>
+
+    <update id="update" parameterType="com.hardware.entity.Reply">
+        UPDATE reply
+        <set>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="parentReplyId != null">
+                parent_reply_id = #{parentReplyId},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM reply WHERE id = #{id}
+    </delete>
+
+    <!-- 分页查询：根据帖子ID查询回复 -->
+    <select id="selectByPostIdWithPagination" parameterType="map" resultMap="ReplyWithUserResultMap">
+        SELECT r.id AS reply_id, r.content, r.post_id, r.user_id, r.create_time, u.username, u.role AS user_role
+        FROM reply r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.post_id = #{postId}
+        ORDER BY r.create_time ASC
+            LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 计数：根据帖子ID统计回复数量 -->
+    <select id="countRepliesByPostId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM reply WHERE post_id = #{postId}
+    </select>
+
+    <!-- 新增：分页查询：根据用户ID查询回复 -->
+    <select id="selectByUserIdWithPagination" parameterType="map" resultMap="ReplyWithUserResultMap">
+        SELECT r.id AS reply_id, r.post_id, r.user_id, r.content, r.create_time, u.username, u.role AS user_role
+        FROM reply r
+                 JOIN user u ON r.user_id = u.id
+        WHERE r.user_id = #{userId}
+        ORDER BY r.create_time DESC
+            LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 新增：计数：根据用户ID统计回复数量 -->
+    <select id="countByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM reply WHERE user_id = #{userId}
+    </select>
+</mapper>

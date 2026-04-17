@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hardware.dao.CertificationQuestionDao">
+
+    <resultMap id="CertificationQuestionResultMap" type="com.hardware.entity.CertificationQuestion">
+        <id property="id" column="id"/>
+        <result property="questionType" column="question_type"/>
+        <result property="questionContent" column="question_content"/>
+        <result property="isActive" column="is_active"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="CertificationQuestionResultMap">
+        SELECT id, question_type, question_content, is_active, created_at, updated_at FROM certification_question
+    </select>
+
+    <select id="selectByTypeAndActive" resultMap="CertificationQuestionResultMap">
+        SELECT id, question_type, question_content, is_active, created_at, updated_at FROM certification_question WHERE question_type = #{type} AND is_active = #{active}
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="CertificationQuestionResultMap">
+        SELECT id, question_type, question_content, is_active, created_at, updated_at FROM certification_question WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.hardware.entity.CertificationQuestion" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO certification_question (question_type, question_content, is_active)
+        VALUES (#{questionType}, #{questionContent}, #{isActive})
+    </insert>
+
+    <update id="update" parameterType="com.hardware.entity.CertificationQuestion">
+        UPDATE certification_question
+        <set>
+            <if test="questionType != null">
+                question_type = #{questionType},
+            </if>
+            <if test="questionContent != null">
+                question_content = #{questionContent},
+            </if>
+            <if test="isActive != null">
+                is_active = #{isActive},
+            </if>
+            updated_at = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM certification_question WHERE id = #{id}
+    </delete>
+
+</mapper>

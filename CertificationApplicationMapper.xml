@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hardware.dao.CertificationApplicationDao">
+
+    <!-- 修正：CertificationApplication ResultMap，关联 User 信息以获取用户名 -->
+    <resultMap id="CertificationApplicationWithUserResultMap" type="com.hardware.entity.CertificationApplication">
+        <id property="id" column="ca_id"/> <!-- 明确指定认证申请表的主键列别名 -->
+        <result property="userId" column="ca_user_id"/> <!-- 认证申请表的用户ID列别名 -->
+        <result property="applicationStatus" column="ca_application_status"/>
+        <result property="submittedAt" column="ca_submitted_at"/>
+        <result property="examDuration" column="ca_exam_duration"/>
+        <result property="answers" column="ca_answers"/>
+        <result property="adminRemarks" column="ca_admin_remarks"/>
+        <result property="reviewedAt" column="ca_reviewed_at"/>
+        <!-- 关联查询获取用户名 -->
+        <result property="authorUsername" column="u_username"/> <!-- 映射用户表的用户名列别名 -->
+        <!-- 如果需要完整的 User 对象，可以使用 association (但通常只获取用户名效率更高) -->
+        <!--
+        <association property="user" column="ca_user_id" select="com.hardware.dao.UserDao.selectById"/>
+        -->
+    </resultMap>
+
+    <!-- 旧的 ResultMap (如果其他地方还在用) -->
+    <resultMap id="CertificationApplicationResultMap" type="com.hardware.entity.CertificationApplication">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="applicationStatus" column="application_status"/>
+        <result property="submittedAt" column="submitted_at"/>
+        <result property="examDuration" column="exam_duration"/>
+        <result property="answers" column="answers"/>
+        <result property="adminRemarks" column="admin_remarks"/>
+        <result property="reviewedAt" column="reviewed_at"/>
+    </resultMap>
+
+    <!-- 修正：查询所有认证申请，关联用户信息获取用户名 -->
+    <select id="selectAll" resultMap="CertificationApplicationWithUserResultMap">
+        SELECT
+        ca.id AS ca_id,
+        ca.user_id AS ca_user_id,
+        ca.application_status AS ca_application_status,
+        ca.submitted_at AS ca_submitted_at,
+        ca.exam_duration AS ca_exam_duration,
+        ca.answers AS ca_answers,
+        ca.admin_remarks AS ca_admin_remarks,
+        ca.reviewed_at AS ca_reviewed_at,
+        u.username AS u_username <!-- 获取用户名并赋予别名 -->
+        FROM certification_application ca
+        JOIN user u ON ca.user_id = u.id <!-- JOIN user 表 -->
+        ORDER BY ca.submitted_at DESC
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="CertificationApplicationResultMap">
+        SELECT id, user_id, application_status, submitted_at, exam_duration, answers, admin_remarks, reviewed_at
+        FROM certification_application
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="CertificationApplicationResultMap">
+        SELECT id, user_id, application_status, submitted_at, exam_duration, answers, admin_remarks, reviewed_at
+        FROM certification_application
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectByStatus" parameterType="java.lang.String" resultMap="CertificationApplicationResultMap">
+        SELECT id, user_id, application_status, submitted_at, exam_duration, answers, admin_remarks, reviewed_at
+        FROM certification_application
+        WHERE application_status = #{status}
+    </select>
+
+    <select id="selectByUserIdAndStatus" parameterType="map" resultMap="CertificationApplicationResultMap">
+        SELECT id, user_id, application_status, submitted_at, exam_duration, answers, admin_remarks, reviewed_at
+        FROM certification_application
+        WHERE user_id = #{userId} AND application_status = #{status}
+    </select>
+
+    <insert id="insert" parameterType="com.hardware.entity.CertificationApplication" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO certification_application (user_id, answers, exam_duration, application_status)
+        VALUES (#{userId}, #{answers}, #{examDuration}, #{applicationStatus})
+    </insert>
+
+    <update id="update" parameterType="com.hardware.entity.CertificationApplication">
+        UPDATE certification_application
+        <set>
+            <if test="applicationStatus != null">
+                application_status = #{applicationStatus},
+            </if>
+            <if test="adminRemarks != null">
+                admin_remarks = #{adminRemarks},
+            </if>
+            reviewed_at = NOW(),
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM certification_application WHERE id = #{id}
+    </delete>
+
+</mapper>

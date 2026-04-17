@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hardware.dao.MotherboardInfoDao">
+
+    <resultMap id="MotherboardInfoResultMap" type="com.hardware.entity.MotherboardInfo">
+        <id property="id" column="id"/>
+        <result property="brand" column="brand"/>
+        <result property="model" column="model"/>
+        <result property="chipset" column="chipset"/>
+        <result property="cpuInterface" column="cpu_interface"/>
+        <result property="memorySlots" column="memory_slots"/>
+        <result property="maxMemory" column="max_memory"/>
+        <result property="memoryType" column="memory_type"/>
+        <result property="powerPhase" column="power_phase"/>
+        <result property="sataPorts" column="sata_ports"/>
+        <result property="m2Slots" column="m2_slots"/>
+        <result property="releaseDate" column="release_date"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time FROM motherboard_info
+    </select>
+
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time FROM motherboard_info WHERE id = #{id}
+    </select>
+
+    <select id="selectByModel" parameterType="java.lang.String" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time FROM motherboard_info WHERE model = #{model}
+    </select>
+
+    <insert id="insert" parameterType="com.hardware.entity.MotherboardInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO motherboard_info (brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time)
+        VALUES (#{brand}, #{model}, #{chipset}, #{cpuInterface}, #{memorySlots}, #{maxMemory}, #{memoryType}, #{powerPhase}, #{sataPorts}, #{m2Slots}, #{releaseDate}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="com.hardware.entity.MotherboardInfo">
+        UPDATE motherboard_info SET
+                                    brand = #{brand},
+                                    model = #{model},
+                                    chipset = #{chipset},
+                                    cpu_interface = #{cpuInterface},
+                                    memory_slots = #{memorySlots},
+                                    max_memory = #{maxMemory},
+                                    memory_type = #{memoryType},
+                                    power_phase = #{powerPhase},
+                                    sata_ports = #{sataPorts},
+                                    m2_slots = #{m2Slots},
+                                    release_date = #{releaseDate},
+                                    update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM motherboard_info WHERE id = #{id}
+    </delete>
+
+    <!-- 新增：搜索主板 -->
+    <select id="searchMotherboards" parameterType="map" resultMap="MotherboardInfoResultMap">
+        SELECT id, brand, model, chipset, cpu_interface, memory_slots, max_memory, memory_type, power_phase, sata_ports, m2_slots, release_date, create_time, update_time
+        FROM motherboard_info
+        WHERE LOWER(brand) LIKE CONCAT('%', LOWER(#{term}), '%')
+           OR LOWER(model) LIKE CONCAT('%', LOWER(#{term}), '%')
+    </select>
+
+</mapper>
