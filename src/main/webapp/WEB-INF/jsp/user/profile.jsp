@@ -197,7 +197,7 @@
                         <li><a href="${pageContext.request.contextPath}/forum/section" class="link-item">📁 论坛分区</a></li>
                         <li><a href="${pageContext.request.contextPath}/hardware-library" class="link-item">🔧 硬件参数库</a></li>
                     </ul>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -233,7 +233,7 @@
                             <c:forEach begin="1" end="${totalPagesPosts}" var="i">
                                 <c:choose>
                                     <c:when test="${i == currentPagePosts}"><span class="current-page">${i}</span></c:when>
-                                    <c:otherwise><a href="${pageContext.request.contextPath}/user/profile?pagePosts=${i}&pageReplies=${pageReplies}">${i}</a></c:otherwise>
+                                    <c:otherwise><a href="${pageContext.request.contextPath}/user/profile?pagePosts=${i}&pageReplies=${pageReplies}&tab=posts">${i}</a></c:otherwise>
                                 </c:choose>
                             </c:forEach>
                         </div>
@@ -264,7 +264,7 @@
                             <c:forEach begin="1" end="${totalPagesReplies}" var="i">
                                 <c:choose>
                                     <c:when test="${i == currentPageReplies}"><span class="current-page">${i}</span></c:when>
-                                    <c:otherwise><a href="${pageContext.request.contextPath}/user/profile?pagePosts=${pagePosts}&pageReplies=${i}">${i}</a></c:otherwise>
+                                    <c:otherwise><a href="${pageContext.request.contextPath}/user/profile?pagePosts=${pagePosts}&pageReplies=${i}&tab=replies">${i}</a></c:otherwise>
                                 </c:choose>
                             </c:forEach>
                         </div>
@@ -279,11 +279,40 @@
     </div>
 </div>
 <script>
-    function switchTab(tabName) {
+    // 从 URL 参数中获取 tab 名称，如果没有则默认为 'overview'
+    function getActiveTabFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('tab') || 'overview';
+    }
+
+    // 页面加载时根据 URL 参数激活对应的标签页
+    document.addEventListener('DOMContentLoaded', function() {
+        const activeTab = getActiveTabFromUrl();
+        if (activeTab === 'posts' || activeTab === 'replies' || activeTab === 'overview') {
+            switchTab(activeTab, true);
+        }
+    });
+
+    function switchTab(tabName, fromLoad) {
         document.querySelectorAll('.tab-content').forEach(function(content) { content.classList.remove('active'); });
         document.querySelectorAll('.tab-item').forEach(function(item) { item.classList.remove('active'); });
         document.getElementById('tab-' + tabName).classList.add('active');
-        event.target.classList.add('active');
+
+        // 如果是从页面加载触发的，需要根据 tabName 找到对应的按钮
+        if (fromLoad) {
+            const buttons = document.querySelectorAll('.tab-item');
+            for (let i = 0; i < buttons.length; i++) {
+                if (buttons[i].textContent.includes(
+                    tabName === 'overview' ? '概览' :
+                        tabName === 'posts' ? '我的帖子' : '我的回复'
+                )) {
+                    buttons[i].classList.add('active');
+                    break;
+                }
+            }
+        } else {
+            event.target.classList.add('active');
+        }
     }
 </script>
 </body>

@@ -83,6 +83,7 @@ public class UserController {
             @RequestParam(defaultValue = "1") Integer pagePosts,
             @RequestParam(defaultValue = "1") Integer pageReplies,
             @RequestParam(defaultValue = "5") Integer pageSize,
+            @RequestParam(defaultValue = "overview") String tab,
             Model model,
             HttpSession session) {
 
@@ -148,6 +149,8 @@ public class UserController {
             model.addAttribute("totalReplies", totalReplies);
             model.addAttribute("startReplyIndex", startReplyIndex);
             model.addAttribute("endReplyIndex", endReplyIndex);
+
+            model.addAttribute("activeTab", tab);
 
             return "user/profile";
 
