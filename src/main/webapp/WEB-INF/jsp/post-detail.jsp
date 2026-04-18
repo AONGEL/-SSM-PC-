@@ -15,13 +15,13 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
-        /* ================= 顶部 Header ================= */
+        /* ================= 顶部 Header (恢复原版) ================= */
         .header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; padding: 0 20px; }
         .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 56px; }
-        .logo { font-size: 22px; font-weight: 700; color: #0066ff; display: flex; align-items: center; gap: 8px; }
+        .logo { font-size: 22px; font-weight: 700; color: #0066ff; display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .logo:hover { color: #0055dd; }
         .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { color: #121212; font-size: 15px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; }
+        .nav-links a { color: #121212; font-size: 15px; padding: 8px 16px; border-radius: 4px; transition: all 0.3s ease; text-decoration: none; }
         .nav-links a:hover { background: #f0f0f0; color: #0066ff; }
         .nav-links .highlight { background: #0066ff; color: #fff; }
         .nav-links .highlight:hover { background: #0055dd; }
@@ -53,55 +53,55 @@
         /* 操作栏 */
         .post-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-        /* 按钮样式 */
+        /* 按钮样式 - 知乎风方正设计 */
         .btn, .action-btn, input[type="submit"] {
-            padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #fff; background: #0066ff;
+            padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #fff;
         }
-        .btn:hover, .action-btn:hover, input[type="submit"]:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); opacity: 0.9; }
+        .btn:hover, .action-btn:hover, input[type="submit"]:hover { opacity: 0.9; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transform: translateY(-1px); }
 
-        .btn-favorite { background: #ffc107; color: #212529; }
-        .btn-favorite.favorited { background: #ffb300; }
-        .btn-edit { background: #0066ff; }
-        .btn-delete, .action-btn.btn-delete, input[type="submit"].btn-delete { background: #dc3545; }
-        .btn-pin, .action-btn.btn-pin { background: #28a745; }
-        .btn-unpin, .action-btn.btn-unpin { background: #6c757d; }
-        .btn-lock, .action-btn.btn-lock { background: #17a2b8; }
-        .btn-unlock, .action-btn.btn-unlock { background: #6c757d; }
-        .btn-info { background: #17a2b8; }
+        .btn-favorite { background: #f5a623; color: #fff; } /* 知乎黄/橙 */
+        .btn-favorite.favorited { background: #e0961b; }
+        .btn-edit { background: #0066ff; } /* 品牌蓝 */
+        .btn-delete, .action-btn.btn-delete, input[type="submit"].btn-delete { background: #d32f2f; } /* 警示红 */
+        .btn-pin, .action-btn.btn-pin { background: #388e3c; } /* 成功绿 */
+        .btn-unpin, .action-btn.btn-unpin { background: #757575; }
+        .btn-lock, .action-btn.btn-lock { background: #0097a7; } /* 青色 */
+        .btn-unlock, .action-btn.btn-unlock { background: #757575; }
+        .btn-info { background: #1976d2; } /* 信息蓝 */
         .btn-primary { background: #0066ff; }
 
         /* 锁定提示 */
-        .locked-post-message { background: #ffebee; border-left: 4px solid #dc3545; padding: 16px 20px; border-radius: 8px; margin-bottom: 20px; }
+        .locked-post-message { background: #ffebee; border-left: 4px solid #dc3545; padding: 16px 20px; border-radius: 4px; margin-bottom: 20px; }
         .locked-post-message p { margin: 0; color: #c62828; font-size: 14px; font-weight: 500; }
 
-        /* 帖子内容 */
-        .post-content { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; color: #121212; white-space: pre-wrap; word-wrap: break-word; }
-        .post-content img { max-width: 100%; height: auto; margin: 16px 0; border-radius: 8px; }
+        /* 帖子内容 - 加粗美观 */
+        .post-content { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; color: #1a1a1a; font-weight: 500; white-space: pre-wrap; word-wrap: break-word; }
+        .post-content img { max-width: 100%; height: auto; margin: 16px 0; border-radius: 4px; }
 
-        /* 回复列表 */
+        /* 回复列表 - 标准字重区分 */
         .reply-list { margin-bottom: 20px; }
         .reply-item { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 16px; }
         .reply-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; gap: 10px; }
         .reply-header p { margin: 0; font-size: 14px; color: #8a8a8a; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .user-role { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+        .user-role { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
         .role-certified { background: #e6f7ed; color: #28a745; }
         .role-admin { background: #ffebee; color: #dc3545; }
         .role-regular { background: #f0f0f0; color: #666; }
-        .reply-content-rendered { font-size: 15px; color: #121212; line-height: 1.7; white-space: pre-wrap; }
-        .reply-content-rendered img { max-width: 100%; height: auto; margin: 12px 0; border-radius: 8px; }
+        .reply-content-rendered { font-size: 15px; color: #333; line-height: 1.7; white-space: pre-wrap; font-weight: 400; }
+        .reply-content-rendered img { max-width: 100%; height: auto; margin: 12px 0; border-radius: 4px; }
         .reply-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; text-align: right; }
 
         /* 回复表单 */
         .reply-form-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
         .form-group { margin-bottom: 16px; }
         .form-button-group { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-        #replyContent { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; resize: vertical; min-height: 120px; font-family: inherit; transition: all 0.3s ease; box-sizing: border-box; }
+        #replyContent { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; resize: vertical; min-height: 120px; font-family: inherit; transition: all 0.3s ease; box-sizing: border-box; }
         #replyContent:focus { outline: none; border-color: #0066ff; box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
         .error { color: #dc3545; font-size: 13px; margin-top: 6px; }
 
         /* 分页 */
         .pagination { margin: 30px 0; text-align: center; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .pagination a, .pagination span.current-page { display: inline-block; padding: 8px 16px; margin: 0 4px; border-radius: 20px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
+        .pagination a, .pagination span.current-page { display: inline-block; padding: 8px 16px; margin: 0 4px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
         .pagination a { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
         .pagination a:hover { background: #0066ff; color: #fff; border-color: #0066ff; }
         .pagination span.current-page { background: #0066ff; color: #fff; border: 1px solid #0066ff; }
@@ -109,20 +109,59 @@
 
         /* 底部导航 */
         .page-footer { margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 20px; }
-        .back-link { display: inline-block; padding: 10px 24px; background: #fff; color: #121212; text-decoration: none; border-radius: 20px; font-weight: 500; font-size: 14px; transition: all 0.3s ease; border: 1px solid #e0e0e0; }
+        .back-link { display: inline-block; padding: 10px 24px; background: #fff; color: #121212; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 14px; transition: all 0.3s ease; border: 1px solid #e0e0e0; }
         .back-link:hover { background: #f0f0f0; }
 
         /* 模态框 */
         .hardware-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .hardware-modal-content { background: #fff; margin: 5% auto; padding: 30px; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; max-height: 85vh; overflow-y: auto; }
+        .hardware-modal-content { background: #fff; margin: 5% auto; padding: 30px; border-radius: 8px; width: 90%; max-width: 700px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; max-height: 85vh; overflow-y: auto; }
         .hardware-modal-close { color: #8a8a8a; float: right; font-size: 32px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; background: none; border: none; padding: 0; line-height: 1; }
         .hardware-modal-close:hover { color: #dc3545; transform: rotate(90deg); }
-        .hardware-modal h3 { color: #121212; font-size: 20px; margin-bottom: 20px; font-weight: 600; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
-        .hardware-detail p { margin: 10px 0; color: #666; font-size: 14px; }
-        .hardware-detail p strong { color: #121212; font-weight: 600; margin-right: 8px; }
+        .hardware-modal h3 { color: #121212; font-size: 22px; margin-bottom: 20px; font-weight: 700; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; }
+
+        /* 硬件详情网格布局美化 */
+        .hardware-spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .spec-item {
+            background: #f9f9f9;
+            padding: 12px 16px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            transition: all 0.2s;
+        }
+        .spec-item:hover {
+            background: #f0f7ff;
+            border-color: #d0e4ff;
+            transform: translateY(-2px);
+        }
+        .spec-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .spec-value {
+            font-size: 15px;
+            color: #0066ff;
+            font-weight: 600;
+            word-break: break-word;
+        }
+        .section-title {
+            grid-column: 1 / -1;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin: 20px 0 10px 0;
+            padding-left: 10px;
+            border-left: 3px solid #0066ff;
+        }
 
         /* 搜索结果项 */
-        .search-result-item { padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; }
+        .search-result-item { padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; border-radius: 4px; }
         .search-result-item:hover { background: #f6f6f6; }
 
         /* ================= 用户卡片样式 ================= */
@@ -136,7 +175,7 @@
         .stat-value { font-size: 20px; font-weight: 700; color: #0066ff; display: block; }
         .stat-label { font-size: 12px; color: #8a8a8a; margin-top: 4px; }
         .user-actions { display: flex; flex-direction: column; gap: 8px; }
-        .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
+        .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 4px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
         .user-btn-primary { background: #0066ff; color: #fff; }
         .user-btn-primary:hover { background: #0055dd; }
         .user-btn-secondary { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
@@ -148,6 +187,40 @@
         .quick-link:hover { background: #f0f0f0; transform: translateY(-2px); }
         .quick-link-icon { font-size: 28px; margin-bottom: 8px; }
         .quick-link-text { font-size: 14px; font-weight: 500; }
+
+        /* 硬件引用突出化样式 */
+        .hardware-ref {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 4px;
+            background: #e6f0ff;
+            color: #0066ff;
+            border: 1px solid #0066ff;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            vertical-align: middle;
+        }
+        .hardware-ref:hover {
+            background: #0066ff;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0,102,255,0.3);
+            transform: translateY(-1px);
+        }
+        .hardware-loading {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 4px;
+            background: #f0f0f0;
+            color: #999;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            font-size: 0.9em;
+            vertical-align: middle;
+        }
 
         /* 响应式 */
         @media (max-width: 900px) {
@@ -391,12 +464,12 @@
             <div class="hardware-modal-content">
                 <span class="hardware-modal-close">&times;</span>
                 <h3>📊 选择硬件</h3>
-                <select id="replyHardwareTypeSelect" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 6px;">
+                <select id="replyHardwareTypeSelect" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 4px;">
                     <option value="cpu_info">CPU</option>
                     <option value="gpu_info">GPU</option>
                     <option value="motherboard_info">主板</option>
                 </select>
-                <input type="text" id="replyHardwareSearch" placeholder="搜索硬件型号..." style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 6px;">
+                <input type="text" id="replyHardwareSearch" placeholder="搜索硬件型号..." style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 4px;">
                 <div id="replyHardwareList"></div>
             </div>
         </div>
@@ -487,7 +560,7 @@
             $(this).next('.reply-content-rendered').html(renderedContent);
         });
 
-        // 3. 删除回复功能 (原版逻辑：DELETE /reply/{id})
+        // 3. 删除回复功能
         $(document).on('click', '.delete-reply-btn', function() {
             var replyId = $(this).data('reply-id');
             if (confirm('确定要删除这条回复吗？')) {
@@ -509,7 +582,7 @@
             }
         });
 
-        // 4. 收藏功能 (原版逻辑：POST /post/{id}/toggle-favorite)
+        // 4. 收藏功能
         $("#favoriteBtn").click(function() {
             var postId = $(this).data("post-id");
             var button = $(this);
@@ -676,25 +749,50 @@
             });
 
             var referenceRegex = /\[([a-zA-Z_]+):(\d+)\]/g;
+            var hardwareRefs = [];
             textWithParagraphs = textWithParagraphs.replace(referenceRegex, function(match, table, id) {
                 if (isValidTableName(table)) {
-                    return '<a href="#" class="hardware-ref" data-table="' + table + '" data-id="' + id + '">📊 查看硬件详情 (' + getHardwareTypeName(table) + ')</a>';
+                    hardwareRefs.push({table: table, id: id, match: match});
+                    return '<span class="hardware-loading" data-table="' + table + '" data-id="' + id + '">加载中...</span>';
                 } else {
                     return match;
                 }
             });
 
+            if (hardwareRefs.length > 0) {
+                setTimeout(function() {
+                    hardwareRefs.forEach(function(ref) {
+                        $.ajax({
+                            url: '${pageContext.request.contextPath}/api/hardware/detail/' + ref.table + '/' + ref.id,
+                            type: 'GET',
+                            success: function(data) {
+                                var displayText = (data.brand || '') + ' ' + (data.model || '');
+                                var linkHtml = '<a href="#" class="hardware-ref" data-table="' + ref.table + '" data-id="' + ref.id + '">' + displayText + '</a>';
+                                $('.hardware-loading[data-table="' + ref.table + '"][data-id="' + ref.id + '"]').replaceWith(linkHtml);
+                            },
+                            error: function() {
+                                $('.hardware-loading[data-table="' + ref.table + '"][data-id="' + ref.id + '"]').text('硬件信息不可用');
+                            }
+                        });
+                    });
+                }, 0);
+            }
+
             return textWithParagraphs;
         }
 
-        function getHardwareTypeName(tableName) {
-            var typeNames = { "cpu_info": "CPU", "gpu_info": "显卡", "motherboard_info": "主板", "memory_info": "内存", "storage_info": "存储" };
-            return typeNames[tableName] || "硬件";
+        function isValidTableName(tableName) {
+            var validTables = ["cpu_info", "gpu_info", "motherboard_info"];
+            return validTables.includes(tableName);
         }
 
-        function isValidTableName(tableName) {
-            var validTables = ["cpu_info", "gpu_info", "motherboard_info", "memory_info", "storage_info"];
-            return validTables.includes(tableName);
+        function getHardwareTypeName(tableName) {
+            var typeNames = {
+                "cpu_info": "CPU",
+                "gpu_info": "显卡",
+                "motherboard_info": "主板"
+            };
+            return typeNames[tableName] || "硬件";
         }
 
         function insertTextAtCursor(textarea, text) {
@@ -707,62 +805,88 @@
             textarea.focus();
         }
 
-        // 9. 点击硬件链接显示详情
+        // 9. 点击硬件链接显示详情 (包含核显和发布信息)
         $(document).on('click', '.hardware-ref', function(e) {
             e.preventDefault();
             var table = $(this).data('table');
             var id = $(this).data('id');
             $('#hardwareModal').show();
-            $('#hardwareDetailContent').html('<p>加载中...</p>');
+            $('#hardwareDetailContent').html('<p style="text-align:center; padding: 20px;">加载中...</p>');
 
             $.ajax({
                 url: '${pageContext.request.contextPath}/api/hardware/detail/' + table + '/' + id,
                 type: 'GET',
                 success: function(data) {
-                    var detailHtml = '<p><strong>型号:</strong> ' + data.model + '</p>';
+                    var displayTitle = (data.brand || '') + ' ' + (data.model || '');
+                    var html = '<h3 style="text-align:center; margin-bottom:25px;">' + displayTitle + '</h3>';
+                    html += '<div class="hardware-spec-grid">';
+
                     if (table === 'cpu_info') {
-                        detailHtml += '<p><strong>品牌:</strong> ' + data.brand + '</p>';
-                        detailHtml += '<p><strong>接口:</strong> ' + data.interfaceType + '</p>';
-                        detailHtml += '<p><strong>核心数:</strong> ' + data.cores + '</p>';
-                        detailHtml += '<p><strong>线程数:</strong> ' + data.threads + '</p>';
-                        detailHtml += '<p><strong>基础频率:</strong> ' + data.baseFrequency + ' GHz</p>';
-                        detailHtml += '<p><strong>最大频率:</strong> ' + data.maxFrequency + ' GHz</p>';
-                        detailHtml += '<p><strong>TDP:</strong> ' + data.tdp + ' W</p>';
+                        // 基本信息
+                        html += '<div class="section-title">基本规格</div>';
+                        html += buildSpecItem('接口类型', data.interfaceType);
+                        html += buildSpecItem('核心数', data.cores);
+                        html += buildSpecItem('线程数', data.threads);
+                        html += buildSpecItem('基础频率', data.baseFrequency + ' GHz');
+                        html += buildSpecItem('最大频率', data.maxFrequency + ' GHz');
+                        html += buildSpecItem('TDP', data.tdp + ' W');
+
+                        // 核显信息
+                        html += '<div class="section-title">核显信息</div>';
+                        html += buildSpecItem('集成显卡', data.integratedGraphics || '无');
+                        if(data.integratedGraphics && data.integratedGraphics !== '无') {
+                            html += buildSpecItem('核显频率', data.igpuClock ? data.igpuClock + ' MHz' : '-');
+                        }
+
+
                     } else if (table === 'gpu_info') {
-                        detailHtml += '<p><strong>品牌:</strong> ' + data.brand + '</p>';
-                        detailHtml += '<p><strong>显存容量:</strong> ' + data.memorySize + ' GB</p>';
-                        detailHtml += '<p><strong>显存类型:</strong> ' + data.memoryType + '</p>';
-                        detailHtml += '<p><strong>基础频率:</strong> ' + data.baseClock + ' MHz</p>';
-                        detailHtml += '<p><strong>加速频率:</strong> ' + data.boostClock + ' MHz</p>';
-                        detailHtml += '<p><strong>TDP:</strong> ' + data.tdp + ' W</p>';
+                        // 基本信息
+                        html += '<div class="section-title">基本规格</div>';
+                        html += buildSpecItem('显存容量', data.memorySize + ' GB');
+                        html += buildSpecItem('显存类型', data.memoryType);
+                        html += buildSpecItem('基础频率', data.baseClock + ' MHz');
+                        html += buildSpecItem('加速频率', data.boostClock + ' MHz');
+                        html += buildSpecItem('TDP', data.tdp + ' W');
+
+                        // 核显/特殊信息 (如果是APU或特定卡)
+                        html += '<div class="section-title">其他信息</div>';
+                        html += buildSpecItem('架构', data.architecture || '-');
+                        html += buildSpecItem('流处理器', data.streamProcessors || '-');
+
+
+
                     } else if (table === 'motherboard_info') {
-                        detailHtml += '<p><strong>品牌:</strong> ' + data.brand + '</p>';
-                        detailHtml += '<p><strong>芯片组:</strong> ' + data.chipset + '</p>';
-                        detailHtml += '<p><strong>CPU 接口:</strong> ' + data.cpuInterface + '</p>';
-                        detailHtml += '<p><strong>内存插槽:</strong> ' + data.memorySlots + '</p>';
-                        detailHtml += '<p><strong>最大内存:</strong> ' + data.maxMemory + ' GB</p>';
-                        detailHtml += '<p><strong>内存类型:</strong> ' + data.memoryType + '</p>';
-                    } else if (table === 'memory_info') {
-                        detailHtml += '<p><strong>品牌:</strong> ' + data.brand + '</p>';
-                        detailHtml += '<p><strong>容量:</strong> ' + data.capacity + ' GB</p>';
-                        detailHtml += '<p><strong>类型:</strong> ' + data.type + '</p>';
-                        detailHtml += '<p><strong>频率:</strong> ' + data.frequency + ' MHz</p>';
-                        detailHtml += '<p><strong>时序:</strong> ' + data.timing + '</p>';
-                    } else if (table === 'storage_info') {
-                        detailHtml += '<p><strong>品牌:</strong> ' + data.brand + '</p>';
-                        detailHtml += '<p><strong>类型:</strong> ' + data.type + '</p>';
-                        detailHtml += '<p><strong>容量:</strong> ' + data.capacity + ' GB</p>';
-                        detailHtml += '<p><strong>接口类型:</strong> ' + data.interfaceType + '</p>';
-                        detailHtml += '<p><strong>读取速度:</strong> ' + data.readSpeed + ' MB/s</p>';
-                        detailHtml += '<p><strong>写入速度:</strong> ' + data.writeSpeed + ' MB/s</p>';
+                        // 基本信息
+                        html += '<div class="section-title">基本规格</div>';
+                        html += buildSpecItem('芯片组', data.chipset);
+                        html += buildSpecItem('CPU 接口', data.cpuInterface);
+                        html += buildSpecItem('内存插槽', data.memorySlots);
+                        html += buildSpecItem('最大内存', data.maxMemory + ' GB');
+                        html += buildSpecItem('内存类型', data.memoryType);
+
+                        // 板载/扩展信息
+                        html += '<div class="section-title">扩展与支持</div>';
+                        html += buildSpecItem('板载显卡支持', data.onboardGraphicsSupport || '依赖 CPU');
+                        html += buildSpecItem('PCIe 插槽', data.pcieSlots || '-');
                     }
-                    $('#hardwareDetailContent').html(detailHtml);
+
+                    html += '</div>';
+                    $('#hardwareDetailContent').html(html);
                 },
                 error: function(xhr, status, error) {
-                    $('#hardwareDetailContent').html('<p>获取硬件详情失败：' + error + '</p>');
+                    $('#hardwareDetailContent').html('<p style="text-align:center; color:red;">获取硬件详情失败：' + error + '</p>');
                 }
             });
         });
+
+        // 辅助构建 HTML 函数
+        function buildSpecItem(label, value) {
+            if (!value || value === 'null') value = '-';
+            return '<div class="spec-item">' +
+                '<div class="spec-label">' + label + '</div>' +
+                '<div class="spec-value">' + value + '</div>' +
+                '</div>';
+        }
     });
 </script>
 </body>
