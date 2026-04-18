@@ -4,340 +4,114 @@
 <html>
 <head>
     <title>修改用户名</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <style>
-        /* 整体布局 - 白色渐变背景 */
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f6f6f6; color: #121212; line-height: 1.6; min-height: 100vh; }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; padding: 0 20px; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 56px; }
+        .logo { font-size: 22px; font-weight: 700; color: #0066ff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo:hover { color: #0055dd; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { color: #121212; text-decoration: none; font-size: 15px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; }
+        .nav-links a:hover { background: #f0f0f0; color: #0066ff; }
 
-        /* 标题美化 */
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 36px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-            letter-spacing: 1px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
+        .nav-tabs { background: #fff; border-bottom: 1px solid #e6e6e6; }
+        .tabs-container { max-width: 1200px; margin: 0 auto; display: flex; padding: 0 20px; }
+        .tab-item { padding: 15px 20px; cursor: pointer; border-bottom: 2px solid transparent; color: #646464; transition: all 0.3s; font-size: 15px; }
+        .tab-item:hover { color: #0066ff; }
+        .tab-item.active { border-bottom: 2px solid #0066ff; color: #0066ff; }
 
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
+        .main-container { max-width: 600px; margin: 20px auto; padding: 0 20px; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .card-header { padding: 20px; border-bottom: 1px solid #f0f0f0; }
+        .card-title { font-size: 18px; font-weight: 600; color: #121212; }
+        .card-body { padding: 20px; }
 
-        /* 消息提示美化 */
-        p[style*="color: red"],
-        p[style*="color: green"] {
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-radius: 15px;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            animation: slideDown 0.3s ease;
-        }
+        .message { padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; font-weight: 500; }
+        .message-error { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+        .message-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
 
-        p[style*="color: red"] {
-            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-            color: #721c24;
-            border-left: 5px solid #dc3545;
-        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #121212; font-size: 15px; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 15px; transition: all 0.3s ease; background: #fff; color: #121212; font-family: inherit; }
+        input[type="text"]:focus, input[type="password"]:focus { outline: none; border-color: #0066ff; box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
+        input[readonly] { background: #fafafa; color: #646464; cursor: not-allowed; }
+        .error { color: #dc3545; font-size: 13px; margin-top: 6px; display: block; font-weight: 500; }
 
-        p[style*="color: red"]::before {
-            content: '⚠️';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
-        }
+        .actions { display: flex; gap: 12px; justify-content: center; margin-top: 24px; }
+        .btn { padding: 12px 28px; border: none; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-primary { background: #0066ff; color: #fff; }
+        .btn-primary:hover { background: #0055dd; }
+        .btn-secondary { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
+        .btn-secondary:hover { background: #f0f0f0; }
+        input[type="submit"].btn { width: auto; }
 
-        p[style*="color: red"] span {
-            margin-left: 25px;
-        }
-
-        p[style*="color: green"] {
-            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-            color: #155724;
-            border-left: 5px solid #28a745;
-        }
-
-        p[style*="color: green"]::before {
-            content: '✅';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 24px;
-        }
-
-        p[style*="color: green"] span {
-            margin-left: 25px;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 表单容器美化 */
-        .form-container {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            margin-bottom: 30px;
-        }
-
-        /* 表单字段美化 */
-        .form-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 16px;
-            padding-left: 5px;
-        }
-
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background: #fff;
-            color: #333;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
-
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        input[type="text"]::placeholder,
-        input[type="password"]::placeholder {
-            color: #9e9e9e;
-            font-style: italic;
-        }
-
-        /* 只读输入框美化 */
-        input[readonly] {
-            background: rgba(248, 249, 250, 0.6);
-            color: #6c757d;
-            cursor: not-allowed;
-        }
-
-        /* 错误提示美化 */
-        .error {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 8px;
-            display: block;
-            font-weight: 500;
-            padding-left: 5px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 按钮组美化 */
-        .actions {
-            margin-top: 30px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* 统一按钮样式 */
-        .btn {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            gap: 8px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        /* 保存按钮 - 蓝色渐变 */
-        input[type="submit"].btn {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-        }
-
-        input[type="submit"].btn:hover {
-            background: linear-gradient(135deg, #0069d9 0%, #004494 100%);
-        }
-
-        /* 返回按钮 - 灰色渐变 */
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #5a6268 0%, #4e555b 100%);
-        }
-
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 28px;
-                margin-bottom: 20px;
-            }
-
-            h1::after {
-                width: 100px;
-                height: 3px;
-            }
-
-            .form-container {
-                padding: 30px 20px;
-            }
-
-            .actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-                margin-bottom: 10px;
-            }
+        @media (max-width: 600px) {
+            .header-content { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 10px; }
+            .nav-links { width: 100%; justify-content: center; }
+            .actions { flex-direction: column; }
+            .btn { width: 100%; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>✏️ 修改用户名</h1>
+<header class="header">
+    <div class="header-content">
+        <a href="${pageContext.request.contextPath}/" class="logo">💻 PC 硬件交流论坛</a>
+        <nav class="nav-links">
+            <c:choose>
+                <c:when test="${sessionScope.currentUser != null}">
+                    <span style="color: #646464; font-size: 14px;">欢迎, ${sessionScope.currentUser.username}</span>
+                    <a href="${pageContext.request.contextPath}/user/profile">👤 个人中心</a>
+                    <a href="${pageContext.request.contextPath}/user/logout">🚪 退出</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/user/login">🔑 登录</a>
+                </c:otherwise>
+            </c:choose>
+        </nav>
+    </div>
+</header>
 
-    <c:if test="${not empty errorMessage}">
-        <p style="color: red;">
-            <span>${errorMessage}</span>
-        </p>
-    </c:if>
+<div class="main-container">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">✏️ 修改用户名</h1>
+        </div>
+        <div class="card-body">
+            <c:if test="${not empty errorMessage}">
+                <div class="message message-error">${errorMessage}</div>
+            </c:if>
 
-    <c:if test="${not empty successMessage}">
-        <p style="color: green;">
-            <span>${successMessage}</span>
-        </p>
-    </c:if>
+            <c:if test="${not empty successMessage}">
+                <div class="message message-success">${successMessage}</div>
+            </c:if>
 
-    <div class="form-container">
-        <form:form action="${pageContext.request.contextPath}/user/update-username" method="post" modelAttribute="user">
-            <div class="form-group">
-                <label for="currentUsername">当前用户名</label>
-                <input type="text" id="currentUsername" value="${currentUser.username}" readonly>
-            </div>
+            <form:form action="${pageContext.request.contextPath}/user/update-username" method="post" modelAttribute="user">
+                <div class="form-group">
+                    <label for="currentUsername">当前用户名</label>
+                    <input type="text" id="currentUsername" value="${currentUser.username}" readonly>
+                </div>
 
-            <div class="form-group">
-                <label for="newUsername">新用户名</label>
-                <form:input path="username" id="newUsername" type="text" required="required"/>
-                <form:errors path="username" cssClass="error"/>
-            </div>
+                <div class="form-group">
+                    <label for="newUsername">新用户名</label>
+                    <form:input path="username" id="newUsername" type="text" required="required" placeholder="请输入新用户名"/>
+                    <form:errors path="username" cssClass="error"/>
+                </div>
 
-            <div class="form-group">
-                <label for="password">验证密码</label>
-                <input type="password" id="password" name="password" required="required"/>
-                <span class="error">${passwordError}</span>
-            </div>
+                <div class="form-group">
+                    <label for="password">验证密码</label>
+                    <input type="password" id="password" name="password" required="required" placeholder="请输入您的密码"/>
+                    <span class="error">${passwordError}</span>
+                </div>
 
-            <div class="actions">
-                <input type="submit" value="💾 保存修改" class="btn">
-                <a href="${pageContext.request.contextPath}/user/profile" class="btn btn-secondary">
-                    🏠 返回个人中心
-                </a>
-            </div>
-        </form:form>
+                <div class="actions">
+                    <input type="submit" value="💾 保存修改" class="btn btn-primary">
+                    <a href="${pageContext.request.contextPath}/user/profile" class="btn btn-secondary">🏠 返回个人中心</a>
+                </div>
+            </form:form>
+        </div>
     </div>
 </div>
 </body>

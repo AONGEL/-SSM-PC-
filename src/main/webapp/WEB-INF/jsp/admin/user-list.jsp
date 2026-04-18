@@ -7,347 +7,119 @@
 <head>
     <title>管理员 - 认证用户管理</title>
     <style>
-        /* 整体布局 - 白色渐变背景 */
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f6f6f6; color: #121212; line-height: 1.6; min-height: 100vh; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        /* 顶部 Header 栏 */
+        .header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; padding: 0 20px; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 56px; }
+        .logo { font-size: 22px; font-weight: 700; color: #0066ff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo:hover { color: #0055dd; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { color: #121212; text-decoration: none; font-size: 15px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; }
+        .nav-links a:hover { background: #f0f0f0; color: #0066ff; }
+        .nav-links .highlight { background: #0066ff; color: #fff; }
+        .nav-links .highlight:hover { background: #0055dd; }
 
-        /* 标题美化 */
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 36px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-            letter-spacing: 1px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
+        /* 主容器 */
+        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
 
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
+        /* 页面标题卡片 */
+        .page-header-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px 24px; margin-bottom: 20px; }
+        .page-title { font-size: 24px; font-weight: 700; color: #121212; display: flex; align-items: center; gap: 10px; }
 
-        /* 当前用户信息美化 */
-        .current-user-info {
-            text-align: center;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 15px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
+        /* 当前用户信息卡片 */
+        .current-user-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 16px 20px; margin-bottom: 20px; text-align: center; }
+        .current-user-text { color: #666; font-size: 15px; margin: 0; }
+        .current-user-text strong { color: #0066ff; font-weight: 600; }
 
-        .current-user-info p {
-            color: #6c757d;
-            font-size: 18px;
-            margin: 0;
-        }
+        /* 用户列表卡片 */
+        .user-list-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+        .user-list-header { padding: 20px 24px; border-bottom: 1px solid #f0f0f0; }
+        .user-list-title { font-size: 18px; font-weight: 600; color: #121212; margin: 0; }
 
-        .current-user-info strong {
-            color: #2c3e50;
-            font-weight: 600;
-        }
+        /* 用户项 */
+        .user-item { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid #f0f0f0; transition: all 0.3s ease; }
+        .user-item:last-child { border-bottom: none; }
+        .user-item:hover { background: #fafafa; }
 
-        /* 用户列表卡片美化 */
-        .user-list-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+        .user-info { display: flex; align-items: center; gap: 16px; }
+        .user-id { font-weight: 600; color: #121212; font-size: 14px; }
+        .user-username { font-weight: 500; color: #121212; font-size: 16px; }
 
-        .user-list-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
-            z-index: 0;
-        }
+        .certified-badge { display: inline-block; background: #e6f7ed; color: #28a745; padding: 4px 12px; border-radius: 12px; font-size: 13px; font-weight: 500; }
 
-        .user-list-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-        }
+        /* 按钮样式 */
+        .btn { padding: 8px 18px; border: none; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-revoke { background: #dc3545; color: white; }
+        .btn-revoke:hover { background: #c82333; }
 
-        /* 用户项美化 */
-        .user-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            margin-bottom: 10px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 12px;
-            border: 1px solid #e9ecef;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+        /* 返回按钮 */
+        .btn-back { display: inline-block; padding: 10px 24px; background: #fafafa; color: #121212; text-decoration: none; border-radius: 20px; font-weight: 500; font-size: 14px; transition: all 0.3s ease; border: 1px solid #e0e0e0; margin: 20px auto; display: block; width: fit-content; }
+        .btn-back:hover { background: #f0f0f0; }
 
-        .user-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+        /* 空状态 */
+        .empty-state { text-align: center; padding: 60px 30px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin: 20px 0; }
+        .empty-icon { font-size: 64px; margin-bottom: 20px; opacity: 0.4; }
+        .empty-state h3 { color: #121212; font-size: 20px; margin-bottom: 12px; font-weight: 600; }
+        .empty-state p { color: #8a8a8a; font-size: 15px; margin: 8px 0; }
 
-        .user-item:hover {
-            background: rgba(40, 167, 69, 0.05);
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .user-item:hover::before {
-            opacity: 1;
-        }
-
-        /* 用户信息美化 */
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-id {
-            font-weight: 700;
-            color: #2c3e50;
-            font-size: 16px;
-        }
-
-        .user-username {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 18px;
-        }
-
-        /* 认证用户标识 */
-        .certified-badge {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: 700;
-            margin-left: 15px;
-            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
-        }
-
-        /* 按钮美化 */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            gap: 6px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        /* 撤销认证按钮 - 红色渐变 */
-        .btn-revoke {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
-        }
-
-        .btn-revoke:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
-        }
-
-        /* 返回按钮 - 灰色渐变 */
-        .btn-back {
-            display: inline-block;
-            padding: 12px 28px;
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-            margin-top: 15px;
-            display: block;
-            width: fit-content;
-            margin: 25px auto 0;
-        }
-
-        .btn-back:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
-            background: linear-gradient(135deg, #5a6268 0%, #4e555b 100%);
-        }
-
-        /* 空状态美化 */
-        .empty-state {
-            text-align: center;
-            padding: 60px 30px;
-            color: #6c757d;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            margin: 30px 0;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .empty-state h3 {
-            color: #2c3e50;
-            font-size: 28px;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .empty-state p {
-            color: #6c757d;
-            font-size: 18px;
-            margin: 10px 0;
-            font-weight: 500;
-        }
-
-        .empty-icon {
-            font-size: 80px;
-            margin-bottom: 25px;
-            color: rgba(40, 167, 69, 0.5);
-        }
-
-        /* 响应式调整 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 28px;
-                margin-bottom: 15px;
-            }
-
-            h1::after {
-                width: 100px;
-                height: 3px;
-            }
-
-            .current-user-info {
-                font-size: 16px;
-                padding: 12px 20px;
-            }
-
-            .user-list-card {
-                padding: 25px 20px;
-            }
-
-            .user-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-                padding: 15px;
-            }
-
-            .user-info {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 200px;
-                margin-top: 10px;
-            }
-
-            .btn-back {
-                width: 100%;
-                max-width: 300px;
-            }
+            .header-content { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 10px; }
+            .nav-links { width: 100%; justify-content: center; }
+            .main-container { padding: 0 15px; }
+            .page-header-card { padding: 16px 18px; }
+            .page-title { font-size: 20px; }
+            .user-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .user-info { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .btn { width: 100%; }
+            .btn-back { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>🎓 认证用户管理</h1>
+<!-- 顶部 Header 栏 -->
+<header class="header">
+    <div class="header-content">
+        <a href="${pageContext.request.contextPath}/" class="logo">💻 PC 硬件交流论坛</a>
+        <nav class="nav-links">
+            <a href="${pageContext.request.contextPath}/forum/section">📁 论坛分区</a>
+            <a href="${pageContext.request.contextPath}/hardware-library">🔧 硬件参数库</a>
+            <c:choose>
+                <c:when test="${sessionScope.currentUser != null}">
+                    <a href="${pageContext.request.contextPath}/user/notifications">🔔 消息</a>
+                    <a href="${pageContext.request.contextPath}/user/profile" class="highlight">👤 个人中心</a>
+                    <a href="${pageContext.request.contextPath}/user/logout">🚪 退出</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/user/login">🔑 登录</a>
+                    <a href="${pageContext.request.contextPath}/user/register" class="highlight">📝 注册</a>
+                </c:otherwise>
+            </c:choose>
+        </nav>
+    </div>
+</header>
 
-    <div class="current-user-info">
-        <p>👑 <strong>当前管理员:</strong> ${sessionScope.currentUser.username} (${sessionScope.currentUser.role})</p>
+<div class="main-container">
+    <div class="page-header-card">
+        <h1 class="page-title">🎓 认证用户管理</h1>
+    </div>
+
+    <div class="current-user-card">
+        <p class="current-user-text">👑 当前管理员：<strong>${sessionScope.currentUser.username}</strong> (${sessionScope.currentUser.role})</p>
     </div>
 
     <div class="user-list-card">
-        <h2 style="color: #2c3e50; font-size: 24px; margin-bottom: 20px; font-weight: 700;">📋 认证用户列表</h2>
+        <div class="user-list-header">
+            <h2 class="user-list-title">📋 认证用户列表</h2>
+        </div>
 
         <c:choose>
             <c:when test="${not empty users}">
                 <div id="usersContainer">
                     <c:forEach items="${users}" var="user">
-                        <!-- 只显示认证用户 -->
                         <c:if test="${user.role == 'CERTIFIED'}">
                             <div class="user-item">
                                 <div class="user-info">
@@ -380,13 +152,12 @@
     </a>
 </div>
 
-<!-- 保留原有的JavaScript逻辑，完全不变 -->
 <script>
     function revokeCertification(userId, username) {
         console.log("revokeCertification called with userId:", userId, "type:", typeof userId, "and username:", username);
         if (userId == null || userId === '' || isNaN(userId)) {
             console.error("Invalid userId provided:", userId, "Type:", typeof userId);
-            alert("无效的用户ID，无法撤销认证。");
+            alert("无效的用户 ID，无法撤销认证。");
             return;
         }
         const reason = prompt(`确定要撤销用户 "${username}" 的认证吗？\n请输入原因（可选）:`);
@@ -414,12 +185,12 @@
                             alert('✅ 认证撤销成功！');
                             location.reload();
                         } else {
-                            alert('❌ 认证撤销失败！服务器返回: ' + parsedResult.message);
+                            alert('❌ 认证撤销失败！服务器返回：' + parsedResult.message);
                         }
                     } catch (e) {
                         console.error("Failed to parse response as JSON:", e);
                         console.error("Response text was:", result);
-                        alert('操作失败，服务器返回非JSON格式响应。请检查网络或稍后重试。');
+                        alert('操作失败，服务器返回非 JSON 格式响应。请检查网络或稍后重试。');
                     }
                 })
                 .catch(error => {

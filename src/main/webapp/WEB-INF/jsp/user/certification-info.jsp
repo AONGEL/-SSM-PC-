@@ -2,441 +2,119 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>认证用户申请说明</title>
+    <title>认证用户申请说明 - PC 硬件交流论坛</title>
     <style>
-        /* 整体布局 - 白色渐变背景 */
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #333;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f6f6f6; color: #121212; line-height: 1.6; min-height: 100vh; }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        /* 顶部 Header 栏 */
+        .header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; padding: 0 20px; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 56px; }
+        .logo { font-size: 22px; font-weight: 700; color: #0066ff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+        .logo:hover { color: #0055dd; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { color: #121212; text-decoration: none; font-size: 15px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; }
+        .nav-links a:hover { background: #f0f0f0; color: #0066ff; }
+        .nav-links .highlight { background: #0066ff; color: #fff; }
+        .nav-links .highlight:hover { background: #0055dd; }
 
-        /* 标题美化 */
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 36px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
-            letter-spacing: 1px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            position: relative;
-        }
+        /* 主容器 */
+        .main-container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
 
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
+        /* 页面标题卡片 */
+        .page-header-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px 24px; margin-bottom: 20px; }
+        .page-title { font-size: 24px; font-weight: 700; color: #121212; display: flex; align-items: center; gap: 10px; }
 
-        /* 用户信息美化 */
-        .user-info {
-            text-align: center;
-            color: #6c757d;
-            font-size: 18px;
-            margin-bottom: 25px;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-        }
+        /* 用户信息卡片 */
+        .user-info-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 16px 20px; margin-bottom: 20px; text-align: center; }
+        .user-info-text { font-size: 15px; color: #666; }
+        .user-info-text strong { color: #0066ff; font-weight: 600; }
 
-        .user-info strong {
-            color: #2c3e50;
-            font-weight: 600;
-        }
+        /* 状态卡片 */
+        .status-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; transition: all 0.3s ease; border-left: 4px solid #e0e0e0; }
+        .status-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .status-pending { border-left-color: #2196F3; background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%); }
+        .status-rejected { border-left-color: #f44336; background: linear-gradient(135deg, #ffebee 0%, #fff 100%); }
+        .status-discussion { border-left-color: #ff9800; background: linear-gradient(135deg, #fff8e1 0%, #fff 100%); }
 
-        /* 申请状态卡片美化 */
-        .status-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
+        .status-title { font-size: 20px; font-weight: 600; color: #121212; margin-bottom: 15px; }
+        .status-description { font-size: 15px; color: #666; margin-bottom: 15px; line-height: 1.7; }
+        .status-description strong { color: #121212; font-weight: 600; }
 
-        .status-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
-            z-index: 0;
-        }
+        .admin-remarks { background: #f6f6f6; border-left: 3px solid #0066ff; padding: 12px 16px; border-radius: 6px; margin: 15px 0; font-style: italic; color: #666; font-size: 14px; }
+        .submit-time { font-size: 13px; color: #8a8a8a; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #e0e0e0; }
 
-        .status-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-        }
+        /* 信息卡片 */
+        .info-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
+        .info-card h2 { font-size: 18px; font-weight: 600; color: #121212; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #f0f0f0; }
+        .info-card p { font-size: 15px; color: #666; line-height: 1.8; margin-bottom: 12px; }
+        .info-card ul { padding-left: 24px; margin-bottom: 16px; }
+        .info-card ul li { font-size: 15px; color: #666; line-height: 1.8; margin-bottom: 10px; position: relative; }
+        .info-card ul li::before { content: '•'; color: #0066ff; font-weight: bold; position: absolute; left: -16px; font-size: 18px; }
+        .info-card ul li strong { color: #121212; font-weight: 600; }
+        .info-card ol { padding-left: 24px; margin-bottom: 16px; }
+        .info-card ol li { font-size: 15px; color: #666; line-height: 1.8; margin-bottom: 10px; }
 
-        /* 待审核状态 - 蓝色 */
-        .status-pending {
-            border-left: 5px solid #2196F3;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        }
+        /* 重要提示 */
+        .important-notice { background: #fff8e1; border-left: 4px solid #ffc107; padding: 16px 20px; border-radius: 8px; margin: 20px 0; }
+        .important-notice p { margin: 0; color: #5d4037; font-weight: 500; font-size: 14px; }
 
-        .status-pending::before {
-            background: radial-gradient(circle, rgba(33, 150, 243, 0.05) 0%, transparent 70%);
-        }
+        /* 按钮组 */
+        .button-group { display: flex; gap: 15px; margin-top: 25px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 12px 28px; border: none; border-radius: 20px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-primary { background: #0066ff; color: #fff; }
+        .btn-primary:hover { background: #0055dd; }
+        .btn-secondary { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
+        .btn-secondary:hover { background: #f0f0f0; }
 
-        /* 被拒绝状态 - 红色 */
-        .status-rejected {
-            border-left: 5px solid #f44336;
-            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-        }
-
-        .status-rejected::before {
-            background: radial-gradient(circle, rgba(244, 67, 54, 0.05) 0%, transparent 70%);
-        }
-
-        /* 待商议状态 - 橙色 */
-        .status-discussion {
-            border-left: 5px solid #ff9800;
-            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-        }
-
-        .status-discussion::before {
-            background: radial-gradient(circle, rgba(255, 152, 0, 0.05) 0%, transparent 70%);
-        }
-
-        /* 状态标题美化 */
-        .status-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 状态描述美化 */
-        .status-description {
-            font-size: 17px;
-            color: #495057;
-            margin-bottom: 20px;
-            line-height: 1.8;
-            position: relative;
-            z-index: 1;
-        }
-
-        .status-description strong {
-            color: #2c3e50;
-            font-weight: 700;
-        }
-
-        /* 管理员留言美化 */
-        .admin-remarks {
-            background: rgba(255, 255, 255, 0.7);
-            border-left: 4px solid #667eea;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin: 15px 0;
-            font-style: italic;
-            color: #2c3e50;
-            position: relative;
-            z-index: 1;
-        }
-
-        .admin-remarks::before {
-            content: '💬';
-            margin-right: 10px;
-            font-size: 18px;
-        }
-
-        /* 提交时间美化 */
-        .submit-time {
-            color: #6c757d;
-            font-size: 15px;
-            margin-top: 10px;
-            padding-top: 15px;
-            border-top: 1px dashed #e9ecef;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 说明内容卡片美化 */
-        .info-card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .info-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.03) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        /* 卡片标题美化 */
-        .info-card h2 {
-            color: #2c3e50;
-            font-size: 26px;
-            margin-bottom: 20px;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
-        }
-
-        /* 段落美化 */
-        .info-card p {
-            color: #495057;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 列表美化 */
-        .info-card ul {
-            padding-left: 30px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .info-card ul li {
-            color: #495057;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .info-card ul li::before {
-            content: '•';
-            color: #667eea;
-            font-weight: bold;
-            position: absolute;
-            left: -20px;
-            font-size: 20px;
-        }
-
-        .info-card ul li strong {
-            color: #2c3e50;
-            font-weight: 700;
-        }
-
-        /* 有序列表美化 */
-        .info-card ol {
-            padding-left: 30px;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .info-card ol li {
-            color: #495057;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .info-card ol li::before {
-            color: #667eea;
-            font-weight: bold;
-        }
-
-        /* 重要提示美化 */
-        .important-notice {
-            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
-            border-left: 5px solid #ffc107;
-            padding: 20px 25px;
-            border-radius: 15px;
-            margin: 25px 0;
-            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .important-notice::before {
-            content: '⚠️';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 32px;
-            opacity: 0.3;
-        }
-
-        .important-notice p {
-            margin: 0;
-            color: #5d4037;
-            font-weight: 600;
-            padding-left: 45px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 按钮组美化 */
-        .button-group {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-            justify-content: center;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 统一按钮样式 */
-        .btn {
-            padding: 14px 32px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            gap: 8px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        /* 主要按钮 - 蓝色渐变 */
-        .btn-primary {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0069d9 0%, #004494 100%);
-        }
-
-        /* 次要按钮 - 灰色渐变 */
-        .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: linear-gradient(135deg, #5a6268 0%, #4e555b 100%);
-        }
-
-        /* 响应式调整 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 28px;
-                margin-bottom: 20px;
-            }
-
-            h1::after {
-                width: 100px;
-                height: 3px;
-            }
-
-            .user-info {
-                font-size: 16px;
-                padding: 12px 20px;
-            }
-
-            .status-card,
-            .info-card {
-                padding: 25px 20px;
-            }
-
-            .status-title {
-                font-size: 22px;
-            }
-
-            .info-card h2 {
-                font-size: 24px;
-            }
-
-            .button-group {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-                margin-bottom: 10px;
-            }
+            .header-content { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 10px; }
+            .nav-links { width: 100%; justify-content: center; }
+            .main-container { padding: 0 15px; }
+            .page-header-card { padding: 16px 18px; }
+            .page-title { font-size: 20px; }
+            .status-card { padding: 18px; }
+            .info-card { padding: 18px; }
+            .button-group { flex-direction: column; align-items: stretch; }
+            .btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>📝 申请成为认证用户</h1>
+<!-- 顶部 Header 栏 -->
+<header class="header">
+    <div class="header-content">
+        <a href="${pageContext.request.contextPath}/" class="logo">💻 PC 硬件交流论坛</a>
+        <nav class="nav-links">
+            <a href="${pageContext.request.contextPath}/forum/section">📁 论坛分区</a>
+            <a href="${pageContext.request.contextPath}/hardware-library">🔧 硬件参数库</a>
+            <c:choose>
+                <c:when test="${sessionScope.currentUser != null}">
+                    <a href="${pageContext.request.contextPath}/user/notifications">🔔 消息</a>
+                    <a href="${pageContext.request.contextPath}/user/profile" class="highlight">👤 个人中心</a>
+                    <a href="${pageContext.request.contextPath}/user/logout">🚪 退出</a>
+                </c:when>
+                <c:otherwise>
+                    <a href="${pageContext.request.contextPath}/user/login">🔑 登录</a>
+                    <a href="${pageContext.request.contextPath}/user/register" class="highlight">📝 注册</a>
+                </c:otherwise>
+            </c:choose>
+        </nav>
+    </div>
+</header>
 
-    <div class="user-info">
-        <strong>当前用户:</strong> ${sessionScope.currentUser.username} (${sessionScope.currentUser.role})
+<div class="main-container">
+    <div class="page-header-card">
+        <h1 class="page-title">📝 申请成为认证用户</h1>
     </div>
 
-    <!-- ========== 优先判断：认证资格被撤销（角色为USER但最近申请状态为approved） ========== -->
+    <div class="user-info-card">
+        <p class="user-info-text">当前用户：<strong>${sessionScope.currentUser.username}</strong> (${sessionScope.currentUser.role})</p>
+    </div>
+
+    <!-- ========== 优先判断：认证资格被撤销（角色为 USER 但最近申请状态为 approved） ========== -->
     <c:if test="${sessionScope.currentUser.role == 'USER' && not empty latestCertificationApplication && latestCertificationApplication.applicationStatus == 'approved'}">
         <div class="status-card status-rejected">
             <h2 class="status-title">❌ 认证资格已被撤销</h2>
@@ -445,7 +123,7 @@
             </p>
             <c:if test="${not empty latestCertificationApplication.adminRemarks}">
                 <div class="admin-remarks">
-                    📌 撤销原因: <em>${latestCertificationApplication.adminRemarks}</em>
+                    📌 撤销原因：<em>${latestCertificationApplication.adminRemarks}</em>
                 </div>
             </c:if>
             <p class="status-description" style="margin-top: 15px;">
