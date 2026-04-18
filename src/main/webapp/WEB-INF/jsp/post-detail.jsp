@@ -15,13 +15,13 @@
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
 
-        /* ================= 顶部 Header (恢复原版) ================= */
+        /* ================= 顶部 Header (恢复原状) ================= */
         .header { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; padding: 0 20px; }
         .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; height: 56px; }
         .logo { font-size: 22px; font-weight: 700; color: #0066ff; display: flex; align-items: center; gap: 8px; text-decoration: none; }
         .logo:hover { color: #0055dd; }
         .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { color: #121212; font-size: 15px; padding: 8px 16px; border-radius: 4px; transition: all 0.3s ease; text-decoration: none; }
+        .nav-links a { color: #121212; text-decoration: none; font-size: 15px; padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease; }
         .nav-links a:hover { background: #f0f0f0; color: #0066ff; }
         .nav-links .highlight { background: #0066ff; color: #fff; }
         .nav-links .highlight:hover { background: #0055dd; }
@@ -36,72 +36,141 @@
         h2 { font-size: 18px; font-weight: 600; color: #121212; margin: 30px 0 15px 0; padding-left: 10px; border-left: 4px solid #0066ff; }
         h3 { font-size: 16px; font-weight: 600; color: #121212; margin-bottom: 15px; }
 
-        .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
         .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
         .card-title { font-size: 18px; font-weight: 600; color: #121212; display: flex; align-items: center; gap: 8px; }
         .card-body { padding: 16px 20px; }
 
         /* 帖子信息卡片 */
-        .post-info-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+        .post-info-card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
         .post-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: #8a8a8a; }
         .post-meta-item { display: flex; align-items: center; gap: 6px; }
         .post-meta-item strong { color: #121212; font-weight: 600; }
         .post-meta-item a { color: #0066ff; font-weight: 500; }
         .post-meta-item a:hover { text-decoration: underline; }
-        .post-status.locked { color: #dc3545; font-weight: 600; background: #ffebee; padding: 2px 8px; border-radius: 4px; }
+        .post-status.locked { color: #d32f2f; font-weight: 600; background: #ffebee; padding: 2px 8px; border-radius: 4px; }
 
-        /* 操作栏 */
-        .post-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-
-        /* 按钮样式 - 知乎风方正设计 */
-        .btn, .action-btn, input[type="submit"] {
-            padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #fff;
+        /* 操作栏 (包含游客提示) */
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            align-items: center;
         }
-        .btn:hover, .action-btn:hover, input[type="submit"]:hover { opacity: 0.9; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transform: translateY(-1px); }
 
-        .btn-favorite { background: #f5a623; color: #fff; } /* 知乎黄/橙 */
-        .btn-favorite.favorited { background: #e0961b; }
-        .btn-edit { background: #0066ff; } /* 品牌蓝 */
-        .btn-delete, .action-btn.btn-delete, input[type="submit"].btn-delete { background: #d32f2f; } /* 警示红 */
-        .btn-pin, .action-btn.btn-pin { background: #388e3c; } /* 成功绿 */
+        /* 游客提示样式 */
+        .guest-action-tip {
+            width: 100%;
+            color: #666;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        .guest-action-tip a {
+            color: #0066ff;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px dashed #0066ff;
+        }
+        .guest-action-tip a:hover {
+            color: #0055dd;
+            border-bottom-style: solid;
+        }
+
+        /* 按钮样式 (方正设计，知乎风) */
+        .btn, .action-btn, input[type="submit"] {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #fff;
+            background: #0066ff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .btn:hover, .action-btn:hover, input[type="submit"]:hover {
+            opacity: 0.9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transform: translateY(-1px);
+        }
+
+        .btn-favorite { background: #f5a623; color: #fff; }
+        .btn-favorite.favorited { background: #e69515; }
+        .btn-edit { background: #0066ff; }
+        .btn-delete, .action-btn.btn-delete, input[type="submit"].btn-delete { background: #d32f2f; }
+        .btn-pin, .action-btn.btn-pin { background: #388e3c; }
         .btn-unpin, .action-btn.btn-unpin { background: #757575; }
-        .btn-lock, .action-btn.btn-lock { background: #0097a7; } /* 青色 */
+        .btn-lock, .action-btn.btn-lock { background: #0097a7; }
         .btn-unlock, .action-btn.btn-unlock { background: #757575; }
-        .btn-info { background: #1976d2; } /* 信息蓝 */
+        .btn-info { background: #0097a7; }
         .btn-primary { background: #0066ff; }
 
         /* 锁定提示 */
-        .locked-post-message { background: #ffebee; border-left: 4px solid #dc3545; padding: 16px 20px; border-radius: 4px; margin-bottom: 20px; }
+        .locked-post-message { background: #ffebee; border-left: 4px solid #d32f2f; padding: 16px 20px; border-radius: 4px; margin-bottom: 20px; }
         .locked-post-message p { margin: 0; color: #c62828; font-size: 14px; font-weight: 500; }
 
-        /* 帖子内容 - 加粗美观 */
-        .post-content { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; color: #1a1a1a; font-weight: 500; white-space: pre-wrap; word-wrap: break-word; }
+        /* 帖子内容 */
+        .post-content {
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            font-size: 16px;
+            color: #1a1a1a;
+            font-weight: 500; /* 贴主文字加粗 */
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
         .post-content img { max-width: 100%; height: auto; margin: 16px 0; border-radius: 4px; }
 
-        /* 回复列表 - 标准字重区分 */
+        /* 回复列表 */
         .reply-list { margin-bottom: 20px; }
-        .reply-item { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 16px; }
+        .reply-item { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 16px; }
         .reply-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; gap: 10px; }
         .reply-header p { margin: 0; font-size: 14px; color: #8a8a8a; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .user-role { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+        .user-role { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
         .role-certified { background: #e6f7ed; color: #28a745; }
-        .role-admin { background: #ffebee; color: #dc3545; }
+        .role-admin { background: #ffebee; color: #d32f2f; }
         .role-regular { background: #f0f0f0; color: #666; }
-        .reply-content-rendered { font-size: 15px; color: #333; line-height: 1.7; white-space: pre-wrap; font-weight: 400; }
+        .reply-content-rendered {
+            font-size: 15px;
+            color: #333;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            font-weight: 400; /* 回复文字标准字重 */
+        }
         .reply-content-rendered img { max-width: 100%; height: auto; margin: 12px 0; border-radius: 4px; }
         .reply-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; text-align: right; }
 
         /* 回复表单 */
-        .reply-form-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
+        .reply-form-card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
         .form-group { margin-bottom: 16px; }
         .form-button-group { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-        #replyContent { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; resize: vertical; min-height: 120px; font-family: inherit; transition: all 0.3s ease; box-sizing: border-box; }
-        #replyContent:focus { outline: none; border-color: #0066ff; box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
-        .error { color: #dc3545; font-size: 13px; margin-top: 6px; }
+        #replyContent { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; resize: vertical; min-height: 120px; font-family: inherit; transition: all 0.2s ease; box-sizing: border-box; }
+        #replyContent:focus { outline: none; border-color: #0066ff; box-shadow: 0 0 0 2px rgba(0,102,255,0.1); }
+        .error { color: #d32f2f; font-size: 13px; margin-top: 6px; }
 
         /* 分页 */
-        .pagination { margin: 30px 0; text-align: center; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .pagination a, .pagination span.current-page { display: inline-block; padding: 8px 16px; margin: 0 4px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
+        .pagination { margin: 30px 0; text-align: center; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .pagination a, .pagination span.current-page { display: inline-block; padding: 8px 16px; margin: 0 4px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s ease; }
         .pagination a { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
         .pagination a:hover { background: #0066ff; color: #fff; border-color: #0066ff; }
         .pagination span.current-page { background: #0066ff; color: #fff; border: 1px solid #0066ff; }
@@ -109,55 +178,49 @@
 
         /* 底部导航 */
         .page-footer { margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 20px; }
-        .back-link { display: inline-block; padding: 10px 24px; background: #fff; color: #121212; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 14px; transition: all 0.3s ease; border: 1px solid #e0e0e0; }
+        .back-link { display: inline-block; padding: 10px 24px; background: #fff; color: #121212; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 14px; transition: all 0.2s ease; border: 1px solid #e0e0e0; }
         .back-link:hover { background: #f0f0f0; }
 
         /* 模态框 */
         .hardware-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .hardware-modal-content { background: #fff; margin: 5% auto; padding: 30px; border-radius: 8px; width: 90%; max-width: 700px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; max-height: 85vh; overflow-y: auto; }
-        .hardware-modal-close { color: #8a8a8a; float: right; font-size: 32px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; background: none; border: none; padding: 0; line-height: 1; }
-        .hardware-modal-close:hover { color: #dc3545; transform: rotate(90deg); }
-        .hardware-modal h3 { color: #121212; font-size: 22px; margin-bottom: 20px; font-weight: 700; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; }
+        .hardware-modal-content { background: #fff; margin: 5% auto; padding: 30px; border-radius: 4px; width: 90%; max-width: 650px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; max-height: 85vh; overflow-y: auto; }
+        .hardware-modal-close { color: #8a8a8a; float: right; font-size: 32px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; background: none; border: none; padding: 0; line-height: 1; }
+        .hardware-modal-close:hover { color: #d32f2f; }
+        .hardware-modal h3 { color: #121212; font-size: 20px; margin-bottom: 20px; font-weight: 600; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 
-        /* 硬件详情网格布局美化 */
-        .hardware-spec-grid {
+        /* 硬件详情网格布局 */
+        .hardware-detail-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
+            gap: 15px;
             margin-top: 20px;
         }
-        .spec-item {
+        .hardware-detail-item {
             background: #f9f9f9;
-            padding: 12px 16px;
-            border-radius: 6px;
+            padding: 12px 15px;
+            border-radius: 4px;
             border: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
             transition: all 0.2s;
         }
-        .spec-item:hover {
+        .hardware-detail-item:hover {
             background: #f0f7ff;
             border-color: #d0e4ff;
-            transform: translateY(-2px);
         }
-        .spec-label {
-            font-size: 13px;
+        .hardware-detail-label {
+            font-size: 12px;
             color: #666;
-            margin-bottom: 4px;
             font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .spec-value {
+        .hardware-detail-value {
             font-size: 15px;
             color: #0066ff;
             font-weight: 600;
             word-break: break-word;
-        }
-        .section-title {
-            grid-column: 1 / -1;
-            font-size: 16px;
-            font-weight: 700;
-            color: #333;
-            margin: 20px 0 10px 0;
-            padding-left: 10px;
-            border-left: 3px solid #0066ff;
         }
 
         /* 搜索结果项 */
@@ -166,7 +229,7 @@
 
         /* ================= 用户卡片样式 ================= */
         .user-card { text-align: center; }
-        .user-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
+        .user-avatar { width: 80px; height: 80px; border-radius: 4px; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
         .user-avatar-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; border: 3px solid #f0f0f0; }
         .user-name { font-size: 18px; font-weight: 600; color: #121212; margin-bottom: 4px; }
         .user-role-badge { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
@@ -175,7 +238,7 @@
         .stat-value { font-size: 20px; font-weight: 700; color: #0066ff; display: block; }
         .stat-label { font-size: 12px; color: #8a8a8a; margin-top: 4px; }
         .user-actions { display: flex; flex-direction: column; gap: 8px; }
-        .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 4px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
+        .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
         .user-btn-primary { background: #0066ff; color: #fff; }
         .user-btn-primary:hover { background: #0055dd; }
         .user-btn-secondary { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
@@ -188,38 +251,36 @@
         .quick-link-icon { font-size: 28px; margin-bottom: 8px; }
         .quick-link-text { font-size: 14px; font-weight: 500; }
 
-        /* 硬件引用突出化样式 */
+        /* 硬件引用高亮样式 */
         .hardware-ref {
             display: inline-block;
-            padding: 2px 8px;
-            margin: 0 4px;
             background: #e6f0ff;
             color: #0066ff;
-            border: 1px solid #0066ff;
+            padding: 2px 8px;
             border-radius: 4px;
+            border: 1px solid #b3d7ff;
             font-weight: 600;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            margin: 0 4px;
             cursor: pointer;
-            text-decoration: none;
             transition: all 0.2s;
-            vertical-align: middle;
+            text-decoration: none;
         }
         .hardware-ref:hover {
             background: #0066ff;
             color: #fff;
-            box-shadow: 0 2px 6px rgba(0,102,255,0.3);
+            border-color: #0055dd;
             transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,102,255,0.2);
         }
         .hardware-loading {
-            display: inline-block;
-            padding: 2px 8px;
-            margin: 0 4px;
-            background: #f0f0f0;
             color: #999;
-            border: 1px dashed #ccc;
-            border-radius: 4px;
+            font-style: italic;
             font-size: 0.9em;
-            vertical-align: middle;
+            padding: 2px 8px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            border: 1px dashed #ddd;
         }
 
         /* 响应式 */
@@ -286,51 +347,59 @@
             </div>
         </div>
 
-        <!-- 帖子操作按钮区域 -->
+        <!-- 帖子操作按钮区域 (已优化游客显示) -->
         <div class="post-actions">
-            <!-- 收藏按钮 -->
-            <c:if test="${sessionScope.currentUser != null}">
-                <button id="favoriteBtn" class="btn btn-favorite ${isFavorited ? 'favorited' : ''}" data-post-id="${post.id}">
-                        ${isFavorited ? '⭐ 已收藏' : '⭐ 收藏'} (<span id="favoriteCount">${favoriteCount}</span>)
-                </button>
-            </c:if>
+            <c:choose>
+                <c:when test="${sessionScope.currentUser != null}">
+                    <!-- 已登录用户显示操作按钮 -->
+                    <button id="favoriteBtn" class="btn btn-favorite ${isFavorited ? 'favorited' : ''}" data-post-id="${post.id}">
+                            ${isFavorited ? '⭐ 已收藏' : '⭐ 收藏'} (<span id="favoriteCount">${favoriteCount}</span>)
+                    </button>
 
-            <!-- 编辑按钮 -->
-            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == post.userId}">
-                <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn btn-edit">✏️ 编辑</a>
-            </c:if>
+                    <c:if test="${sessionScope.currentUser.id == post.userId}">
+                        <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn btn-edit">✏️ 编辑</a>
+                    </c:if>
 
-            <!-- 删除按钮 -->
-            <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN')}">
-                <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
-                    <input type="submit" value="🗑️ 删除" class="action-btn btn-delete" onclick="return confirm('确定要删除此帖子吗？删除后无法恢复！');">
-                </form>
-            </c:if>
+                    <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN')}">
+                        <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
+                            <input type="submit" value="🗑️ 删除" class="action-btn btn-delete" onclick="return confirm('确定要删除此帖子吗？删除后无法恢复！');">
+                        </form>
+                    </c:if>
 
-            <!-- 管理员操作 -->
-            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
-                <c:if test="${post.pinLevel > 0}">
-                    <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
-                        <input type="submit" value="📌 取消置顶" class="action-btn btn-unpin">
-                    </form>
-                </c:if>
-                <c:if test="${post.pinLevel == 0}">
-                    <form action="${pageContext.request.contextPath}/post/${post.id}/pin" method="post" style="display:inline;">
-                        <input type="hidden" name="level" value="1">
-                        <input type="submit" value="📌 置顶" class="action-btn btn-pin">
-                    </form>
-                </c:if>
-                <c:if test="${post.isLocked}">
-                    <form action="${pageContext.request.contextPath}/post/${post.id}/unlock" method="post" style="display:inline;">
-                        <input type="submit" value="🔓 解锁" class="action-btn btn-unlock">
-                    </form>
-                </c:if>
-                <c:if test="${!post.isLocked}">
-                    <form action="${pageContext.request.contextPath}/post/${post.id}/lock" method="post" style="display:inline;">
-                        <input type="submit" value="🔒 锁定" class="action-btn btn-lock">
-                    </form>
-                </c:if>
-            </c:if>
+                    <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
+                        <c:if test="${post.pinLevel > 0}">
+                            <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
+                                <input type="submit" value="📌 取消置顶" class="action-btn btn-unpin">
+                            </form>
+                        </c:if>
+                        <c:if test="${post.pinLevel == 0}">
+                            <form action="${pageContext.request.contextPath}/post/${post.id}/pin" method="post" style="display:inline;">
+                                <input type="hidden" name="level" value="1">
+                                <input type="submit" value="📌 置顶" class="action-btn btn-pin">
+                            </form>
+                        </c:if>
+                        <c:if test="${post.isLocked}">
+                            <form action="${pageContext.request.contextPath}/post/${post.id}/unlock" method="post" style="display:inline;">
+                                <input type="submit" value="🔓 解锁" class="action-btn btn-unlock">
+                            </form>
+                        </c:if>
+                        <c:if test="${!post.isLocked}">
+                            <form action="${pageContext.request.contextPath}/post/${post.id}/lock" method="post" style="display:inline;">
+                                <input type="submit" value="🔒 锁定" class="action-btn btn-lock">
+                            </form>
+                        </c:if>
+                    </c:if>
+                </c:when>
+                <c:otherwise>
+                    <!-- 游客显示提示信息 -->
+                    <div class="guest-action-tip">
+                        <span>🔒 您尚未登录，无法执行收藏、编辑等操作。</span>
+                        <a href="${pageContext.request.contextPath}/user/login">立即登录</a>
+                        <span>或</span>
+                        <a href="${pageContext.request.contextPath}/user/register">免费注册</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div><br>
 
         <!-- 锁定提示 -->
@@ -811,80 +880,56 @@
             var table = $(this).data('table');
             var id = $(this).data('id');
             $('#hardwareModal').show();
-            $('#hardwareDetailContent').html('<p style="text-align:center; padding: 20px;">加载中...</p>');
+            $('#hardwareDetailContent').html('<p>加载中...</p>');
 
             $.ajax({
                 url: '${pageContext.request.contextPath}/api/hardware/detail/' + table + '/' + id,
                 type: 'GET',
                 success: function(data) {
                     var displayTitle = (data.brand || '') + ' ' + (data.model || '');
-                    var html = '<h3 style="text-align:center; margin-bottom:25px;">' + displayTitle + '</h3>';
-                    html += '<div class="hardware-spec-grid">';
+                    var detailHtml = '<h3>' + displayTitle + '</h3>';
+
+                    // 构建网格布局的HTML
+                    var gridHtml = '<div class="hardware-detail-grid">';
 
                     if (table === 'cpu_info') {
-                        // 基本信息
-                        html += '<div class="section-title">基本规格</div>';
-                        html += buildSpecItem('接口类型', data.interfaceType);
-                        html += buildSpecItem('核心数', data.cores);
-                        html += buildSpecItem('线程数', data.threads);
-                        html += buildSpecItem('基础频率', data.baseFrequency + ' GHz');
-                        html += buildSpecItem('最大频率', data.maxFrequency + ' GHz');
-                        html += buildSpecItem('TDP', data.tdp + ' W');
-
-                        // 核显信息
-                        html += '<div class="section-title">核显信息</div>';
-                        html += buildSpecItem('集成显卡', data.integratedGraphics || '无');
-                        if(data.integratedGraphics && data.integratedGraphics !== '无') {
-                            html += buildSpecItem('核显频率', data.igpuClock ? data.igpuClock + ' MHz' : '-');
-                        }
-
-
+                        gridHtml += createGridItem('接口类型', data.interfaceType);
+                        gridHtml += createGridItem('核心数', data.cores);
+                        gridHtml += createGridItem('线程数', data.threads);
+                        gridHtml += createGridItem('基础频率', data.baseFrequency + ' GHz');
+                        gridHtml += createGridItem('最大频率', data.maxFrequency + ' GHz');
+                        gridHtml += createGridItem('TDP', data.tdp + ' W');
+                        gridHtml += createGridItem('核显', data.integratedGraphics || '无');
                     } else if (table === 'gpu_info') {
-                        // 基本信息
-                        html += '<div class="section-title">基本规格</div>';
-                        html += buildSpecItem('显存容量', data.memorySize + ' GB');
-                        html += buildSpecItem('显存类型', data.memoryType);
-                        html += buildSpecItem('基础频率', data.baseClock + ' MHz');
-                        html += buildSpecItem('加速频率', data.boostClock + ' MHz');
-                        html += buildSpecItem('TDP', data.tdp + ' W');
-
-                        // 核显/特殊信息 (如果是APU或特定卡)
-                        html += '<div class="section-title">其他信息</div>';
-                        html += buildSpecItem('架构', data.architecture || '-');
-                        html += buildSpecItem('流处理器', data.streamProcessors || '-');
-
-
-
+                        gridHtml += createGridItem('显存容量', data.memorySize + ' GB');
+                        gridHtml += createGridItem('显存类型', data.memoryType);
+                        gridHtml += createGridItem('基础频率', data.baseClock + ' MHz');
+                        gridHtml += createGridItem('加速频率', data.boostClock + ' MHz');
+                        gridHtml += createGridItem('TDP', data.tdp + ' W');
                     } else if (table === 'motherboard_info') {
-                        // 基本信息
-                        html += '<div class="section-title">基本规格</div>';
-                        html += buildSpecItem('芯片组', data.chipset);
-                        html += buildSpecItem('CPU 接口', data.cpuInterface);
-                        html += buildSpecItem('内存插槽', data.memorySlots);
-                        html += buildSpecItem('最大内存', data.maxMemory + ' GB');
-                        html += buildSpecItem('内存类型', data.memoryType);
-
-                        // 板载/扩展信息
-                        html += '<div class="section-title">扩展与支持</div>';
-                        html += buildSpecItem('板载显卡支持', data.onboardGraphicsSupport || '依赖 CPU');
-                        html += buildSpecItem('PCIe 插槽', data.pcieSlots || '-');
+                        gridHtml += createGridItem('芯片组', data.chipset);
+                        gridHtml += createGridItem('CPU 接口', data.cpuInterface);
+                        gridHtml += createGridItem('内存插槽', data.memorySlots);
+                        gridHtml += createGridItem('最大内存', data.maxMemory + ' GB');
+                        gridHtml += createGridItem('内存类型', data.memoryType);
                     }
 
-                    html += '</div>';
-                    $('#hardwareDetailContent').html(html);
+                    gridHtml += '</div>';
+                    detailHtml += gridHtml;
+                    $('#hardwareDetailContent').html(detailHtml);
                 },
                 error: function(xhr, status, error) {
-                    $('#hardwareDetailContent').html('<p style="text-align:center; color:red;">获取硬件详情失败：' + error + '</p>');
+                    $('#hardwareDetailContent').html('<p>获取硬件详情失败：' + error + '</p>');
                 }
             });
         });
 
-        // 辅助构建 HTML 函数
-        function buildSpecItem(label, value) {
-            if (!value || value === 'null') value = '-';
-            return '<div class="spec-item">' +
-                '<div class="spec-label">' + label + '</div>' +
-                '<div class="spec-value">' + value + '</div>' +
+        // 辅助函数：创建网格项
+        function createGridItem(label, value) {
+            if (!value || value === 'null') value = '未知';
+            return '<div class="hardware-detail-item">' +
+                '<span class="hardware-detail-label">' + label + '</span>' +
+                '<span class="hardware-detail-value">' + value + '</span>' +
                 '</div>';
         }
     });
