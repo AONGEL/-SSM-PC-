@@ -27,7 +27,9 @@
         .nav-links .highlight:hover { background: #0055dd; }
 
         /* ================= 主容器 ================= */
-        .container { max-width: 1000px; margin: 20px auto; padding: 0 20px; }
+        .main-container { max-width: 1200px; margin: 20px auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+        .left-column { display: flex; flex-direction: column; gap: 20px; }
+        .right-column { display: flex; flex-direction: column; gap: 20px; }
 
         /* ================= 通用卡片与排版 ================= */
         h1 { font-size: 24px; font-weight: 700; color: #121212; margin-bottom: 20px; line-height: 1.4; }
@@ -35,6 +37,9 @@
         h3 { font-size: 16px; font-weight: 600; color: #121212; margin-bottom: 15px; }
 
         .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+        .card-title { font-size: 18px; font-weight: 600; color: #121212; display: flex; align-items: center; gap: 8px; }
+        .card-body { padding: 16px 20px; }
 
         /* 帖子信息卡片 */
         .post-info-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
@@ -120,7 +125,35 @@
         .search-result-item { padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; }
         .search-result-item:hover { background: #f6f6f6; }
 
+        /* ================= 用户卡片样式 ================= */
+        .user-card { text-align: center; }
+        .user-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
+        .user-avatar-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; border: 3px solid #f0f0f0; }
+        .user-name { font-size: 18px; font-weight: 600; color: #121212; margin-bottom: 4px; }
+        .user-role-badge { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
+        .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+        .stat-item { text-align: center; padding: 12px 8px; background: #fafafa; border-radius: 8px; }
+        .stat-value { font-size: 20px; font-weight: 700; color: #0066ff; display: block; }
+        .stat-label { font-size: 12px; color: #8a8a8a; margin-top: 4px; }
+        .user-actions { display: flex; flex-direction: column; gap: 8px; }
+        .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
+        .user-btn-primary { background: #0066ff; color: #fff; }
+        .user-btn-primary:hover { background: #0055dd; }
+        .user-btn-secondary { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
+        .user-btn-secondary:hover { background: #f0f0f0; }
+
+        /* ================= 快捷入口样式 ================= */
+        .quick-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .quick-link { display: flex; flex-direction: column; align-items: center; padding: 16px; background: #fafafa; border-radius: 8px; text-decoration: none; color: #121212; transition: all 0.3s ease; text-align: center; }
+        .quick-link:hover { background: #f0f0f0; transform: translateY(-2px); }
+        .quick-link-icon { font-size: 28px; margin-bottom: 8px; }
+        .quick-link-text { font-size: 14px; font-weight: 500; }
+
         /* 响应式 */
+        @media (max-width: 900px) {
+            .main-container { grid-template-columns: 1fr; }
+            .right-column { order: -1; }
+        }
         @media (max-width: 768px) {
             .header-content { flex-wrap: wrap; height: auto; padding: 10px 0; gap: 10px; }
             .nav-links { width: 100%; justify-content: center; }
@@ -154,215 +187,283 @@
     </div>
 </header>
 
-<div class="container">
-    <h1>${fn:escapeXml(post.title)}</h1>
+<div class="main-container">
+    <!-- 左侧列：帖子详情内容 -->
+    <div class="left-column">
+        <h1>${fn:escapeXml(post.title)}</h1>
 
-    <!-- 帖子信息卡片 -->
-    <div class="post-info-card">
-        <div class="post-meta">
-            <span class="post-meta-item">
-                <strong>👤</strong> 作者: ${fn:escapeXml(post.authorUsername)}
-            </span>
-            <span class="post-meta-item">
-                <strong>📅</strong> <fmt:formatDate value="${post.createTime}" pattern="yyyy-MM-dd HH:mm"/>
-            </span>
-            <span class="post-meta-item">
-                <strong>👁️</strong> 浏览: ${post.viewCount}
-            </span>
-            <span class="post-meta-item">
-                <strong>📁</strong> 板块: <a href="${pageContext.request.contextPath}/forum/section/${post.sectionId}/posts">${fn:escapeXml(post.sectionName)}</a>
-            </span>
-            <c:if test="${post.isLocked}">
-                <span class="post-meta-item post-status locked">🔒 已锁定</span>
-            </c:if>
-        </div>
-    </div>
-
-    <!-- 帖子操作按钮区域 -->
-    <div class="post-actions">
-        <!-- 收藏按钮 -->
-        <c:if test="${sessionScope.currentUser != null}">
-            <button id="favoriteBtn" class="btn btn-favorite ${isFavorited ? 'favorited' : ''}" data-post-id="${post.id}">
-                    ${isFavorited ? '⭐ 已收藏' : '⭐ 收藏'} (<span id="favoriteCount">${favoriteCount}</span>)
-            </button>
-        </c:if>
-
-        <!-- 编辑按钮 -->
-        <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == post.userId}">
-            <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn btn-edit">✏️ 编辑</a>
-        </c:if>
-
-        <!-- 删除按钮 -->
-        <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN')}">
-            <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
-                <input type="submit" value="🗑️ 删除" class="action-btn btn-delete" onclick="return confirm('确定要删除此帖子吗？删除后无法恢复！');">
-            </form>
-        </c:if>
-
-        <!-- 管理员操作 -->
-        <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
-            <c:if test="${post.pinLevel > 0}">
-                <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
-                    <input type="submit" value="📌 取消置顶" class="action-btn btn-unpin">
-                </form>
-            </c:if>
-            <c:if test="${post.pinLevel == 0}">
-                <form action="${pageContext.request.contextPath}/post/${post.id}/pin" method="post" style="display:inline;">
-                    <input type="hidden" name="level" value="1">
-                    <input type="submit" value="📌 置顶" class="action-btn btn-pin">
-                </form>
-            </c:if>
-            <c:if test="${post.isLocked}">
-                <form action="${pageContext.request.contextPath}/post/${post.id}/unlock" method="post" style="display:inline;">
-                    <input type="submit" value="🔓 解锁" class="action-btn btn-unlock">
-                </form>
-            </c:if>
-            <c:if test="${!post.isLocked}">
-                <form action="${pageContext.request.contextPath}/post/${post.id}/lock" method="post" style="display:inline;">
-                    <input type="submit" value="🔒 锁定" class="action-btn btn-lock">
-                </form>
-            </c:if>
-        </c:if>
-    </div><br>
-
-    <!-- 锁定提示 -->
-    <c:if test="${post.isLocked}">
-        <div class="locked-post-message">
-            <p><strong>🔒 此帖子已被锁定</strong>，只有管理员可以进行回复操作。</p>
-        </div>
-    </c:if>
-
-    <!-- 帖子内容 -->
-    <div class="post-content">
-        <div id="postContentRaw" style="display: none;">${post.content}</div>
-        <div id="postContentRendered"></div>
-    </div>
-
-    <!-- 回复列表 -->
-    <div class="reply-list">
-        <h2>💬 回复 (<c:out value="${totalReplies}"/>)</h2>
-        <c:choose>
-            <c:when test="${not empty replies}">
-                <ul id="repliesList">
-                    <c:forEach items="${replies}" var="reply" varStatus="status">
-                        <li class="reply-item" id="reply-${reply.id}">
-                            <div class="reply-header">
-                                <p>👤 用户: ${fn:escapeXml(reply.authorUsername)}
-                                    <c:if test="${reply.authorRole == 'CERTIFIED'}">
-                                        <span class="user-role role-certified">[认证用户]</span>
-                                    </c:if>
-                                    <c:if test="${reply.authorRole == 'ADMIN'}">
-                                        <span class="user-role role-admin">[管理员]</span>
-                                    </c:if>
-                                    <c:if test="${reply.authorRole == 'USER' || reply.authorRole == null}">
-                                        <span class="user-role role-regular">[普通用户]</span>
-                                    </c:if>
-                                    📅 时间: <fmt:formatDate value="${reply.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-                                </p>
-                            </div>
-                            <div class="reply-content">
-                                <div class="reply-content-raw" style="display: none;">${reply.content}</div>
-                                <div class="reply-content-rendered"></div>
-                            </div>
-                            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == reply.userId}">
-                                <div class="reply-actions">
-                                    <button class="btn btn-primary delete-reply-btn" data-reply-id="${reply.id}">🗑️ 删除</button>
-                                </div>
-                            </c:if>
-                        </li>
-                    </c:forEach>
-                </ul>
-
-                <!-- 分页 -->
-                <c:if test="${totalPages > 1}">
-                    <div class="pagination">
-                        <c:if test="${pageNum > 1}">
-                            <a href="${pageContext.request.contextPath}/post/${post.id}?pageNum=${pageNum - 1}&pageSize=6">&laquo; <span class="page-text">上一页</span></a>
-                        </c:if>
-                        <c:forEach begin="1" end="${totalPages}" var="i">
-                            <c:choose>
-                                <c:when test="${i eq pageNum}">
-                                    <span class="current-page">${i}</span>
-                                </c:when>
-                                <c:otherwise>
-                                    <a href="${pageContext.request.contextPath}/post/${post.id}?pageNum=${i}&pageSize=6">${i}</a>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:forEach>
-                        <c:if test="${pageNum < totalPages}">
-                            <a href="${pageContext.request.contextPath}/post/${post.id}?pageNum=${pageNum + 1}&pageSize=6"><span class="page-text">下一页</span> &raquo;</a>
-                        </c:if>
-                        <div class="page-info">
-                            <strong>第 ${pageNum} 页</strong> / 共 <strong>${totalPages} 页</strong> (共 <strong>${totalReplies} 条</strong> 回复)
-                        </div>
-                    </div>
+        <!-- 帖子信息卡片 -->
+        <div class="post-info-card">
+            <div class="post-meta">
+                <span class="post-meta-item">
+                    <strong>👤</strong> 作者：${fn:escapeXml(post.authorUsername)}
+                </span>
+                <span class="post-meta-item">
+                    <strong>📅</strong> <fmt:formatDate value="${post.createTime}" pattern="yyyy-MM-dd HH:mm"/>
+                </span>
+                <span class="post-meta-item">
+                    <strong>👁️</strong> 浏览：${post.viewCount}
+                </span>
+                <span class="post-meta-item">
+                    <strong>📁</strong> 板块：<a href="${pageContext.request.contextPath}/forum/section/${post.sectionId}/posts">${fn:escapeXml(post.sectionName)}</a>
+                </span>
+                <c:if test="${post.isLocked}">
+                    <span class="post-meta-item post-status locked">🔒 已锁定</span>
                 </c:if>
+            </div>
+        </div>
+
+        <!-- 帖子操作按钮区域 -->
+        <div class="post-actions">
+            <!-- 收藏按钮 -->
+            <c:if test="${sessionScope.currentUser != null}">
+                <button id="favoriteBtn" class="btn btn-favorite ${isFavorited ? 'favorited' : ''}" data-post-id="${post.id}">
+                        ${isFavorited ? '⭐ 已收藏' : '⭐ 收藏'} (<span id="favoriteCount">${favoriteCount}</span>)
+                </button>
+            </c:if>
+
+            <!-- 编辑按钮 -->
+            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == post.userId}">
+                <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn btn-edit">✏️ 编辑</a>
+            </c:if>
+
+            <!-- 删除按钮 -->
+            <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN')}">
+                <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
+                    <input type="submit" value="🗑️ 删除" class="action-btn btn-delete" onclick="return confirm('确定要删除此帖子吗？删除后无法恢复！');">
+                </form>
+            </c:if>
+
+            <!-- 管理员操作 -->
+            <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
+                <c:if test="${post.pinLevel > 0}">
+                    <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
+                        <input type="submit" value="📌 取消置顶" class="action-btn btn-unpin">
+                    </form>
+                </c:if>
+                <c:if test="${post.pinLevel == 0}">
+                    <form action="${pageContext.request.contextPath}/post/${post.id}/pin" method="post" style="display:inline;">
+                        <input type="hidden" name="level" value="1">
+                        <input type="submit" value="📌 置顶" class="action-btn btn-pin">
+                    </form>
+                </c:if>
+                <c:if test="${post.isLocked}">
+                    <form action="${pageContext.request.contextPath}/post/${post.id}/unlock" method="post" style="display:inline;">
+                        <input type="submit" value="🔓 解锁" class="action-btn btn-unlock">
+                    </form>
+                </c:if>
+                <c:if test="${!post.isLocked}">
+                    <form action="${pageContext.request.contextPath}/post/${post.id}/lock" method="post" style="display:inline;">
+                        <input type="submit" value="🔒 锁定" class="action-btn btn-lock">
+                    </form>
+                </c:if>
+            </c:if>
+        </div><br>
+
+        <!-- 锁定提示 -->
+        <c:if test="${post.isLocked}">
+            <div class="locked-post-message">
+                <p><strong>🔒 此帖子已被锁定</strong>，只有管理员可以进行回复操作。</p>
+            </div>
+        </c:if>
+
+        <!-- 帖子内容 -->
+        <div class="post-content">
+            <div id="postContentRaw" style="display: none;">${post.content}</div>
+            <div id="postContentRendered"></div>
+        </div>
+
+        <!-- 回复列表 -->
+        <div class="reply-list">
+            <h2>💬 回复 (<c:out value="${totalReplies}"/>)</h2>
+            <c:choose>
+                <c:when test="${not empty replies}">
+                    <ul id="repliesList">
+                        <c:forEach items="${replies}" var="reply" varStatus="status">
+                            <li class="reply-item" id="reply-${reply.id}">
+                                <div class="reply-header">
+                                    <p>👤 用户：${fn:escapeXml(reply.authorUsername)}
+                                        <c:if test="${reply.authorRole == 'CERTIFIED'}">
+                                            <span class="user-role role-certified">[认证用户]</span>
+                                        </c:if>
+                                        <c:if test="${reply.authorRole == 'ADMIN'}">
+                                            <span class="user-role role-admin">[管理员]</span>
+                                        </c:if>
+                                        <c:if test="${reply.authorRole == 'USER' || reply.authorRole == null}">
+                                            <span class="user-role role-regular">[普通用户]</span>
+                                        </c:if>
+                                        📅 时间：<fmt:formatDate value="${reply.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                    </p>
+                                </div>
+                                <div class="reply-content">
+                                    <div class="reply-content-raw" style="display: none;">${reply.content}</div>
+                                    <div class="reply-content-rendered"></div>
+                                </div>
+                                <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.id == reply.userId}">
+                                    <div class="reply-actions">
+                                        <button class="btn btn-primary delete-reply-btn" data-reply-id="${reply.id}">🗑️ 删除</button>
+                                    </div>
+                                </c:if>
+                            </li>
+                        </c:forEach>
+                    </ul>
+
+                    <!-- 分页 -->
+                    <c:if test="${totalPages > 1}">
+                        <div class="pagination">
+                            <c:if test="${pageNum > 1}">
+                                <a href="${pageContext.request.contextPath}/post/${post.id}?pageNum=${pageNum - 1}&pageSize=6">&laquo; <span class="page-text">上一页</span></a>
+                            </c:if>
+                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                <c:choose>
+                                    <c:when test="${i eq pageNum}">
+                                        <span class="current-page">${i}</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a href="${pageContext.request.contextPath}/post/${post.id}?pageNum=${i}&pageSize=6">${i}</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:forEach>
+                            <c:if test="${pageNum < totalPages}">
+                                <a href="${pageContext.request.contextPath}/post/${post.id}?pageNum=${pageNum + 1}&pageSize=6"><span class="page-text">下一页</span> &raquo;</a>
+                            </c:if>
+                            <div class="page-info">
+                                <strong>第 ${pageNum} 页</strong> / 共 <strong>${totalPages} 页</strong> (共 <strong>${totalReplies} 条</strong> 回复)
+                            </div>
+                        </div>
+                    </c:if>
+                </c:when>
+                <c:otherwise>
+                    <p>暂无回复。</p>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <!-- 回复表单 -->
+        <c:choose>
+            <c:when test="${post.isLocked && (!sessionScope.currentUser.role.equals('ADMIN'))}">
+                <div class="locked-post-message">
+                    <p>此帖子已被锁定，只有管理员可以回复。</p>
+                </div>
             </c:when>
             <c:otherwise>
-                <p>暂无回复。</p>
+                <c:if test="${sessionScope.currentUser != null}">
+                    <div class="reply-form-card">
+                        <h3>💬 发表回复</h3>
+                        <form:form action="${pageContext.request.contextPath}/post/${post.id}/reply" method="post" modelAttribute="reply">
+                            <form:hidden path="postId" value="${post.id}"/>
+                            <form:hidden path="userId" value="${sessionScope.currentUser.id}"/>
+                            <div class="form-group">
+                                <div class="form-button-group">
+                                    <button type="button" id="replyUploadBtn" class="btn btn-info">📝 上传图片</button>
+                                    <input type="file" id="replyImageFileInput" accept="image/*" style="display:none;">
+                                    <c:if test="${sessionScope.currentUser.role == 'CERTIFIED' || sessionScope.currentUser.role == 'ADMIN'}">
+                                        <button type="button" id="replyInsertReferenceBtn" class="btn btn-info">📊 插入硬件引用</button>
+                                    </c:if>
+                                </div><br>
+                                <form:textarea path="content" id="replyContent" rows="5" cols="50" required="required"/><br>
+                                <form:errors path="content" cssClass="error" /><br>
+                                <input type="submit" value="✅ 回复" class="btn btn-primary">
+                            </div>
+                        </form:form>
+                    </div>
+                </c:if>
             </c:otherwise>
         </c:choose>
-    </div>
 
-    <!-- 回复表单 -->
-    <c:choose>
-        <c:when test="${post.isLocked && (!sessionScope.currentUser.role.equals('ADMIN'))}">
-            <div class="locked-post-message">
-                <p>此帖子已被锁定，只有管理员可以回复。</p>
+        <!-- 底部导航 -->
+        <div class="page-footer">
+            <a href="${pageContext.request.contextPath}/forum/section/${post.sectionId}/posts" class="back-link">📁 返回帖子列表</a>
+            <a href="${pageContext.request.contextPath}/" class="back-link">🏠 返回首页</a>
+        </div>
+
+        <!-- 硬件详情模态框 -->
+        <div id="hardwareModal" class="hardware-modal">
+            <div class="hardware-modal-content">
+                <span class="hardware-modal-close">&times;</span>
+                <h3>📊 硬件详情</h3>
+                <div id="hardwareDetailContent" class="hardware-detail"></div>
             </div>
-        </c:when>
-        <c:otherwise>
-            <c:if test="${sessionScope.currentUser != null}">
-                <div class="reply-form-card">
-                    <h3>💬 发表回复</h3>
-                    <form:form action="${pageContext.request.contextPath}/post/${post.id}/reply" method="post" modelAttribute="reply">
-                        <form:hidden path="postId" value="${post.id}"/>
-                        <form:hidden path="userId" value="${sessionScope.currentUser.id}"/>
-                        <div class="form-group">
-                            <div class="form-button-group">
-                                <button type="button" id="replyUploadBtn" class="btn btn-info">📝 上传图片</button>
-                                <input type="file" id="replyImageFileInput" accept="image/*" style="display:none;">
-                                <c:if test="${sessionScope.currentUser.role == 'CERTIFIED' || sessionScope.currentUser.role == 'ADMIN'}">
-                                    <button type="button" id="replyInsertReferenceBtn" class="btn btn-info">📊 插入硬件引用</button>
-                                </c:if>
-                            </div><br>
-                            <form:textarea path="content" id="replyContent" rows="5" cols="50" required="required"/><br>
-                            <form:errors path="content" cssClass="error" /><br>
-                            <input type="submit" value="✅ 回复" class="btn btn-primary">
-                        </div>
-                    </form:form>
-                </div>
-            </c:if>
-        </c:otherwise>
-    </c:choose>
+        </div>
 
-    <!-- 底部导航 -->
-    <div class="page-footer">
-        <a href="${pageContext.request.contextPath}/forum/section/${post.sectionId}/posts" class="back-link">📁 返回帖子列表</a>
-        <a href="${pageContext.request.contextPath}/" class="back-link">🏠 返回首页</a>
-    </div>
-
-    <!-- 硬件详情模态框 -->
-    <div id="hardwareModal" class="hardware-modal">
-        <div class="hardware-modal-content">
-            <span class="hardware-modal-close">&times;</span>
-            <h3>📊 硬件详情</h3>
-            <div id="hardwareDetailContent" class="hardware-detail"></div>
+        <!-- 硬件搜索模态框 -->
+        <div id="replyHardwareModal" class="hardware-modal">
+            <div class="hardware-modal-content">
+                <span class="hardware-modal-close">&times;</span>
+                <h3>📊 选择硬件</h3>
+                <select id="replyHardwareTypeSelect" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 6px;">
+                    <option value="cpu_info">CPU</option>
+                    <option value="gpu_info">GPU</option>
+                    <option value="motherboard_info">主板</option>
+                </select>
+                <input type="text" id="replyHardwareSearch" placeholder="搜索硬件型号..." style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 6px;">
+                <div id="replyHardwareList"></div>
+            </div>
         </div>
     </div>
 
-    <!-- 硬件搜索模态框 -->
-    <div id="replyHardwareModal" class="hardware-modal">
-        <div class="hardware-modal-content">
-            <span class="hardware-modal-close">&times;</span>
-            <h3>📊 选择硬件</h3>
-            <select id="replyHardwareTypeSelect" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 6px;">
-                <option value="cpu_info">CPU</option>
-                <option value="gpu_info">GPU</option>
-                <option value="motherboard_info">主板</option>
-            </select>
-            <input type="text" id="replyHardwareSearch" placeholder="搜索硬件型号..." style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #e0e0e0; border-radius: 6px;">
-            <div id="replyHardwareList"></div>
+    <!-- 右侧列：用户信息和快捷入口 -->
+    <div class="right-column">
+        <c:choose>
+            <c:when test="${currentUser != null}">
+                <div class="card user-card">
+                    <div class="card-body">
+                        <c:choose>
+                            <c:when test="${not empty currentUser.avatar && currentUser.avatar != ''}">
+                                <img src="${currentUser.avatar}" alt="头像" class="user-avatar-img" />
+                            </c:when>
+                            <c:otherwise>
+                                <div class="user-avatar">${fn:substring(currentUser.username, 0, 1)}</div>
+                            </c:otherwise>
+                        </c:choose>
+                        <div class="user-name">${currentUser.username}</div>
+                        <c:choose>
+                            <c:when test="${currentUser.role == 'ADMIN'}"><span class="user-role-badge">👑 管理员</span></c:when>
+                            <c:when test="${currentUser.role == 'CERTIFIED'}"><span class="user-role-badge">✅ 认证用户</span></c:when>
+                            <c:otherwise><span class="user-role-badge">👤 普通用户</span></c:otherwise>
+                        </c:choose>
+                        <div class="user-stats">
+                            <div class="stat-item"><span class="stat-value">${postCount != null ? postCount : 0}</span><div class="stat-label">发帖数</div></div>
+                            <div class="stat-item"><span class="stat-value">${replyCount != null ? replyCount : 0}</span><div class="stat-label">回复数</div></div>
+                            <div class="stat-item"><span class="stat-value">${favoriteCount != null ? favoriteCount : 0}</span><div class="stat-label">收藏数</div></div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="${pageContext.request.contextPath}/user/profile" class="user-btn user-btn-primary">👤 个人中心</a>
+                            <a href="${pageContext.request.contextPath}/user/notifications" class="user-btn user-btn-secondary">🔔 我的消息</a>
+                            <a href="${pageContext.request.contextPath}/user/favorites" class="user-btn user-btn-secondary">⭐ 我的收藏</a>
+                        </div>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="card">
+                    <div class="card-body" style="text-align: center; padding: 30px 20px;">
+                        <div style="font-size: 48px; margin-bottom: 12px;">👋</div>
+                        <h3 style="font-size: 18px; margin-bottom: 8px; color: #121212;">欢迎游客</h3>
+                        <p style="color: #8a8a8a; font-size: 14px; margin-bottom: 20px;">登录后享受更多功能</p>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <a href="${pageContext.request.contextPath}/user/login" class="user-btn user-btn-primary">🔑 立即登录</a>
+                            <a href="${pageContext.request.contextPath}/user/register" class="user-btn user-btn-secondary">📝 免费注册</a>
+                        </div>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
+        <div class="card">
+            <div class="card-header"><h2 class="card-title">⚡ 快捷入口</h2></div>
+            <div class="card-body">
+                <div class="quick-links">
+                    <a href="${pageContext.request.contextPath}/hardware-library" class="quick-link">
+                        <span class="quick-link-icon">🔧</span><span class="quick-link-text">硬件参数库</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/post/create?sectionId=1" class="quick-link">
+                        <span class="quick-link-icon">✏️</span><span class="quick-link-text">发布帖子</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/forum/section" class="quick-link">
+                        <span class="quick-link-icon">📁</span><span class="quick-link-text">所有分区</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -386,7 +487,7 @@
             $(this).next('.reply-content-rendered').html(renderedContent);
         });
 
-        // 3. 删除回复功能 (原版逻辑: DELETE /reply/{id})
+        // 3. 删除回复功能 (原版逻辑：DELETE /reply/{id})
         $(document).on('click', '.delete-reply-btn', function() {
             var replyId = $(this).data('reply-id');
             if (confirm('确定要删除这条回复吗？')) {
@@ -408,8 +509,7 @@
             }
         });
 
-        // 4. 收藏功能 (原版逻辑: POST /post/{id}/toggle-favorite)
-        // 移除 onclick 绑定，改用 jQuery click
+        // 4. 收藏功能 (原版逻辑：POST /post/{id}/toggle-favorite)
         $("#favoriteBtn").click(function() {
             var postId = $(this).data("post-id");
             var button = $(this);
@@ -425,8 +525,6 @@
                             button.removeClass("favorited");
                             button.html('⭐ 收藏 (<span id="favoriteCount">' + response.favoriteCount + '</span>)');
                         }
-                        var message = isCurrentlyFavorited ? '已取消收藏' : '收藏成功';
-                        // alert(message); // 可选：是否保留弹窗
                     } else {
                         alert('操作失败：' + response.message);
                     }
@@ -435,7 +533,7 @@
             });
         });
 
-        // 5. 硬件引用搜索功能 (原版逻辑: GET /hardware/search?table=xx&term=xx)
+        // 5. 硬件引用搜索功能
         var replyHardwareModal = $('#replyHardwareModal');
         var replyHardwareModalClose = replyHardwareModal.find('.hardware-modal-close');
         var replyHardwareSearchInput = $('#replyHardwareSearch');
@@ -460,7 +558,6 @@
             }
         });
 
-        // 搜索输入事件
         replyHardwareSearchInput.on('input', function() {
             var keyword = $(this).val().trim();
             var table = replyHardwareTypeSelect.val();
@@ -469,12 +566,11 @@
                 $.ajax({
                     url: '${pageContext.request.contextPath}/hardware/search',
                     type: 'GET',
-                    data: { term: keyword, table: table }, // 关键：参数名 term 和 table
+                    data: { term: keyword, table: table },
                     success: function(data) {
                         replyHardwareSearchList.empty();
                         if (data && data.length > 0) {
                             data.forEach(function(item) {
-                                // 显示 Brand + Model
                                 var displayName = (item.brand ? item.brand + ' ' : '') + item.model;
                                 var itemDiv = $('<div class="search-result-item" data-id="' + item.id + '">' + displayName + '</div>');
                                 itemDiv.click(function() {
@@ -558,8 +654,6 @@
         // 8. 渲染辅助函数
         function renderContentWithReferences(text) {
             if(!text) return '';
-
-            // 处理段落
             var paragraphs = text.split(/\n\s*\n/);
             var processedParagraphs = [];
             for (var i = 0; i < paragraphs.length; i++) {
@@ -572,7 +666,6 @@
             if (processedParagraphs.length === 0) return '';
             var textWithParagraphs = processedParagraphs.join('');
 
-            // 处理图片
             var imageRegex = /!\[([^\]]*)\]\(([^)]+)\)/g;
             textWithParagraphs = textWithParagraphs.replace(imageRegex, function(match, alt, url) {
                 if (url.startsWith('${pageContext.request.contextPath}/uploads/') || url.startsWith('http')) {
@@ -582,7 +675,6 @@
                 }
             });
 
-            // 处理硬件引用 [table:id] -> 显示 "📊 查看硬件详情 (类型)"
             var referenceRegex = /\[([a-zA-Z_]+):(\d+)\]/g;
             textWithParagraphs = textWithParagraphs.replace(referenceRegex, function(match, table, id) {
                 if (isValidTableName(table)) {
@@ -615,7 +707,7 @@
             textarea.focus();
         }
 
-        // 9. 点击硬件链接显示详情 (原版逻辑: GET /api/hardware/detail/{table}/{id})
+        // 9. 点击硬件链接显示详情
         $(document).on('click', '.hardware-ref', function(e) {
             e.preventDefault();
             var table = $(this).data('table');
