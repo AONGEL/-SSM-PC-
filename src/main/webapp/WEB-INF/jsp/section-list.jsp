@@ -112,7 +112,7 @@
 
     <div class="page-footer">
         <a href="${pageContext.request.contextPath}/" class="btn btn-primary">🏠 返回首页</a>
-        <a href="${pageContext.request.contextPath}/post/create" class="btn btn-secondary">✏️ 发布帖子</a>
+        <a href="${pageContext.request.contextPath}/post/create?sectionId=1" class="btn btn-secondary">✏️ 发布帖子(默认是硬件故障区)</a>
     </div>
 </div>
 </body>

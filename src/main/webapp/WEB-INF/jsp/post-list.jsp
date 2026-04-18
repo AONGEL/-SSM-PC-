@@ -97,7 +97,7 @@
         .user-role { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
         .user-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
         .stat-box { text-align: center; padding: 12px; background: #fafafa; border-radius: 6px; }
-        .stat-value { font-size: 18px; font-weight: 600; color: #0066ff; }
+        .stat-value { font-size: 20px; font-weight: 700; color: #0066ff; display: block; }
         .stat-label { font-size: 12px; color: #8a8a8a; margin-top: 4px; }
         .user-actions { display: flex; flex-direction: column; gap: 8px; }
         .user-btn { display: block; width: 100%; padding: 12px; text-align: center; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.3s ease; }
