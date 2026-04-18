@@ -425,7 +425,7 @@
                         <div class="user-stats">
                             <div class="stat-item"><span class="stat-value">${postCount != null ? postCount : 0}</span><div class="stat-label">发帖数</div></div>
                             <div class="stat-item"><span class="stat-value">${replyCount != null ? replyCount : 0}</span><div class="stat-label">回复数</div></div>
-                            <div class="stat-item"><span class="stat-value">${favoriteCount != null ? favoriteCount : 0}</span><div class="stat-label">收藏数</div></div>
+                            <div class="stat-item"><span class="stat-value">${userFavoriteCount != null ? userFavoriteCount : 0}</span><div class="stat-label">收藏数</div></div>
                         </div>
                         <div class="user-actions">
                             <a href="${pageContext.request.contextPath}/user/profile" class="user-btn user-btn-primary">👤 个人中心</a>

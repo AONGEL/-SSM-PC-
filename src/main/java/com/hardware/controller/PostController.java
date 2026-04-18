@@ -105,9 +105,19 @@ public class PostController {
             boolean isFavorited = postFavoriteService.isPostFavorited(currentUser.getId(), id);
             model.addAttribute("isFavorited", isFavorited);
 
-            // 获取收藏数量
-            int favoriteCount = postFavoriteService.countFavoritesByPostId(id);
-            model.addAttribute("favoriteCount", favoriteCount);
+            // 获取帖子的收藏数量（用于收藏按钮显示）
+            int postFavoriteCount = postFavoriteService.countFavoritesByPostId(id);
+            model.addAttribute("favoriteCount", postFavoriteCount);
+
+            // 9. 传递用户统计数据（发帖数、回复数、收藏数）
+            int postCount = userService.getUserPosts(currentUser.getId()).size();
+            model.addAttribute("postCount", postCount);
+
+            int replyCount = userService.getUserReplies(currentUser.getId()).size();
+            model.addAttribute("replyCount", replyCount);
+
+            int userFavoriteCount = postFavoriteService.countFavoritesByUserId(currentUser.getId());
+            model.addAttribute("userFavoriteCount", userFavoriteCount);
         }
 
         return "post-detail";
