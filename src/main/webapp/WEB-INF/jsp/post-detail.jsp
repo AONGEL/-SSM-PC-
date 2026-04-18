@@ -51,7 +51,7 @@
         .post-status.locked { color: #dc3545; font-weight: 600; background: #ffebee; padding: 2px 8px; border-radius: 4px; }
 
         /* 操作栏 */
-        .post-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); align-items: center; }
+        .post-actions { justify-content: center; align-items: center;display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); align-items: center; }
 
         /* 游客提示样式 */
         .guest-action-tip {
