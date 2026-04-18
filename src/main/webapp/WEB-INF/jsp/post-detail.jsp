@@ -36,141 +36,135 @@
         h2 { font-size: 18px; font-weight: 600; color: #121212; margin: 30px 0 15px 0; padding-left: 10px; border-left: 4px solid #0066ff; }
         h3 { font-size: 16px; font-weight: 600; color: #121212; margin-bottom: 15px; }
 
-        .card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
         .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
         .card-title { font-size: 18px; font-weight: 600; color: #121212; display: flex; align-items: center; gap: 8px; }
         .card-body { padding: 16px 20px; }
 
         /* 帖子信息卡片 */
-        .post-info-card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+        .post-info-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
         .post-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: #8a8a8a; }
         .post-meta-item { display: flex; align-items: center; gap: 6px; }
         .post-meta-item strong { color: #121212; font-weight: 600; }
         .post-meta-item a { color: #0066ff; font-weight: 500; }
         .post-meta-item a:hover { text-decoration: underline; }
-        .post-status.locked { color: #d32f2f; font-weight: 600; background: #ffebee; padding: 2px 8px; border-radius: 4px; }
+        .post-status.locked { color: #dc3545; font-weight: 600; background: #ffebee; padding: 2px 8px; border-radius: 4px; }
 
-        /* 操作栏 (包含游客提示) */
-        .post-actions {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            background: #fff;
-            padding: 15px;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            align-items: center;
-        }
+        /* 操作栏 */
+        .post-actions { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); align-items: center; }
 
         /* 游客提示样式 */
         .guest-action-tip {
             width: 100%;
+            text-align: center;
             color: #666;
             font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f9f9f9;
-            padding: 10px 15px;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
+            padding: 10px 0;
         }
         .guest-action-tip a {
             color: #0066ff;
             font-weight: 600;
-            text-decoration: none;
-            border-bottom: 1px dashed #0066ff;
+            margin: 0 5px;
         }
         .guest-action-tip a:hover {
-            color: #0055dd;
-            border-bottom-style: solid;
+            text-decoration: underline;
         }
 
-        /* 按钮样式 (方正设计，知乎风) */
+        /* 按钮样式 (方正设计，知乎风格) */
         .btn, .action-btn, input[type="submit"] {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            color: #fff;
-            background: #0066ff;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .btn:hover, .action-btn:hover, input[type="submit"]:hover {
-            opacity: 0.9;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-            transform: translateY(-1px);
-        }
+        .btn:hover, .action-btn:hover, input[type="submit"]:hover { opacity: 0.9; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transform: translateY(-1px); }
 
-        .btn-favorite { background: #f5a623; color: #fff; }
-        .btn-favorite.favorited { background: #e69515; }
-        .btn-edit { background: #0066ff; }
-        .btn-delete, .action-btn.btn-delete, input[type="submit"].btn-delete { background: #d32f2f; }
-        .btn-pin, .action-btn.btn-pin { background: #388e3c; }
+        .btn-favorite { background: #f5a623; color: #fff; } /* 知乎黄/橙 */
+        .btn-favorite.favorited { background: #e09600; }
+        .btn-edit { background: #0066ff; } /* 品牌蓝 */
+        .btn-delete, .action-btn.btn-delete, input[type="submit"].btn-delete { background: #d32f2f; } /* 警示红 */
+        .btn-pin, .action-btn.btn-pin { background: #388e3c; } /* 成功绿 */
         .btn-unpin, .action-btn.btn-unpin { background: #757575; }
-        .btn-lock, .action-btn.btn-lock { background: #0097a7; }
+        .btn-lock, .action-btn.btn-lock { background: #0097a7; } /* 青色 */
         .btn-unlock, .action-btn.btn-unlock { background: #757575; }
-        .btn-info { background: #0097a7; }
+        .btn-info { background: #1976d2; } /* 信息蓝 */
         .btn-primary { background: #0066ff; }
 
         /* 锁定提示 */
-        .locked-post-message { background: #ffebee; border-left: 4px solid #d32f2f; padding: 16px 20px; border-radius: 4px; margin-bottom: 20px; }
+        .locked-post-message { background: #ffebee; border-left: 4px solid #dc3545; padding: 16px 20px; border-radius: 4px; margin-bottom: 20px; }
         .locked-post-message p { margin: 0; color: #c62828; font-size: 14px; font-weight: 500; }
 
-        /* 帖子内容 */
-        .post-content {
-            background: #fff;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 24px;
-            margin-bottom: 20px;
-            line-height: 1.8;
-            font-size: 16px;
-            color: #1a1a1a;
-            font-weight: 500; /* 贴主文字加粗 */
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
+        /* 帖子内容 (加粗，美观) */
+        .post-content { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; line-height: 1.8; font-size: 16px; color: #1a1a1a; white-space: pre-wrap; word-wrap: break-word; font-weight: 500; }
         .post-content img { max-width: 100%; height: auto; margin: 16px 0; border-radius: 4px; }
+
+        /* 硬件引用链接 (突出化) */
+        .hardware-ref {
+            display: inline-block;
+            background-color: #e6f0ff;
+            color: #0066ff;
+            border: 1px solid #0066ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin: 0 4px;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .hardware-ref:hover {
+            background-color: #0066ff;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0,102,255,0.3);
+        }
+        .hardware-loading {
+            color: #999;
+            font-style: italic;
+            font-size: 0.9em;
+            background: #f5f5f5;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px dashed #ddd;
+        }
 
         /* 回复列表 */
         .reply-list { margin-bottom: 20px; }
-        .reply-item { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 16px; }
+        .reply-item { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 16px; }
         .reply-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; gap: 10px; }
         .reply-header p { margin: 0; font-size: 14px; color: #8a8a8a; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-        .user-role { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
+        .user-role { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
         .role-certified { background: #e6f7ed; color: #28a745; }
-        .role-admin { background: #ffebee; color: #d32f2f; }
+        .role-admin { background: #ffebee; color: #dc3545; }
         .role-regular { background: #f0f0f0; color: #666; }
-        .reply-content-rendered {
-            font-size: 15px;
-            color: #333;
-            line-height: 1.7;
-            white-space: pre-wrap;
-            font-weight: 400; /* 回复文字标准字重 */
-        }
+
+        /* 回复内容 (标准字重，区别于帖子) */
+        .reply-content-rendered { font-size: 15px; color: #333; line-height: 1.7; white-space: pre-wrap; font-weight: 400; }
         .reply-content-rendered img { max-width: 100%; height: auto; margin: 12px 0; border-radius: 4px; }
         .reply-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; text-align: right; }
 
         /* 回复表单 */
-        .reply-form-card { background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
+        .reply-form-card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; margin-bottom: 20px; }
         .form-group { margin-bottom: 16px; }
         .form-button-group { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-        #replyContent { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; resize: vertical; min-height: 120px; font-family: inherit; transition: all 0.2s ease; box-sizing: border-box; }
-        #replyContent:focus { outline: none; border-color: #0066ff; box-shadow: 0 0 0 2px rgba(0,102,255,0.1); }
-        .error { color: #d32f2f; font-size: 13px; margin-top: 6px; }
+        #replyContent { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 14px; resize: vertical; min-height: 120px; font-family: inherit; transition: all 0.3s ease; box-sizing: border-box; }
+        #replyContent:focus { outline: none; border-color: #0066ff; box-shadow: 0 0 0 3px rgba(0,102,255,0.1); }
+        .error { color: #dc3545; font-size: 13px; margin-top: 6px; }
+
+        /* 字数限制样式 */
+        .char-count {
+            display: block;
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        .char-count.limit-exceeded {
+            color: #dc3545;
+            font-weight: bold;
+        }
 
         /* 分页 */
-        .pagination { margin: 30px 0; text-align: center; padding: 20px; background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .pagination a, .pagination span.current-page { display: inline-block; padding: 8px 16px; margin: 0 4px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s ease; }
+        .pagination { margin: 30px 0; text-align: center; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .pagination a, .pagination span.current-page { display: inline-block; padding: 8px 16px; margin: 0 4px; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.3s ease; }
         .pagination a { background: #fafafa; color: #121212; border: 1px solid #e0e0e0; }
         .pagination a:hover { background: #0066ff; color: #fff; border-color: #0066ff; }
         .pagination span.current-page { background: #0066ff; color: #fff; border: 1px solid #0066ff; }
@@ -178,58 +172,51 @@
 
         /* 底部导航 */
         .page-footer { margin-top: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; padding: 20px; }
-        .back-link { display: inline-block; padding: 10px 24px; background: #fff; color: #121212; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 14px; transition: all 0.2s ease; border: 1px solid #e0e0e0; }
+        .back-link { display: inline-block; padding: 10px 24px; background: #fff; color: #121212; text-decoration: none; border-radius: 4px; font-weight: 500; font-size: 14px; transition: all 0.3s ease; border: 1px solid #e0e0e0; }
         .back-link:hover { background: #f0f0f0; }
 
         /* 模态框 */
         .hardware-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .hardware-modal-content { background: #fff; margin: 5% auto; padding: 30px; border-radius: 4px; width: 90%; max-width: 650px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; max-height: 85vh; overflow-y: auto; }
-        .hardware-modal-close { color: #8a8a8a; float: right; font-size: 32px; font-weight: bold; cursor: pointer; transition: all 0.2s ease; background: none; border: none; padding: 0; line-height: 1; }
-        .hardware-modal-close:hover { color: #d32f2f; }
+        .hardware-modal-content { background: #fff; margin: 5% auto; padding: 30px; border-radius: 8px; width: 90%; max-width: 600px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); position: relative; max-height: 85vh; overflow-y: auto; }
+        .hardware-modal-close { color: #8a8a8a; float: right; font-size: 32px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; background: none; border: none; padding: 0; line-height: 1; }
+        .hardware-modal-close:hover { color: #dc3545; transform: rotate(90deg); }
         .hardware-modal h3 { color: #121212; font-size: 20px; margin-bottom: 20px; font-weight: 600; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
 
         /* 硬件详情网格布局 */
         .hardware-detail-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
         }
         .hardware-detail-item {
             background: #f9f9f9;
-            padding: 12px 15px;
+            padding: 10px;
             border-radius: 4px;
             border: 1px solid #eee;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: all 0.2s;
         }
-        .hardware-detail-item:hover {
-            background: #f0f7ff;
-            border-color: #d0e4ff;
-        }
-        .hardware-detail-label {
+        .hardware-detail-item strong {
+            display: block;
+            color: #555;
             font-size: 12px;
-            color: #666;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
-        .hardware-detail-value {
-            font-size: 15px;
+        .hardware-detail-item span {
             color: #0066ff;
             font-weight: 600;
-            word-break: break-word;
+            font-size: 14px;
+        }
+        .hardware-full-width {
+            grid-column: 1 / -1;
         }
 
         /* 搜索结果项 */
-        .search-result-item { padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; border-radius: 4px; }
+        .search-result-item { padding: 10px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; }
         .search-result-item:hover { background: #f6f6f6; }
 
         /* ================= 用户卡片样式 ================= */
         .user-card { text-align: center; }
-        .user-avatar { width: 80px; height: 80px; border-radius: 4px; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
+        .user-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #0066ff 0%, #00ccff 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 36px; color: #fff; font-weight: 700; }
         .user-avatar-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 12px; border: 3px solid #f0f0f0; }
         .user-name { font-size: 18px; font-weight: 600; color: #121212; margin-bottom: 4px; }
         .user-role-badge { display: inline-block; padding: 2px 12px; background: #e6f0ff; color: #0066ff; border-radius: 12px; font-size: 12px; font-weight: 500; margin-bottom: 16px; }
@@ -251,38 +238,6 @@
         .quick-link-icon { font-size: 28px; margin-bottom: 8px; }
         .quick-link-text { font-size: 14px; font-weight: 500; }
 
-        /* 硬件引用高亮样式 */
-        .hardware-ref {
-            display: inline-block;
-            background: #e6f0ff;
-            color: #0066ff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid #b3d7ff;
-            font-weight: 600;
-            font-size: 0.95em;
-            margin: 0 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-        .hardware-ref:hover {
-            background: #0066ff;
-            color: #fff;
-            border-color: #0055dd;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,102,255,0.2);
-        }
-        .hardware-loading {
-            color: #999;
-            font-style: italic;
-            font-size: 0.9em;
-            padding: 2px 8px;
-            background: #f5f5f5;
-            border-radius: 4px;
-            border: 1px dashed #ddd;
-        }
-
         /* 响应式 */
         @media (max-width: 900px) {
             .main-container { grid-template-columns: 1fr; }
@@ -295,6 +250,7 @@
             .btn, .action-btn { width: 100%; justify-content: center; }
             .form-button-group { flex-direction: column; }
             .form-button-group .btn { width: 100%; }
+            .hardware-detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -336,6 +292,9 @@
                     <strong>📅</strong> <fmt:formatDate value="${post.createTime}" pattern="yyyy-MM-dd HH:mm"/>
                 </span>
                 <span class="post-meta-item">
+                    <strong>💬</strong> 回复：${post.replyCount}
+                </span>
+                <span class="post-meta-item">
                     <strong>👁️</strong> 浏览：${post.viewCount}
                 </span>
                 <span class="post-meta-item">
@@ -347,26 +306,29 @@
             </div>
         </div>
 
-        <!-- 帖子操作按钮区域 (已优化游客显示) -->
+        <!-- 帖子操作按钮区域 -->
         <div class="post-actions">
             <c:choose>
                 <c:when test="${sessionScope.currentUser != null}">
-                    <!-- 已登录用户显示操作按钮 -->
+                    <!-- 收藏按钮 -->
                     <button id="favoriteBtn" class="btn btn-favorite ${isFavorited ? 'favorited' : ''}" data-post-id="${post.id}">
                             ${isFavorited ? '⭐ 已收藏' : '⭐ 收藏'} (<span id="favoriteCount">${favoriteCount}</span>)
                     </button>
 
+                    <!-- 编辑按钮 -->
                     <c:if test="${sessionScope.currentUser.id == post.userId}">
                         <a href="${pageContext.request.contextPath}/post/${post.id}/edit" class="btn btn-edit">✏️ 编辑</a>
                     </c:if>
 
-                    <c:if test="${sessionScope.currentUser != null && (sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN')}">
+                    <!-- 删除按钮 -->
+                    <c:if test="${sessionScope.currentUser.id == post.userId || sessionScope.currentUser.role == 'ADMIN'}">
                         <form action="${pageContext.request.contextPath}/post/${post.id}/delete" method="post" style="display:inline;">
                             <input type="submit" value="🗑️ 删除" class="action-btn btn-delete" onclick="return confirm('确定要删除此帖子吗？删除后无法恢复！');">
                         </form>
                     </c:if>
 
-                    <c:if test="${sessionScope.currentUser != null && sessionScope.currentUser.role == 'ADMIN'}">
+                    <!-- 管理员操作 -->
+                    <c:if test="${sessionScope.currentUser.role == 'ADMIN'}">
                         <c:if test="${post.pinLevel > 0}">
                             <form action="${pageContext.request.contextPath}/post/${post.id}/unpin" method="post" style="display:inline;">
                                 <input type="submit" value="📌 取消置顶" class="action-btn btn-unpin">
@@ -391,12 +353,9 @@
                     </c:if>
                 </c:when>
                 <c:otherwise>
-                    <!-- 游客显示提示信息 -->
+                    <!-- 游客提示 -->
                     <div class="guest-action-tip">
-                        <span>🔒 您尚未登录，无法执行收藏、编辑等操作。</span>
-                        <a href="${pageContext.request.contextPath}/user/login">立即登录</a>
-                        <span>或</span>
-                        <a href="${pageContext.request.contextPath}/user/register">免费注册</a>
+                        登录后即可收藏、编辑或管理帖子 <a href="${pageContext.request.contextPath}/user/login">立即登录</a> 或 <a href="${pageContext.request.contextPath}/user/register">免费注册</a>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -409,7 +368,7 @@
             </div>
         </c:if>
 
-        <!-- 帖子内容 -->
+        <!-- 帖子内容 (确保游客可见) -->
         <div class="post-content">
             <div id="postContentRaw" style="display: none;">${post.content}</div>
             <div id="postContentRendered"></div>
@@ -481,7 +440,7 @@
             </c:choose>
         </div>
 
-        <!-- 回复表单 -->
+        <!-- 回复表单 (仅登录用户可见) -->
         <c:choose>
             <c:when test="${post.isLocked && (!sessionScope.currentUser.role.equals('ADMIN'))}">
                 <div class="locked-post-message">
@@ -492,7 +451,7 @@
                 <c:if test="${sessionScope.currentUser != null}">
                     <div class="reply-form-card">
                         <h3>💬 发表回复</h3>
-                        <form:form action="${pageContext.request.contextPath}/post/${post.id}/reply" method="post" modelAttribute="reply">
+                        <form:form action="${pageContext.request.contextPath}/post/${post.id}/reply" method="post" modelAttribute="reply" onsubmit="return validateReplyLength()">
                             <form:hidden path="postId" value="${post.id}"/>
                             <form:hidden path="userId" value="${sessionScope.currentUser.id}"/>
                             <div class="form-group">
@@ -503,7 +462,8 @@
                                         <button type="button" id="replyInsertReferenceBtn" class="btn btn-info">📊 插入硬件引用</button>
                                     </c:if>
                                 </div><br>
-                                <form:textarea path="content" id="replyContent" rows="5" cols="50" required="required"/><br>
+                                <form:textarea path="content" id="replyContent" rows="5" cols="50" required="required" oninput="updateCharCount()"/><br>
+                                <span id="replyCharCount" class="char-count">0 / 1000</span>
                                 <form:errors path="content" cssClass="error" /><br>
                                 <input type="submit" value="✅ 回复" class="btn btn-primary">
                             </div>
@@ -614,7 +574,7 @@
     $(document).ready(function() {
         console.log("Detail Document ready fired");
 
-        // 1. 渲染帖子内容
+        // 1. 渲染帖子内容 (确保对所有用户执行)
         var postContentRaw = $('#postContentRaw').text();
         // 简单解码防止双重转义
         postContentRaw = postContentRaw.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"');
@@ -887,35 +847,33 @@
                 type: 'GET',
                 success: function(data) {
                     var displayTitle = (data.brand || '') + ' ' + (data.model || '');
-                    var detailHtml = '<h3>' + displayTitle + '</h3>';
+                    var detailHtml = '<h3>' + displayTitle + '</h3><hr>';
 
-                    // 构建网格布局的HTML
-                    var gridHtml = '<div class="hardware-detail-grid">';
+                    detailHtml += '<div class="hardware-detail-grid">';
 
                     if (table === 'cpu_info') {
-                        gridHtml += createGridItem('接口类型', data.interfaceType);
-                        gridHtml += createGridItem('核心数', data.cores);
-                        gridHtml += createGridItem('线程数', data.threads);
-                        gridHtml += createGridItem('基础频率', data.baseFrequency + ' GHz');
-                        gridHtml += createGridItem('最大频率', data.maxFrequency + ' GHz');
-                        gridHtml += createGridItem('TDP', data.tdp + ' W');
-                        gridHtml += createGridItem('核显', data.integratedGraphics || '无');
+                        detailHtml += '<div class="hardware-detail-item"><strong>接口类型</strong><span>' + (data.interfaceType || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>核心数</strong><span>' + (data.cores || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>线程数</strong><span>' + (data.threads || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>基础频率</strong><span>' + (data.baseFrequency || '-') + ' GHz</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>最大频率</strong><span>' + (data.maxFrequency || '-') + ' GHz</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>TDP</strong><span>' + (data.tdp || '-') + ' W</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>核显</strong><span>' + (data.integratedGraphics || '无') + '</span></div>';
                     } else if (table === 'gpu_info') {
-                        gridHtml += createGridItem('显存容量', data.memorySize + ' GB');
-                        gridHtml += createGridItem('显存类型', data.memoryType);
-                        gridHtml += createGridItem('基础频率', data.baseClock + ' MHz');
-                        gridHtml += createGridItem('加速频率', data.boostClock + ' MHz');
-                        gridHtml += createGridItem('TDP', data.tdp + ' W');
+                        detailHtml += '<div class="hardware-detail-item"><strong>显存容量</strong><span>' + (data.memorySize || '-') + ' GB</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>显存类型</strong><span>' + (data.memoryType || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>基础频率</strong><span>' + (data.baseClock || '-') + ' MHz</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>加速频率</strong><span>' + (data.boostClock || '-') + ' MHz</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>TDP</strong><span>' + (data.tdp || '-') + ' W</span></div>';
                     } else if (table === 'motherboard_info') {
-                        gridHtml += createGridItem('芯片组', data.chipset);
-                        gridHtml += createGridItem('CPU 接口', data.cpuInterface);
-                        gridHtml += createGridItem('内存插槽', data.memorySlots);
-                        gridHtml += createGridItem('最大内存', data.maxMemory + ' GB');
-                        gridHtml += createGridItem('内存类型', data.memoryType);
+                        detailHtml += '<div class="hardware-detail-item"><strong>芯片组</strong><span>' + (data.chipset || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>CPU 接口</strong><span>' + (data.cpuInterface || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>内存插槽</strong><span>' + (data.memorySlots || '-') + '</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>最大内存</strong><span>' + (data.maxMemory || '-') + ' GB</span></div>';
+                        detailHtml += '<div class="hardware-detail-item"><strong>内存类型</strong><span>' + (data.memoryType || '-') + '</span></div>';
                     }
 
-                    gridHtml += '</div>';
-                    detailHtml += gridHtml;
+                    detailHtml += '</div>'; // Close grid
                     $('#hardwareDetailContent').html(detailHtml);
                 },
                 error: function(xhr, status, error) {
@@ -923,16 +881,39 @@
                 }
             });
         });
-
-        // 辅助函数：创建网格项
-        function createGridItem(label, value) {
-            if (!value || value === 'null') value = '未知';
-            return '<div class="hardware-detail-item">' +
-                '<span class="hardware-detail-label">' + label + '</span>' +
-                '<span class="hardware-detail-value">' + value + '</span>' +
-                '</div>';
-        }
     });
+
+    // 字数统计与验证函数
+    function updateCharCount() {
+        var textarea = document.getElementById('replyContent');
+        var countSpan = document.getElementById('replyCharCount');
+        var currentLength = textarea.value.length;
+        var maxLength = 1000;
+
+        countSpan.textContent = currentLength + ' / ' + maxLength;
+
+        if (currentLength > maxLength) {
+            countSpan.classList.add('limit-exceeded');
+        } else {
+            countSpan.classList.remove('limit-exceeded');
+        }
+    }
+
+    function validateReplyLength() {
+        var textarea = document.getElementById('replyContent');
+        var currentLength = textarea.value.length;
+        var maxLength = 1000;
+
+        if (currentLength === 0) {
+            alert('回复内容不能为空！');
+            return false;
+        }
+        if (currentLength > maxLength) {
+            alert('回复内容过长，请控制在 ' + maxLength + ' 字以内！');
+            return false;
+        }
+        return true;
+    }
 </script>
 </body>
 </html>
