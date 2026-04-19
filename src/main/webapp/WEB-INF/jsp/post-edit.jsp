@@ -199,15 +199,15 @@
 <body>
 <nav class="navbar">
     <div class="navbar-content">
-        <a href="${pageContext.request.contextPath}/" class="navbar-logo">PC 硬件论坛</a>
+        <a href="${pageContext.request.contextPath}/" class="navbar-logo">💻PC 硬件交流论坛</a>
         <div class="navbar-links">
             <c:if test="${sessionScope.currentUser != null}">
-                <a href="${pageContext.request.contextPath}/user/profile">${sessionScope.currentUser.username}</a>
-                <a href="${pageContext.request.contextPath}/user/logout">退出</a>
+                <a href="${pageContext.request.contextPath}/user/profile" class="highlight">👤 ${sessionScope.currentUser.username} 个人中心</a>
+                <a href="${pageContext.request.contextPath}/user/logout">🚪 退出</a>
             </c:if>
             <c:if test="${sessionScope.currentUser == null}">
-                <a href="${pageContext.request.contextPath}/user/login">登录</a>
-                <a href="${pageContext.request.contextPath}/user/register">注册</a>
+                <a href="${pageContext.request.contextPath}/user/login">🔑 登录</a>
+                <a href="${pageContext.request.contextPath}/user/register">📝 注册</a>
             </c:if>
         </div>
     </div>
