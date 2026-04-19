@@ -240,7 +240,7 @@
                         <div class="pagination-info">显示 ${startPostIndex} 到 ${endPostIndex} 条，共 ${totalPosts} 条</div>
                     </c:when>
                     <c:otherwise>
-                        <div class="empty-state"><div class="empty-text">您还没有发布任何帖子。</div><a href="${pageContext.request.contextPath}/post/create" class="btn btn-primary">创建新帖子</a></div>
+                        <div class="empty-state"><div class="empty-text">您还没有发布任何帖子。</div><a href="${pageContext.request.contextPath}/post/create?sectionId=1" class="btn btn-primary">创建新帖子(默认发布到硬件故障区)</a></div>
                     </c:otherwise>
                 </c:choose>
             </div>
