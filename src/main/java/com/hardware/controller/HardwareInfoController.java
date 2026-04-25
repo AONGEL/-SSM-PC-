@@ -142,7 +142,7 @@ public class HardwareInfoController {
         return "hardware/gpu-detail";
     }
 
-    // --- 主板 相关页面 ---
+    // ---主板 相关页面 ---
     @GetMapping("/motherboard")
     public String listMotherboards(Model model) {
         List<MotherboardInfo> motherboards = hardwareInfoService.getAllMotherboards();

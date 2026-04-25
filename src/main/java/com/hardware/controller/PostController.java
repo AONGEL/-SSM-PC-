@@ -206,8 +206,7 @@ public class PostController {
         }
     }
 
-    /**
-     * 显示编辑帖子的表单页面
+    /*** 显示编辑帖子的表单页面
      * @param id 帖子ID
      * @param session HTTP会话，用于验证当前用户是否为作者
      * @param model Model对象，用于向视图传递数据
