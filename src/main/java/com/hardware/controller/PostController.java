@@ -150,34 +150,27 @@ public class PostController {
         System.out.println("createPost method called!"); // 调试日志
         System.out.println("Post object: " + post);
         System.out.println("Binding result has errors: " + bindingResult.hasErrors());
-
         // 1. 验证用户是否登录
         User currentUser = (User) session.getAttribute("currentUser");
         System.out.println("Current user: " + currentUser);
-
         if (currentUser == null) {
             System.out.println("User is not logged in.");
             model.addAttribute("errorMessage", "请先登录");
             return "redirect:/user/login";
         }
-
         // 2. 设置帖子作者ID
         post.setUserId(currentUser.getId());
         System.out.println("Set userId: " + post.getUserId());
-
         // 3. 设置初始浏览次数
         post.setViewCount(0);
-
         // 4. 设置初始锁定状态
         post.setIsLocked(false);
-
         // 5. 验证表单数据 (标题和内容不能为空) - 仅验证用户输入
         if (bindingResult.hasErrors()) {
             System.out.println("Validation errors found.");
             model.addAttribute("sectionId", post.getSectionId());
             return "post-create"; // 返回创建页面，显示错误信息
         }
-
         // 6. 手动检查服务器设置的字段 (可选，作为额外安全检查)
         if (post.getUserId() == null || post.getSectionId() == null) {
             System.out.println("Error: userId or sectionId is null after setting.");
@@ -185,26 +178,22 @@ public class PostController {
             model.addAttribute("sectionId", post.getSectionId());
             return "post-create";
         }
-
-        // --- 新增：解析并保存参数引用 ---
+        // --- 解析并保存参数引用 ---
         String postContent = post.getContent();
         List<ParamReference> referencesToSave = parseAndCreateReferences(postContent, post.getId(), null); // postId 为当前帖子ID, replyId 为 null
-        // --- /新增 ---
-
         // 7. 调用Service保存帖子
         try {
             System.out.println("Attempting to save post...");
             Post savedPost = postService.addPost(post);
             System.out.println("Post saved successfully with ID: " + savedPost.getId());
 
-            // --- 新增：保存参数引用 ---
+            // --- 保存参数引用 ---
             if (!referencesToSave.isEmpty()) {
                 for (ParamReference ref : referencesToSave) {
                     paramReferenceService.addReference(ref); // 假设 service 有 addReference 方法
                     System.out.println("Saved reference: " + ref);
                 }
             }
-            // --- /新增 ---
 
             // 8. 保存成功后，重定向到新帖子的详情页
             return "redirect:/post/" + savedPost.getId();
@@ -409,7 +398,6 @@ public class PostController {
     @PostMapping("/{postId}/reply")
     public String createReply(@PathVariable Integer postId, @Valid Reply reply, BindingResult bindingResult, HttpSession session, Model model) {
         System.out.println("createReply method called for Post ID: " + postId);
-
         // 1. 验证用户是否登录
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
@@ -417,14 +405,12 @@ public class PostController {
             model.addAttribute("errorMessage", "请先登录");
             return "redirect:/user/login";
         }
-
         // 2. 验证帖子是否存在
         Post post = postService.getPostById(postId);
         if (post == null) {
             System.out.println("Post not found for ID: " + postId + " when replying. Forwarding to deleted page.");
             return "post-deleted";
         }
-
         // --- 检查帖子是否被锁定 ---
         if (post.getIsLocked() != null && post.getIsLocked() &&
                 !"ADMIN".equals(currentUser.getRole())) {
@@ -435,11 +421,9 @@ public class PostController {
             model.addAttribute("replies", replies);
             return "post-detail";
         }
-
         // 3. 设置回复的帖子ID和用户ID
         reply.setPostId(postId);
         reply.setUserId(currentUser.getId());
-
         // 4. 验证表单数据
         if (bindingResult.hasErrors()) {
             System.out.println("Validation errors found for reply.");
@@ -449,8 +433,7 @@ public class PostController {
             model.addAttribute("errorMessage", "回复内容不能为空。");
             return "post-detail";
         }
-
-        // --- 新增：先保存回复，获取ID，再解析并保存参数引用 ---
+        // --- 先保存回复，获取ID，再解析并保存参数引用 ---
         try {
             System.out.println("Attempting to save reply...");
             Reply savedReply = replyService.addReply(reply); // 此时 savedReply.getId() 已经是新生成的ID
@@ -601,17 +584,14 @@ public class PostController {
     public Map<String, Object> toggleFavorite(@PathVariable Integer id, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         response.put("success", false);
-
         User currentUser = (User) session.getAttribute("currentUser");
         if (currentUser == null) {
             response.put("message", "请先登录");
             return response;
         }
-
         try {
             // 检查是否已收藏
             boolean isFavorited = postFavoriteService.isPostFavorited(currentUser.getId(), id);
-
             if (isFavorited) {
                 // 取消收藏
                 boolean result = postFavoriteService.cancelFavorite(currentUser.getId(), id);
@@ -633,7 +613,6 @@ public class PostController {
                     return response;
                 }
             }
-
             response.put("message", "操作失败");
             return response;
         } catch (Exception e) {

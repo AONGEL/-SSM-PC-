@@ -161,6 +161,5 @@ public class HardwareInfoController {
         return "hardware/motherboard-detail";
     }
 
-    // --- 移除：内存 相关页面 ---
-    // --- 移除：硬盘 相关页面 ---
+
 }
